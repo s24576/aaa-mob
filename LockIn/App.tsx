@@ -11,6 +11,7 @@ import {
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Home from "./screens/Home";
+import { UserContextProvider } from "./context/UserContext";
 
 type RootStackParamList = {
   Login: undefined;
@@ -27,15 +28,17 @@ export default function App() {
 export const Layout = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerBackVisible: false,
-        }}
-      >
-        <Stack.Screen name="Login" component={Login}></Stack.Screen>
-        <Stack.Screen name="Register" component={Register}></Stack.Screen>
-        <Stack.Screen name="Home" component={Home}></Stack.Screen>
-      </Stack.Navigator>
+      <UserContextProvider>
+        <Stack.Navigator
+          screenOptions={{
+            headerBackVisible: false,
+          }}
+        >
+          <Stack.Screen name="Login" component={Login}></Stack.Screen>
+          <Stack.Screen name="Register" component={Register}></Stack.Screen>
+          <Stack.Screen name="Home" component={Home}></Stack.Screen>
+        </Stack.Navigator>
+      </UserContextProvider>
     </NavigationContainer>
   );
 };
