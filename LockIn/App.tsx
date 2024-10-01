@@ -1,15 +1,27 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  NavigationContainer,
+  NavigatorScreenParams,
+} from "@react-navigation/native";
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Home from "./screens/Home";
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Home: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
-  return <Layout></Layout>;
+  return <Layout />;
 }
 
 export const Layout = () => {
@@ -27,3 +39,16 @@ export const Layout = () => {
     </NavigationContainer>
   );
 };
+
+export type LoginScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "Login"
+>;
+export type RegisterScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "Register"
+>;
+export type HomeScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "Home"
+>;
