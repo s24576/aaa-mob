@@ -6,11 +6,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginScreenProps } from "../App";
 import { UserData, Friend, UserContextType } from "../types/userContext";
 import { UserContext } from "../context/UserContext";
+import { useTranslation } from "react-i18next";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation<LoginScreenProps["navigation"]>();
+
+  const { t } = useTranslation();
 
   const { setUserData } = useContext(UserContext) as UserContextType;
 
@@ -83,19 +86,19 @@ const LoginForm = () => {
   return (
     <View>
       <TextInput
-        placeholder="Username"
+        placeholder={t("loginForm.usernameInput")}
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
-        placeholder="Password"
+        placeholder={t("loginForm.passwordInput")}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <Button title={t("loginForm.loginButton")} onPress={handleLogin} />
       <Button
-        title="Create Account"
+        title={t("loginForm.toRegistrerButton")}
         onPress={() => navigation.navigate("Register")}
       />
     </View>

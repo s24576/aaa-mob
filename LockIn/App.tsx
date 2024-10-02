@@ -12,6 +12,9 @@ import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Home from "./screens/Home";
 import { UserContextProvider } from "./context/UserContext";
+import { initI18n } from "./translations/i18n";
+
+initI18n();
 
 type RootStackParamList = {
   Login: undefined;
