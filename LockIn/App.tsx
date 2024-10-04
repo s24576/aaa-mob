@@ -16,6 +16,8 @@ import { initI18n } from "./translations/i18n";
 
 initI18n();
 
+//https://49f5-194-181-181-5.ngrok-free.app
+
 type RootStackParamList = {
   Login: undefined;
   Register: undefined;
