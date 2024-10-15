@@ -1,11 +1,11 @@
-import { View, Text } from "react-native";
-import React from "react";
-import LoginForm from "../components/LoginForm";
+import { View } from 'react-native';
+import React from 'react';
+import LoginPage from '../components/LoginPage';
 
 const Login = () => {
   return (
     <View>
-      <LoginForm />
+      <LoginPage />
     </View>
   );
 };
