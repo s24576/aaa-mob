@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios, { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginScreenProps } from "../App";
-import { UserData, Friend, UserContextType } from "../types/userContext";
+import { UserData, Friend, UserContextType } from "../types/local/userContext";
 import { UserContext } from "../context/UserContext";
 import { useTranslation } from "react-i18next";
 
