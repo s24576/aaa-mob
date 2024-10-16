@@ -1,11 +1,11 @@
 {
-  "loginPage": {
+  "loginForm": {
     "usernameInput": "Username",
     "passwordInput": "Password",
     "loginButton": "Login",
     "toRegistrerButton": "Don't have an account? Register"
   },
-  "registerPage": {
+  "registerForm": {
     "usernameInput": "Username",
     "passwordInput": "Password",
     "registerButton": "Register",
