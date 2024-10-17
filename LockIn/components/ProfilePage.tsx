@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, ScrollView } from 'react-native';
-import { Profile } from '../types/riot/profileClass'; // Adjust the import path as necessary
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, Alert, ScrollView } from "react-native";
+import { Profile } from "../types/riot/profileClass"; // Adjust the import path as necessary
 
 const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   return (
@@ -65,9 +65,9 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 };
 
 const ProfilePage: React.FC = () => {
-  const [server, setServer] = useState('EUW1');
-  const [tag, setTag] = useState('ECPU');
-  const [name, setName] = useState('Oriol');
+  const [server, setServer] = useState("EUW1");
+  const [tag, setTag] = useState("ECPU");
+  const [name, setName] = useState("Oriol");
   const [profile, setProfile] = useState<Profile | null>(null);
 
   const handleSubmit = async () => {
@@ -75,15 +75,15 @@ const ProfilePage: React.FC = () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      console.log('RIOT URL:', url); // Log the request URL
-      console.log('Server Response:', data); // Log the server response
-      Alert.alert('Server Response', JSON.stringify(data));
+      console.log("RIOT URL:", url); // Log the request URL
+      console.log("Server Response:", data); // Log the server response
+      Alert.alert("Server Response", JSON.stringify(data));
 
       const profileData = new Profile(data);
       setProfile(profileData);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      Alert.alert('Error', 'Failed to fetch data from server');
+      console.error("Error fetching data:", error);
+      Alert.alert("Error", "Failed to fetch data from server");
     }
   };
 
