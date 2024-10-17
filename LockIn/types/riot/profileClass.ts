@@ -1,3 +1,53 @@
+interface RankData {
+  leagueId: string
+  summonerId: string
+  summonerName: string | null
+  queueType: string
+  tier: string
+  rank: string
+  leaguePoints: number
+  wins: number
+  losses: number
+}
+
+interface MasteryData {
+  puuid: string
+  chestGranted: boolean
+  championId: number
+  lastPlayTime: number
+  championLevel: number
+  championPoints: number
+  championName: string
+}
+
+interface MatchData {
+  championName: string
+  win: boolean
+  queueType: string
+  kills: number
+  deaths: number
+  assists: number
+  matchId: string
+}
+
+interface ProfileData {
+  puuid: string
+  gameName: string
+  tagLine: string
+  server: string
+  id: string
+  accountId: string
+  name: string | null
+  profileIconId: string
+  revisionDate: number
+  summonerLevel: number
+  ranks: RankData[]
+  mastery: MasteryData[]
+  matches: MatchData[]
+  rankedTier: string
+  rankedRank: string
+}
+
 class Rank {
   leagueId: string
   summonerId: string
@@ -9,7 +59,7 @@ class Rank {
   wins: number
   losses: number
 
-  constructor(data: any) {
+  constructor(data: RankData) {
     this.leagueId = data.leagueId
     this.summonerId = data.summonerId
     this.summonerName = data.summonerName
@@ -31,7 +81,7 @@ class Mastery {
   championPoints: number
   championName: string
 
-  constructor(data: any) {
+  constructor(data: MasteryData) {
     this.puuid = data.puuid
     this.chestGranted = data.chestGranted
     this.championId = data.championId
@@ -51,7 +101,7 @@ class Match {
   assists: number
   matchId: string
 
-  constructor(data: any) {
+  constructor(data: MatchData) {
     this.championName = data.championName
     this.win = data.win
     this.queueType = data.queueType
@@ -79,7 +129,7 @@ class Profile {
   rankedTier: string
   rankedRank: string
 
-  constructor(data: any) {
+  constructor(data: ProfileData) {
     this.puuid = data.puuid
     this.gameName = data.gameName
     this.tagLine = data.tagLine
@@ -90,9 +140,9 @@ class Profile {
     this.profileIconId = data.profileIconId
     this.revisionDate = data.revisionDate
     this.summonerLevel = data.summonerLevel
-    this.ranks = data.ranks.map((rank: any) => new Rank(rank))
-    this.mastery = data.mastery.map((mastery: any) => new Mastery(mastery))
-    this.matches = data.matches.map((match: any) => new Match(match))
+    this.ranks = data.ranks.map((rank) => new Rank(rank))
+    this.mastery = data.mastery.map((mastery) => new Mastery(mastery))
+    this.matches = data.matches.map((match) => new Match(match))
     this.rankedTier = data.rankedTier
     this.rankedRank = data.rankedRank
   }
