@@ -1,7 +1,7 @@
-import { View, Text } from "react-native";
-import React from "react";
-import HomePage from "../components/HomePage";
-import ProfilePage from "../components/ProfilePage";
+import { View, Text } from 'react-native'
+import React from 'react'
+import HomePage from '../components/HomePage'
+import ProfilePage from '../components/ProfilePage'
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
       {/* <HomePage /> */}
       <ProfilePage />
     </View>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
