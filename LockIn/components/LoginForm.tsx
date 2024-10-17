@@ -7,6 +7,8 @@ import { LoginScreenProps } from '../App'
 import { UserData, Friend, UserContextType } from '../types/local/userContext'
 import { UserContext } from '../context/UserContext'
 import { useTranslation } from 'react-i18next'
+import { encryptToken } from '../security/TokenEncryption' // Update the path as necessary
+import { decryptToken } from '../security/TokenDecryption' // Update the path as necessary
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -18,27 +20,6 @@ const LoginForm = () => {
   const { setUserData } = useContext(UserContext) as UserContextType
 
   const BACKEND_ADDRESS = process.env.BACKEND_ADDRESS
-
-  const handleLogin = async () => {
-    try {
-      console.log('Backend Address:', BACKEND_ADDRESS)
-      const response = await axios.post(
-        `${BACKEND_ADDRESS}/user/login`,
-        { username, password },
-        { headers: { 'Accept-Language': 'en' } }
-      )
-
-      const token: string = response.data // Assuming the token is returned directly
-      await AsyncStorage.setItem('token', token) // Save the token
-      console.log('JSON Response:', token)
-      getUserData(token)
-
-      // Navigate to the Home screen
-      navigation.navigate('Home')
-    } catch (error) {
-      handleError(error)
-    }
-  }
 
   const getUserData = async (token: string) => {
     try {
@@ -80,6 +61,28 @@ const LoginForm = () => {
       console.error('Unexpected Error:', error.message)
     } else {
       console.error('Unknown Error:', error)
+    }
+  }
+
+  const handleLogin = async () => {
+    try {
+      console.log('Backend Address:', BACKEND_ADDRESS)
+      const response = await axios.post(
+        `${BACKEND_ADDRESS}/user/login`,
+        { username, password },
+        { headers: { 'Accept-Language': 'en' } }
+      )
+
+      const token: string = response.data
+      const encryptedToken = encryptToken(token) // Encrypt the token before storing
+      await AsyncStorage.setItem('token', encryptedToken)
+      console.log('Encrypted Token:', encryptedToken)
+
+      getUserData(token) // Use the raw token to get user data
+
+      navigation.navigate('Home')
+    } catch (error) {
+      handleError(error)
     }
   }
 
