@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, Alert, ScrollView } from "react-native";
-import { Profile } from "../types/riot/profileClass"; // Adjust the import path as necessary
+import React, { useState } from 'react'
+import { View, Text, TextInput, Button, Alert, ScrollView } from 'react-native'
+import { Profile } from '../types/riot/profileClass' // Adjust the import path as necessary
 
 const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   return (
@@ -61,31 +61,31 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
         </View>
       ))}
     </View>
-  );
-};
+  )
+}
 
 const ProfilePage: React.FC = () => {
-  const [server, setServer] = useState("EUW1");
-  const [tag, setTag] = useState("ECPU");
-  const [name, setName] = useState("Oriol");
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [server, setServer] = useState('EUW1')
+  const [tag, setTag] = useState('ECPU')
+  const [name, setName] = useState('Oriol')
+  const [profile, setProfile] = useState<Profile | null>(null)
 
   const handleSubmit = async () => {
-    const url = `${process.env.BACKEND_ADDRESS}/riot/findPlayer?server=${server}&tag=${tag}&name=${name}`;
+    const url = `${process.env.BACKEND_ADDRESS}/riot/findPlayer?server=${server}&tag=${tag}&name=${name}`
     try {
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log("RIOT URL:", url); // Log the request URL
-      console.log("Server Response:", data); // Log the server response
-      Alert.alert("Server Response", JSON.stringify(data));
+      const response = await fetch(url)
+      const data = await response.json()
+      console.log('RIOT URL:', url) // Log the request URL
+      console.log('Server Response:', data) // Log the server response
+      Alert.alert('Server Response', JSON.stringify(data))
 
-      const profileData = new Profile(data);
-      setProfile(profileData);
+      const profileData = new Profile(data)
+      setProfile(profileData)
     } catch (error) {
-      console.error("Error fetching data:", error);
-      Alert.alert("Error", "Failed to fetch data from server");
+      console.error('Error fetching data:', error)
+      Alert.alert('Error', 'Failed to fetch data from server')
     }
-  };
+  }
 
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
@@ -118,7 +118,7 @@ const ProfilePage: React.FC = () => {
 
       {profile && <ProfileTable profile={profile} />}
     </ScrollView>
-  );
-};
+  )
+}
 
-export default ProfilePage;
+export default ProfilePage
