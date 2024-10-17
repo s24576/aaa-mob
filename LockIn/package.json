@@ -6,9 +6,7 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix"
+    "web": "expo start --web"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
@@ -34,11 +32,6 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
-    "@typescript-eslint/eslint-plugin": "^8.9.0",
-    "@typescript-eslint/parser": "^8.9.0",
-    "eslint": "^8.57.1",
-    "eslint-plugin-react": "^7.37.1",
-    "eslint-plugin-react-native": "^4.1.0",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.3.3"
   },
