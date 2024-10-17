@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useContext } from 'react'
+import { View, Text } from 'react-native'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
 

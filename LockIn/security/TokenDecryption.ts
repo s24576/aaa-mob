@@ -1,16 +1,15 @@
-import { createDecipheriv } from 'crypto'
+import * as Crypto from 'expo-crypto'
 
-const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string // Should be 32 bytes for AES-256
+const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
 
-export const decryptToken = (encryptedToken: string): string => {
-  const iv = Buffer.from(encryptedToken.slice(0, 32), 'hex') // Extract IV from the encrypted token
+export const decryptToken = async (encryptedToken: string): Promise<string> => {
+  const iv = encryptedToken.slice(0, 32) // Pobierz IV
   const encrypted = encryptedToken.slice(32)
-  const decipher = createDecipheriv(
-    'aes-256-cbc',
-    Buffer.from(encryptionKey, 'hex'),
-    iv
+
+  const decrypted = await Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    encryptionKey + encrypted + iv
   )
-  let decrypted = decipher.update(encrypted, 'hex', 'utf-8')
-  decrypted += decipher.final('utf-8')
+
   return decrypted
 }

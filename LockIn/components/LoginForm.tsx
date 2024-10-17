@@ -1,14 +1,13 @@
 import { View, TextInput, Button } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LoginScreenProps } from '../App'
 import { UserData, Friend, UserContextType } from '../types/local/userContext'
 import { UserContext } from '../context/UserContext'
 import { useTranslation } from 'react-i18next'
-import { encryptToken } from '../security/TokenEncryption' // Update the path as necessary
-import { decryptToken } from '../security/TokenDecryption' // Update the path as necessary
+import { encryptToken } from '../security/TokenEncryption'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -31,13 +30,20 @@ const LoginForm = () => {
       })
       console.log('User Data:', response.data)
 
+      // Define the type for the friend object
+      interface FriendResponse {
+        _id: string
+        username: string
+        username2: string
+      }
+
       // Parse the user data and set it in the context
       const userData = new UserData(
         response.data._id,
         response.data.profileIcon,
         response.data.bio,
         response.data.friends.map(
-          (friend: any) =>
+          (friend: FriendResponse) =>
             new Friend(friend._id, friend.username, friend.username2)
         ),
         response.data.username
@@ -74,11 +80,11 @@ const LoginForm = () => {
       )
 
       const token: string = response.data
-      const encryptedToken = encryptToken(token) // Encrypt the token before storing
-      await AsyncStorage.setItem('token', encryptedToken)
+      const encryptedToken = await encryptToken(token)
+      await AsyncStorage.setItem('token', JSON.stringify(encryptedToken)) // Stringify the encrypted token
       console.log('Encrypted Token:', encryptedToken)
 
-      getUserData(token) // Use the raw token to get user data
+      getUserData(token)
 
       navigation.navigate('Home')
     } catch (error) {

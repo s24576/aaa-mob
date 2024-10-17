@@ -1,9 +1,5 @@
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
-import {
-  NavigationContainer,
-  NavigatorScreenParams,
-} from '@react-navigation/native'
+import React from 'react'
+import { NavigationContainer } from '@react-navigation/native'
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -16,8 +12,6 @@ import { UserContextProvider } from './context/UserContext'
 import { initI18n } from './translations/i18n'
 
 initI18n()
-
-//https://49f5-194-181-181-5.ngrok-free.app
 
 type RootStackParamList = {
   Login: undefined

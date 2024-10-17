@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useContext } from 'react'
+import React, { createContext, useState, ReactNode } from 'react'
 import { UserContextType, UserData } from '../types/local/userContext'
 
 export const UserContext = createContext<UserContextType | undefined>(undefined)

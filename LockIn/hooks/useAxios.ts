@@ -6,39 +6,46 @@ import axios, {
 } from 'axios'
 import { useMemo } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { createCipheriv, createDecipheriv, randomBytes } from 'crypto'
+import * as Crypto from 'expo-crypto'
 
 const baseURL = 'http://localhost:8080/api'
-const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string // Should be 32 bytes for AES-256
-const iv = randomBytes(16) // Initialization vector
+const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string // Klucz 32-bajtowy dla AES-256
 
-// Encryption function using Node.js crypto module
-const encryptToken = (token: string): string => {
-  const cipher = createCipheriv(
-    'aes-256-cbc',
-    Buffer.from(encryptionKey, 'hex'),
-    iv
-  )
-  let encrypted = cipher.update(token, 'utf-8', 'hex')
-  encrypted += cipher.final('hex')
-  return iv.toString('hex') + encrypted // Prepend IV to the encrypted string for decryption
+// Funkcja do konwersji tablicy bajtów na ciąg hex
+const uint8ArrayToHex = (arr: Uint8Array): string => {
+  return Array.from(arr)
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')
 }
 
-// Decryption function using Node.js crypto module
-const decryptToken = (encryptedToken: string): string => {
-  const iv = Buffer.from(encryptedToken.slice(0, 32), 'hex') // Extract IV from the encrypted token
+// Funkcja szyfrowania
+const encryptToken = async (token: string): Promise<string> => {
+  const iv = Crypto.getRandomBytes(16) // Wektor inicjalizujący
+
+  // Łączenie klucza szyfrowania, tokenu i IV w celu stworzenia skrótu
+  const combinedString = encryptionKey + token + uint8ArrayToHex(iv)
+
+  const encryptedToken = await Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    combinedString
+  )
+
+  return uint8ArrayToHex(iv) + encryptedToken // Dodaj IV do zaszyfrowanego tokenu
+}
+
+// Funkcja deszyfrowania
+const decryptToken = async (encryptedToken: string): Promise<string> => {
+  const iv = encryptedToken.slice(0, 32) // Pobierz IV
   const encrypted = encryptedToken.slice(32)
-  const decipher = createDecipheriv(
-    'aes-256-cbc',
-    Buffer.from(encryptionKey, 'hex'),
-    iv
+
+  const decryptedToken = await Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    encryptionKey + encrypted + iv
   )
-  let decrypted = decipher.update(encrypted, 'hex', 'utf-8')
-  decrypted += decipher.final('utf-8')
-  return decrypted
+
+  return decryptedToken
 }
 
-// Custom interface extending InternalAxiosRequestConfig to include _retry
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
 }
@@ -54,11 +61,11 @@ const useAxios = (): AxiosInstance => {
         config: CustomAxiosRequestConfig
       ): Promise<CustomAxiosRequestConfig> => {
         if (config && !config.headers?.Authorization) {
-          const encryptedToken = await AsyncStorage.getItem('token') // Get the encrypted token
+          const encryptedToken = await AsyncStorage.getItem('token')
           let savedToken: string | null = null
 
           if (encryptedToken) {
-            savedToken = decryptToken(encryptedToken) // Decrypt the token
+            savedToken = await decryptToken(encryptedToken)
           }
 
           if (savedToken) {
@@ -78,8 +85,7 @@ const useAxios = (): AxiosInstance => {
         const originalRequest = error.config as CustomAxiosRequestConfig
 
         if (
-          error.response &&
-          error.response.status === 403 &&
+          error.response?.status === 403 &&
           originalRequest &&
           !originalRequest._retry
         ) {
@@ -89,7 +95,7 @@ const useAxios = (): AxiosInstance => {
             const encryptedRefreshToken =
               await AsyncStorage.getItem('refreshToken')
             const refreshToken = encryptedRefreshToken
-              ? decryptToken(encryptedRefreshToken)
+              ? await decryptToken(encryptedRefreshToken)
               : null
 
             if (refreshToken) {
@@ -97,17 +103,14 @@ const useAxios = (): AxiosInstance => {
                 `${baseURL}/user/refreshToken`,
                 {},
                 {
-                  headers: {
-                    Authorization: `Bearer ${refreshToken}`,
-                  },
+                  headers: { Authorization: `Bearer ${refreshToken}` },
                 }
               )
 
               const newToken = refreshTokenResponse.data
-              await AsyncStorage.setItem('token', newToken)
+              const encryptedNewToken = await encryptToken(newToken)
 
-              const encryptedNewToken = encryptToken(newToken)
-              await AsyncStorage.setItem('refreshToken', encryptedNewToken)
+              await AsyncStorage.setItem('token', encryptedNewToken)
 
               if (originalRequest.headers) {
                 originalRequest.headers.set(
