@@ -95,19 +95,19 @@ const LoginForm = () => {
   return (
     <View>
       <TextInput
-        placeholder={t('loginForm.usernameInput')}
+        placeholder={t('usernameInput')}
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
-        placeholder={t('loginForm.passwordInput')}
+        placeholder={t('passwordInput')}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title={t('loginForm.loginButton')} onPress={handleLogin} />
+      <Button title={t('loginButton')} onPress={handleLogin} />
       <Button
-        title={t('loginForm.toRegistrerButton')}
+        title={t('toRegistrerButton')}
         onPress={() => navigation.navigate('Register')}
       />
     </View>

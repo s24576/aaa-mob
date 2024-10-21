@@ -1,14 +1,9 @@
 {
-  "loginForm": {
-    "usernameInput": "Nazwa użytkownika",
-    "passwordInput": "Hasło",
-    "loginButton": "Zaloguj się",
-    "toRegistrerButton": "Nie masz konta? Zarejestruj się"
-  },
-  "registerForm": {
-    "usernameInput": "Nazwa użytkownika",
-    "passwordInput": "Hasło",
-    "registerButton": "Zarejestruj się",
-    "toLoginButton": "Masz już konto? Zaloguj się"
-  }
+  "confirmPasswordInput": "Potwierdź hasło",
+  "loginButton": "Zaloguj się",
+  "passwordInput": "Hasło",
+  "registerButton": "Zarejestruj",
+  "toLoginButton": "Przejdź do logowania",
+  "toRegistrerButton": "Nie masz konta? Zarejestruj się",
+  "usernameInput": "Nazwa użytkownika"
 }

@@ -1,14 +1,9 @@
 {
-  "loginForm": {
-    "usernameInput": "Username",
-    "passwordInput": "Password",
-    "loginButton": "Login",
-    "toRegistrerButton": "Don't have an account? Register"
-  },
-  "registerForm": {
-    "usernameInput": "Username",
-    "passwordInput": "Password",
-    "registerButton": "Register",
-    "toLoginButton": "Already have an account? Log in"
-  }
+  "confirmPasswordInput": "Confirm Password",
+  "loginButton": "Login",
+  "passwordInput": "Password",
+  "registerButton": "Register",
+  "toLoginButton": "Already have an account? Log in",
+  "toRegistrerButton": "Don't have an account? Register",
+  "usernameInput": "Username"
 }
