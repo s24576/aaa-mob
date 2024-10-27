@@ -10,6 +10,7 @@ import Home from './screens/Home'
 import Profile from './screens/Profile'
 import { UserContextProvider } from './context/UserContext'
 import { initI18n } from './translations/i18n'
+import LanguageToggleButton from './components/LanguageToggleButton'
 
 initI18n()
 
@@ -31,9 +32,10 @@ export const Layout = () => {
     <NavigationContainer>
       <UserContextProvider>
         <Stack.Navigator
-          screenOptions={{
+          screenOptions={({ navigation }) => ({
             headerBackVisible: false,
-          }}
+            headerRight: () => <LanguageToggleButton />,
+          })}
         >
           <Stack.Screen name="Login" component={Login}></Stack.Screen>
           <Stack.Screen name="Register" component={Register}></Stack.Screen>
