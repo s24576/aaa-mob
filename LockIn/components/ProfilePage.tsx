@@ -1,8 +1,24 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, Button, Alert, ScrollView } from 'react-native'
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Alert,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native'
 import { Profile } from '../types/riot/profileClass' // Adjust the import path as necessary
+import { useNavigation } from '@react-navigation/native'
+import { MatchDetailsScreenProps } from '../App'
 
 const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
+  const navigation = useNavigation<MatchDetailsScreenProps['navigation']>()
+
+  const handleMatchPress = (matchId: string) => {
+    navigation.navigate('MatchDetails', { matchId })
+  }
+
   return (
     <View className="mt-5">
       <Text className="text-lg mb-2">Profile Information</Text>
@@ -51,13 +67,16 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
       <Text className="text-lg mb-2 mt-4">Matches</Text>
       {profile.matches.map((match, index) => (
         <View
-          key={index}
+          key={match.matchId}
           className="flex-row justify-between py-2 border-b border-gray-300"
         >
           <Text className="flex-1 text-left">{match.championName}</Text>
           <Text className="flex-1 text-left">
             {match.kills}/{match.deaths}/{match.assists}
           </Text>
+          <TouchableOpacity onPress={() => handleMatchPress(match.matchId)}>
+            <Text>{match.matchId}</Text>
+          </TouchableOpacity>
         </View>
       ))}
     </View>
