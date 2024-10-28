@@ -2,8 +2,8 @@
 
 ## Features
 
-- [ ] Create a page for each match (`strona do kazdego meczu`)
-- [ ] Add a translation button (`guzik do tłumaczeń`)
+- [ ] Przebudowa useAxios.ts tak żeby ustawiało header przetestować czy działa szyfrowanie
+- [ ] Rozbicie wszystkich zapytań do bazy na useQuery i osobne zapytania
 - [ ] Implement user account redirection from match page (`ze strony meczu przenoszenie na konta uzytkownikow`)
 - [ ] Add user follow functionality (`follow uzytkownika`)
 - [ ] Fetch champion and item icons from RedDragon (`pobierac ikonki championow i przedmiotow z reddragona`)
