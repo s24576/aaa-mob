@@ -75,7 +75,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
             {match.kills}/{match.deaths}/{match.assists}
           </Text>
           <TouchableOpacity onPress={() => handleMatchPress(match.matchId)}>
-            <Text>{match.matchId}</Text>
+            <Text className="font-bold">{match.matchId}</Text>
           </TouchableOpacity>
         </View>
       ))}

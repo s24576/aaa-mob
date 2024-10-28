@@ -37,11 +37,14 @@ const MatchDetailsPage: React.FC = () => {
   return (
     <ScrollView>
       <View>
-        <Text>Game Duration: {matchInfo.gameDuration} seconds</Text>
-        <Text>Queue Type: {matchInfo.queueType}</Text>
-        <Text>Participants:</Text>
+        <View className="mb-4">
+          <Text>Game Duration: {matchInfo.gameDuration} seconds</Text>
+          <Text>Queue Type: {matchInfo.queueType}</Text>
+          <Text>Participants:</Text>
+        </View>
         {matchInfo.participants.map((participant, index) => (
-          <View key={index}>
+          <View key={index} className="mb-2">
+            <Text>Summoner Name: {participant.riotIdGameName}</Text>
             <Text>Champion: {participant.championName}</Text>
             <Text>Kills: {participant.kills}</Text>
             <Text>Deaths: {participant.deaths}</Text>
@@ -51,6 +54,7 @@ const MatchDetailsPage: React.FC = () => {
               {participant.totalDamageDealtToChampions}
             </Text>
             <Text>Win: {participant.win ? 'Yes' : 'No'}</Text>
+            <Text className="font-bold">PUUID: {participant.puuid}</Text>
           </View>
         ))}
       </View>
