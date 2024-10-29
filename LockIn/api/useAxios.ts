@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Crypto from 'expo-crypto'
 
-const baseURL = process.env.BACKEND_URL + '/api'
+const baseURL = process.env.BACKEND_URL as string
 const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
 
 // Encryption and decryption functions remain the same

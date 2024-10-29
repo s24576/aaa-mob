@@ -25,5 +25,6 @@
 ## Pytania
 - Co robi refresh w findPlayer requescie
 - Co zwraca serv gdy nie ma tokenu
-- Czy kazdy request potrzebuje tokenu
-- 
+- Czy kazdy request potrzebuje tokenu  (profilowe potrzebuja)
+
+accept language i bearer token
