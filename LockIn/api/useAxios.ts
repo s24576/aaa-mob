@@ -6,6 +6,20 @@ const instance = axios.create({
   baseURL: process.env.BACKEND_ADDRESS,
 })
 
+// Interceptor dołączający token i język do każdego requestu
+instance.interceptors.request.use(
+  async (config) => {
+    const token = await AsyncStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    config.headers['Accept-Language'] = i18n.language
+    return config
+  },
+  (error) => Promise.reject(error)
+)
+
+// Interceptor obsługujący odświeżanie tokena
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -24,7 +38,7 @@ instance.interceptors.response.use(
       if (refreshToken) {
         console.log('Odśwież token:', refreshToken)
         try {
-          // Wyślij żądanie do /user/refreshToken z poprawnym nagłówkiem
+          // Wyślij żądanie do /user/refreshToken
           const refreshResponse = await axios.post(
             `${process.env.BACKEND_ADDRESS}/user/refreshToken`,
             {},
@@ -45,7 +59,6 @@ instance.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
           return instance(originalRequest)
         } catch (refreshError) {
-          // Jeśli odświeżenie tokena nie powiedzie się, można np. przenieść użytkownika do ekranu logowania
           console.error('Odświeżenie tokena nie powiodło się:', refreshError)
         }
       }
