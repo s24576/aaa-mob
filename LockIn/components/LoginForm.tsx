@@ -8,6 +8,7 @@ import { UserData, Friend, UserContextType } from '../types/local/userContext'
 import { UserContext } from '../context/UserContext'
 import { useTranslation } from 'react-i18next'
 import { encryptToken } from '../security/TokenEncryption'
+import { decryptToken } from '../security/TokenDecryption'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -80,9 +81,14 @@ const LoginForm = () => {
       )
 
       const token: string = response.data
+      console.log('Token:', token)
+
       const encryptedToken = await encryptToken(token)
-      await AsyncStorage.setItem('token', JSON.stringify(encryptedToken)) // Stringify the encrypted token
+      await AsyncStorage.setItem('token', token) // Stringify the encrypted token
       console.log('Encrypted Token:', encryptedToken)
+      const decryptedToken = await decryptToken(encryptedToken)
+      console.log('Decrypted Token:', decryptedToken)
+      console.log('AsyncStorage Token:', await AsyncStorage.getItem('token'))
 
       getUserData(token)
 

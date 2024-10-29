@@ -1,9 +1,9 @@
-import api from './useAxios' // Importuj instancję axios
+import api from './../useAxios' // Importuj instancję axios
 import axios from 'axios'
 
-export const getMatchInfo = async (matchId: string) => {
+export const getMyAccounts = async () => {
   try {
-    const response = await api.get(`/riot/getMatchInfo?matchId=${matchId}`)
+    const response = await api.get(`/profile/myAccounts`)
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -13,6 +13,6 @@ export const getMatchInfo = async (matchId: string) => {
     } else {
       console.error('Unknown error:', error)
     }
-    throw error // Rzuć wyjątek ponownie po zalogowaniu
+    throw error
   }
 }

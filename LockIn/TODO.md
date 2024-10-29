@@ -23,8 +23,14 @@
 - [ ] Fix follow button not responding on certain user profiles
 
 ## Pytania
+
 - Co robi refresh w findPlayer requescie
 - Co zwraca serv gdy nie ma tokenu
-- Czy kazdy request potrzebuje tokenu  (profilowe potrzebuja)
+- Czy kazdy request potrzebuje tokenu (profilowe potrzebuja)
 
 accept language i bearer token
+
+enkrypcja dekrypcja
+naglowki
+
+mecze dzialaja na przedawnionych tokenach, myAccounts nie
