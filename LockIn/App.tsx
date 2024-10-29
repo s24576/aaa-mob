@@ -12,6 +12,7 @@ import MatchDetails from './screens/MatchDetails'
 import { UserContextProvider } from './context/UserContext'
 import { initI18n } from './translations/i18n'
 import LanguageToggleButton from './components/LanguageToggleButton'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 initI18n()
 
@@ -25,6 +26,8 @@ type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
+const queryClient = new QueryClient()
+
 export default function App() {
   return <Layout />
 }
@@ -32,23 +35,25 @@ export default function App() {
 export const Layout = () => {
   return (
     <NavigationContainer>
-      <UserContextProvider>
-        <Stack.Navigator
-          screenOptions={({ navigation }) => ({
-            headerBackVisible: false,
-            headerRight: () => <LanguageToggleButton />,
-          })}
-        >
-          <Stack.Screen name="Login" component={Login}></Stack.Screen>
-          <Stack.Screen name="Register" component={Register}></Stack.Screen>
-          <Stack.Screen name="Home" component={Home}></Stack.Screen>
-          <Stack.Screen name="Profile" component={Profile}></Stack.Screen>
-          <Stack.Screen
-            name="MatchDetails"
-            component={MatchDetails}
-          ></Stack.Screen>
-        </Stack.Navigator>
-      </UserContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <UserContextProvider>
+          <Stack.Navigator
+            screenOptions={({ navigation }) => ({
+              headerBackVisible: false,
+              headerRight: () => <LanguageToggleButton />,
+            })}
+          >
+            <Stack.Screen name="Login" component={Login}></Stack.Screen>
+            <Stack.Screen name="Register" component={Register}></Stack.Screen>
+            <Stack.Screen name="Home" component={Home}></Stack.Screen>
+            <Stack.Screen name="Profile" component={Profile}></Stack.Screen>
+            <Stack.Screen
+              name="MatchDetails"
+              component={MatchDetails}
+            ></Stack.Screen>
+          </Stack.Navigator>
+        </UserContextProvider>
+      </QueryClientProvider>
     </NavigationContainer>
   )
 }
