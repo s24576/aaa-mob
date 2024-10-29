@@ -8,21 +8,18 @@ import { useMemo } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Crypto from 'expo-crypto'
 
-const baseURL = 'http://localhost:8080/api'
-const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string // Klucz 32-bajtowy dla AES-256
+const baseURL = process.env.BACKEND_URL + '/api'
+const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
 
-// Funkcja do konwersji tablicy bajtów na ciąg hex
+// Encryption and decryption functions remain the same
 const uint8ArrayToHex = (arr: Uint8Array): string => {
   return Array.from(arr)
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('')
 }
 
-// Funkcja szyfrowania
 const encryptToken = async (token: string): Promise<string> => {
-  const iv = Crypto.getRandomBytes(16) // Wektor inicjalizujący
-
-  // Łączenie klucza szyfrowania, tokenu i IV w celu stworzenia skrótu
+  const iv = Crypto.getRandomBytes(16)
   const combinedString = encryptionKey + token + uint8ArrayToHex(iv)
 
   const encryptedToken = await Crypto.digestStringAsync(
@@ -30,12 +27,11 @@ const encryptToken = async (token: string): Promise<string> => {
     combinedString
   )
 
-  return uint8ArrayToHex(iv) + encryptedToken // Dodaj IV do zaszyfrowanego tokenu
+  return uint8ArrayToHex(iv) + encryptedToken
 }
 
-// Funkcja deszyfrowania
 const decryptToken = async (encryptedToken: string): Promise<string> => {
-  const iv = encryptedToken.slice(0, 32) // Pobierz IV
+  const iv = encryptedToken.slice(0, 32)
   const encrypted = encryptedToken.slice(32)
 
   const decryptedToken = await Crypto.digestStringAsync(
@@ -52,21 +48,16 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 
 const useAxios = (): AxiosInstance => {
   const axiosInstance = useMemo((): AxiosInstance => {
-    const instance = axios.create({
-      baseURL: baseURL,
-    })
+    const instance = axios.create({ baseURL })
 
+    // Request Interceptor
     instance.interceptors.request.use(
-      async (
-        config: CustomAxiosRequestConfig
-      ): Promise<CustomAxiosRequestConfig> => {
+      async (config: CustomAxiosRequestConfig) => {
         if (config && !config.headers?.Authorization) {
           const encryptedToken = await AsyncStorage.getItem('token')
-          let savedToken: string | null = null
-
-          if (encryptedToken) {
-            savedToken = await decryptToken(encryptedToken)
-          }
+          const savedToken = encryptedToken
+            ? await decryptToken(encryptedToken)
+            : null
 
           if (savedToken) {
             config.headers = config.headers || new AxiosHeaders()
@@ -79,6 +70,7 @@ const useAxios = (): AxiosInstance => {
       (error: AxiosError) => Promise.reject(error)
     )
 
+    // Response Interceptor
     instance.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {
@@ -99,7 +91,7 @@ const useAxios = (): AxiosInstance => {
               : null
 
             if (refreshToken) {
-              const refreshTokenResponse = await axios.post(
+              const refreshTokenResponse = await instance.post(
                 `${baseURL}/user/refreshToken`,
                 {},
                 {
@@ -109,7 +101,6 @@ const useAxios = (): AxiosInstance => {
 
               const newToken = refreshTokenResponse.data
               const encryptedNewToken = await encryptToken(newToken)
-
               await AsyncStorage.setItem('token', encryptedNewToken)
 
               if (originalRequest.headers) {

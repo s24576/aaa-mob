@@ -21,3 +21,9 @@
 - [ ] Resolve translation button not appearing on some devices
 - [ ] Address redirection errors from match page to user accounts
 - [ ] Fix follow button not responding on certain user profiles
+
+## Pytania
+- Co robi refresh w findPlayer requescie
+- Co zwraca serv gdy nie ma tokenu
+- Czy kazdy request potrzebuje tokenu
+- 
