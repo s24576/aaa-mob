@@ -5,10 +5,10 @@
 - [ ] Encryption and decryption
 - [x] Refactor `useAxios.ts` to set headers (`Auth and Language`)
 - [ ] Split all database queries into `useQuery` hooks and separate requests (`Jest na przykladzie MatchDetailsPage.tsx`)
-- [ ] Wyświetlanie danych konkretnego meczu (`użyć klas z ts`)
+- [X] Wyświetlanie danych konkretnego meczu (`użyć klas z ts`)
 - [ ] Implement user account redirection from match page
 - [ ] Add user follow functionality
-- [ ] Fetch champion and item icons from RedDragon
+- [X] Fetch champion and item icons from RedDragon
 
 ## Enhancements
 

@@ -1,16 +1,16 @@
 import React from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, Image } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { Info, Participant } from '../types/riot/matchClass' // Ensure Participant type is exported from matchClass
 import { useQuery } from '@tanstack/react-query'
 import { getMatchInfo } from '../api/match'
 import { getMyAccounts } from '../api/profile/myAccounts'
+import { getVersion } from '../api/version' // Import getVersion function
 
 const MatchDetailsPage: React.FC = () => {
   const route = useRoute()
   const { matchId } = route.params as { matchId: string }
 
-  // Use the useQuery hook to fetch my accounts
   const {
     data: myAccounts,
     isLoading: isMyAccountsLoading,
@@ -20,7 +20,6 @@ const MatchDetailsPage: React.FC = () => {
     queryFn: getMyAccounts,
   })
 
-  // Use the useMatchInfo hook to fetch match info
   const {
     data: matchInfo,
     isLoading,
@@ -31,50 +30,99 @@ const MatchDetailsPage: React.FC = () => {
     enabled: !!matchId,
   })
 
-  // Log the response data
+  const {
+    data: version,
+    isLoading: isVersionLoading,
+    error: versionError,
+  } = useQuery({
+    queryKey: ['version'],
+    queryFn: getVersion,
+  })
+
   console.log('Match Info:', matchInfo)
   console.log('My Accounts:', myAccounts)
+  console.log('Version:', version)
 
-  // Handle loading state
-  if (isLoading) {
+  if (isLoading || isVersionLoading) {
     return (
-      <View>
-        <Text>Loading...</Text>
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-lg">Loading...</Text>
       </View>
     )
   }
 
-  // Handle error state
-  if (error) {
-    console.log(error)
+  if (error || versionError) {
+    console.log(error || versionError)
     return (
-      <View>
-        <Text>Error fetching match info: {error.message}</Text>
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-lg">
+          Error fetching match info: {(error || versionError)?.message}
+        </Text>
       </View>
     )
   }
 
-  // If matchInfo is not available, handle that case
   if (!matchInfo) {
     return (
-      <View>
-        <Text>No match information found.</Text>
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-lg">No match information found.</Text>
       </View>
     )
   }
+
+  if (!Array.isArray(matchInfo.info.participants)) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-lg">Invalid match information format.</Text>
+      </View>
+    )
+  }
+
+  const team1 = matchInfo.info.participants.slice(0, 5)
+  const team2 = matchInfo.info.participants.slice(5, 10)
+
+  const renderParticipant = ({ item }: { item: Participant }) => (
+    <View className="flex-row justify-between py-2 border-b border-gray-300">
+      <Image
+        source={{
+          uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championName}.png`,
+        }}
+        style={{ width: 50, height: 50 }}
+      />
+      <Text className="flex-1 text-left"> {item.riotIdGameName}</Text>
+      <Text className="flex-1 text-left">
+        {item.kills}/{item.deaths}/{item.assists}
+      </Text>
+      <Text className="flex-1 text-left">
+        Question Marks:{item.enemyMissingPings}
+      </Text>
+    </View>
+  )
 
   return (
     <FlatList
-      ListHeaderComponent={<Text>Match Details</Text>}
-      data={matchInfo.participants}
-      keyExtractor={(item) => item.participantId.toString()}
-      renderItem={({ item }) => (
-        <View>
-          <Text>Participant: {item.participantId}</Text>
-          <Text>Kills: {item.kills}</Text>
-          <Text>Deaths: {item.deaths}</Text>
+      ListHeaderComponent={
+        <View className="p-4">
+          <Text className="text-2xl font-bold mb-4">Match Details</Text>
+          <Text className="text-xl font-semibold mb-2">Team 1</Text>
         </View>
-      )}
+      }
+      data={[...team1, { header: 'Team 2' }, ...team2]}
+      keyExtractor={(item, index) =>
+        item.participantId ? item.participantId.toString() : `header-${index}`
+      }
+      renderItem={({ item }) => {
+        if (item.header) {
+          return (
+            <View className="p-4">
+              <Text className="text-xl font-semibold mt-4 mb-2">
+                {item.header}
+              </Text>
+            </View>
+          )
+        }
+        return renderParticipant({ item })
+      }}
     />
   )
 }
