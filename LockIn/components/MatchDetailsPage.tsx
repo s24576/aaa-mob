@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, FlatList, Image } from 'react-native'
 import { useRoute } from '@react-navigation/native'
-import { Info, Participant } from '../types/riot/matchClass' // Ensure Participant type is exported from matchClass
+import { Info, Participant } from '../types/riot/matchClass'
 import { useQuery } from '@tanstack/react-query'
 import { getMatchInfo } from '../api/match'
 import { getMyAccounts } from '../api/profile/myAccounts'
-import { getVersion } from '../api/version' // Import getVersion function
+import { getVersion } from '../api/version'
 
 const MatchDetailsPage: React.FC = () => {
   const route = useRoute()

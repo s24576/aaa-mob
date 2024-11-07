@@ -8,9 +8,10 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native'
-import { Profile } from '../types/riot/profileClass' // Adjust the import path as necessary
+import { Profile } from '../types/riot/profileClass'
 import { useNavigation } from '@react-navigation/native'
 import { MatchDetailsScreenProps } from '../App'
+import { findPlayer } from '../api/riot/findPlayer'
 
 const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   const navigation = useNavigation<MatchDetailsScreenProps['navigation']>()
@@ -90,20 +91,7 @@ const ProfilePage: React.FC = () => {
   const [profile, setProfile] = useState<Profile | null>(null)
 
   const handleSubmit = async () => {
-    const url = `${process.env.BACKEND_ADDRESS}/riot/findPlayer?server=${server}&tag=${tag}&name=${name}`
-    try {
-      const response = await fetch(url)
-      const data = await response.json()
-      console.log('RIOT URL:', url) // Log the request URL
-      console.log('Server Response:', data) // Log the server response
-      Alert.alert('Server Response', JSON.stringify(data))
-
-      const profileData = new Profile(data)
-      setProfile(profileData)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-      Alert.alert('Error', 'Failed to fetch data from server')
-    }
+    await findPlayer(server, tag, name, setProfile)
   }
 
   return (
