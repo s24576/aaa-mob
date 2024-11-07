@@ -5,7 +5,6 @@ import MatchDetailsPage from '../components/MatchDetailsPage'
 const Home = () => {
   return (
     <View>
-      {/* <HomePage /> */}
       <MatchDetailsPage />
     </View>
   )

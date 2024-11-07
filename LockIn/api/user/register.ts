@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { handleError } from '../error/handleError'
+import api from '../axios/useAxios'
 
 const BACKEND_ADDRESS = process.env.BACKEND_ADDRESS
 
@@ -16,7 +16,7 @@ export const handleRegister = async (
 
   try {
     console.log('Backend Address:', BACKEND_ADDRESS)
-    await axios.post(
+    await api.post(
       `${BACKEND_ADDRESS}/user/register`,
       { username, password },
       { headers: { 'Accept-Language': 'en' } }

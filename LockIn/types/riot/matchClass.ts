@@ -1,5 +1,3 @@
-// matchClass.ts
-
 export class Metadata {
   dataVersion: string
   matchId: string

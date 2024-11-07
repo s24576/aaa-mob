@@ -24,7 +24,6 @@ export interface UserContextType {
   setUserData: (userData: UserData) => void
 }
 
-// Friend class to represent each friend's data
 export class Friend {
   constructor(
     public _id: string,

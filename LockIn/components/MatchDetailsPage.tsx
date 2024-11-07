@@ -3,9 +3,9 @@ import { View, Text, FlatList, Image } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { Info, Participant } from '../types/riot/matchClass'
 import { useQuery } from '@tanstack/react-query'
-import { getMatchInfo } from '../api/match'
-import { getMyAccounts } from '../api/profile/myAccounts'
-import { getVersion } from '../api/version'
+import { getMatchInfo } from '../api/riot/getMatchInfo'
+import { getMyAccounts } from '../api/profile/getMyAccounts'
+import { getVersion } from '../api/ddragon/version'
 
 const MatchDetailsPage: React.FC = () => {
   const route = useRoute()

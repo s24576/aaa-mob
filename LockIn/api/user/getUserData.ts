@@ -1,4 +1,4 @@
-import axios from 'axios'
+import api from '../axios/useAxios'
 import { UserData, Friend } from '../../types/local/userContext'
 import { handleError } from '../error/handleError'
 
@@ -15,7 +15,7 @@ export const getUserData = async (
   setUserData: (userData: UserData) => void
 ) => {
   try {
-    const response = await axios.get(`${BACKEND_ADDRESS}/user/getUserData`, {
+    const response = await api.get(`${BACKEND_ADDRESS}/user/getUserData`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Accept-Language': 'en',
