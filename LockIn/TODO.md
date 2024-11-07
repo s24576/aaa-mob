@@ -9,6 +9,7 @@
 - [ ] Implement user account redirection from match page
 - [ ] Add user follow functionality
 - [x] Fetch champion and item icons from RedDragon
+- [] Dodanie formularza do wyszukiwania do headera jako popup
 
 ## Enhancements
 

@@ -11,8 +11,8 @@ import { encryptToken } from '../security/TokenEncryption'
 import { decryptToken } from '../security/TokenDecryption'
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('Test1234')
+  const [password, setPassword] = useState('Test1234')
   const navigation = useNavigation<LoginScreenProps['navigation']>()
 
   const { t } = useTranslation()
