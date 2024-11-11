@@ -14,11 +14,6 @@ export const findPlayer = async (
       `/riot/findPlayer?server=${server}&tag=${tag}&name=${name}`
     )
     const data = response.data
-    console.log(
-      'RIOT URL:',
-      `/riot/findPlayer?server=${server}&tag=${tag}&name=${name}`
-    )
-    console.log('Server Response:', data)
 
     const profileData = new Profile(data)
     setProfile(profileData)

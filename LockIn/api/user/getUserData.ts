@@ -21,7 +21,6 @@ export const getUserData = async (
         'Accept-Language': 'en',
       },
     })
-    console.log('User Data:', response.data)
 
     const userData = new UserData(
       response.data._id,
