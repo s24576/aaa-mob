@@ -3,12 +3,9 @@
 ## Features
 
 - [ ] Encryption and decryption
-- [x] Refactor `useAxios.ts` to set headers (`Auth and Language`)
 - [ ] Split all database queries into `useQuery` hooks and separate requests (`Jest na przykladzie MatchDetailsPage.tsx`)
-- [x] Wyświetlanie danych konkretnego meczu (`użyć klas z ts`)
 - [ ] Implement user account redirection from match page
 - [ ] Add user follow functionality
-- [x] Fetch champion and item icons from RedDragon
 - [] Dodanie formularza do wyszukiwania do headera jako popup
 
 ## Enhancements

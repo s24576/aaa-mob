@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import {
   createNativeStackNavigator,
@@ -9,10 +9,14 @@ import Register from './screens/Register'
 import Home from './screens/Home'
 import Profile from './screens/Profile'
 import MatchDetails from './screens/MatchDetails'
-import { UserContextProvider } from './context/UserContext'
+import { UserContextProvider, UserContext } from './context/UserContext'
 import { initI18n } from './translations/i18n'
 import LanguageToggleButton from './components/LanguageToggleButton'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { createDrawerNavigator } from '@react-navigation/drawer'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { UserContextType } from './types/local/userContext'
+import { Button } from 'react-native'
 
 initI18n()
 
@@ -24,35 +28,72 @@ type RootStackParamList = {
   MatchDetails: { matchId: string }
 }
 
+const Drawer = createDrawerNavigator<RootStackParamList>()
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const queryClient = new QueryClient()
 
 export default function App() {
-  return <Layout />
+  return (
+    <UserContextProvider>
+      <Layout />
+    </UserContextProvider>
+  )
 }
 
 export const Layout = () => {
+  const { userData, setUserData } = useContext(UserContext) as UserContextType
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem('token')
+      console.log('Token:', token)
+      setIsLoggedIn(!!token)
+    }
+    checkLoginStatus()
+  }, [userData])
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('token')
+    setIsLoggedIn(false)
+  }
+
   return (
     <NavigationContainer>
       <QueryClientProvider client={queryClient}>
-        <UserContextProvider>
-          <Stack.Navigator
+        {!isLoggedIn ? (
+          <Stack.Navigator screenOptions={{ headerBackVisible: false }}>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Home" component={Home} />
+            {/* nie usuawać home stad bo jest error*/}
+          </Stack.Navigator>
+        ) : (
+          <Drawer.Navigator
             screenOptions={({ navigation }) => ({
-              headerBackVisible: false,
-              headerRight: () => <LanguageToggleButton />,
+              headerRight: () => (
+                <>
+                  <LanguageToggleButton />
+                  <Button title="Logout" onPress={handleLogout} />
+                </>
+              ),
             })}
           >
-            <Stack.Screen name="Login" component={Login}></Stack.Screen>
-            <Stack.Screen name="Register" component={Register}></Stack.Screen>
-            <Stack.Screen name="Home" component={Home}></Stack.Screen>
-            <Stack.Screen name="Profile" component={Profile}></Stack.Screen>
-            <Stack.Screen
+            <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="Profile" component={Profile} />
+            <Drawer.Screen
               name="MatchDetails"
               component={MatchDetails}
-            ></Stack.Screen>
-          </Stack.Navigator>
-        </UserContextProvider>
+              options={{
+                drawerLabel: () => null,
+                drawerItemStyle: { height: 0 },
+                unmountOnBlur: true,
+              }}
+            />
+            {/* match details musi być na samym dole */}
+          </Drawer.Navigator>
+        )}
       </QueryClientProvider>
     </NavigationContainer>
   )
