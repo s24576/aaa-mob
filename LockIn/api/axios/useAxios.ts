@@ -33,6 +33,7 @@ instance.interceptors.response.use(
 
       const refreshToken = await AsyncStorage.getItem('token')
       if (refreshToken) {
+        console.log('Odśwież token:', refreshToken)
         try {
           const refreshResponse = await axios.post(
             `${process.env.BACKEND_ADDRESS}/user/refreshToken`,

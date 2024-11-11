@@ -39,6 +39,10 @@ const MatchDetailsPage: React.FC = () => {
     queryFn: getVersion,
   })
 
+  console.log('Match Info:', matchInfo)
+  console.log('My Accounts:', myAccounts)
+  console.log('Version:', version)
+
   if (isLoading || isVersionLoading) {
     return (
       <View className="flex-1 justify-center items-center">
@@ -48,6 +52,7 @@ const MatchDetailsPage: React.FC = () => {
   }
 
   if (error || versionError) {
+    console.log(error || versionError)
     return (
       <View className="flex-1 justify-center items-center">
         <Text className="text-lg">
