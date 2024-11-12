@@ -39,7 +39,9 @@ const MatchDetailsPage: React.FC = () => {
   }
 
   const renderParticipant = ({ item }: { item: Participant }) => (
-    <TouchableOpacity onPress={() => handleParticipantPress('EUW1', item.puuid)}>
+    <TouchableOpacity
+      onPress={() => handleParticipantPress('EUW1', item.puuid)}
+    >
       <View className="flex-row justify-between py-2 border-b border-gray-300">
         <Image
           source={{
