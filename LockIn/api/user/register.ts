@@ -1,5 +1,6 @@
 import { handleError } from '../error/handleError'
 import api from '../axios/useAxios'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 const BACKEND_ADDRESS = process.env.BACKEND_ADDRESS
 
@@ -7,7 +8,7 @@ export const handleRegister = async (
   username: string,
   password: string,
   confirmPassword: string,
-  navigation: any
+  navigation: NavigationProp<ParamListBase>
 ) => {
   if (password !== confirmPassword) {
     console.error('Passwords do not match')

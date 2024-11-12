@@ -7,8 +7,6 @@ import {
 import Login from './screens/Login'
 import Register from './screens/Register'
 import Home from './screens/Home'
-import RiotProfile from './screens/RiotProfile'
-import RiotSearch from './screens/RiotSearch'
 import MatchDetails from './screens/MatchDetails'
 import { UserContextProvider, UserContext } from './context/UserContext'
 import { initI18n } from './translations/i18n'
@@ -46,7 +44,7 @@ export default function App() {
 }
 
 export const Layout = () => {
-  const { userData, setUserData } = useContext(UserContext) as UserContextType
+  const { userData } = useContext(UserContext) as UserContextType
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
@@ -75,14 +73,14 @@ export const Layout = () => {
           </Stack.Navigator>
         ) : (
           <Drawer.Navigator
-            screenOptions={({ navigation }) => ({
+            screenOptions={{
               headerRight: () => (
                 <>
                   <LanguageToggleButton />
                   <Button title="Logout" onPress={handleLogout} />
                 </>
               ),
-            })}
+            }}
           >
             <Drawer.Screen name="RiotSearch" component={RiotSearchPage} />
             <Drawer.Screen name="Home" component={Home} />

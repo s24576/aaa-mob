@@ -198,7 +198,7 @@ export class Participant {
   summoner1Name: string
   summoner2Name: string
 
-  constructor(data: any) {
+  constructor(data: Participant) {
     this.allInPings = data.allInPings
     this.assistMePings = data.assistMePings
     this.assists = data.assists
@@ -366,7 +366,7 @@ export class Info {
   teams: Team[]
   queueType: string
 
-  constructor(data: any) {
+  constructor(data: Info) {
     this.gameCreation = data.gameCreation
     this.gameDuration = data.gameDuration
     this.gameEndTimestamp = data.gameEndTimestamp
@@ -391,7 +391,7 @@ export class Team {
   teamId: number
   win: boolean
 
-  constructor(data: any) {
+  constructor(data: Team) {
     this.bans = data.bans.map((b: any) => new Ban(b))
     this.objectives = new Objectives(data.objectives)
     this.teamId = data.teamId
@@ -403,7 +403,7 @@ export class Ban {
   championId: number
   pickTurn: number
 
-  constructor(data: any) {
+  constructor(data: Ban) {
     this.championId = data.championId
     this.pickTurn = data.pickTurn
   }
@@ -418,7 +418,7 @@ export class Objectives {
   riftHerald: Objective
   tower: Objective
 
-  constructor(data: any) {
+  constructor(data: Objectives) {
     this.baron = new Objective(data.baron)
     this.champion = new Objective(data.champion)
     this.dragon = new Objective(data.dragon)
@@ -433,7 +433,7 @@ export class Objective {
   first: boolean
   kills: number
 
-  constructor(data: any) {
+  constructor(data: Objective) {
     this.first = data.first
     this.kills = data.kills
   }

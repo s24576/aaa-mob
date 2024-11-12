@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, Text, ScrollView, TouchableOpacity, Button } from 'react-native'
 import { Profile } from '../types/riot/profileClass'
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
@@ -79,7 +79,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
         </View>
       ))}
       <Text className="text-lg mb-2 mt-4">Matches</Text>
-      {profile.matches.map((match, index) => (
+      {profile.matches.map((match) => (
         <View
           key={match.matchId}
           className="flex-row justify-between py-2 border-b border-gray-300"
@@ -106,7 +106,6 @@ const ProfilePage: React.FC = () => {
     data: profile,
     isLoading,
     error,
-    refetch,
   } = useQuery({
     queryKey: ['profile', server, tag, name, puuid],
     queryFn: () => findPlayer(server, tag, name, puuid),
