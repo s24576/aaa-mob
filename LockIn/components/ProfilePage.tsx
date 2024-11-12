@@ -12,6 +12,7 @@ import { Profile } from '../types/riot/profileClass'
 import { useNavigation } from '@react-navigation/native'
 import { MatchDetailsScreenProps } from '../App'
 import { findPlayer } from '../api/riot/findPlayer'
+import { useQuery } from '@tanstack/react-query'
 
 const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   const navigation = useNavigation<MatchDetailsScreenProps['navigation']>()
@@ -88,10 +89,15 @@ const ProfilePage: React.FC = () => {
   const [server, setServer] = useState('EUW1')
   const [tag, setTag] = useState('ECPU')
   const [name, setName] = useState('Oriol')
-  const [profile, setProfile] = useState<Profile | null>(null)
+
+  const { data: profile, isLoading, error, refetch } = useQuery({
+    queryKey: ['profile', server, tag, name],
+    queryFn: () => findPlayer(server, tag, name),
+    enabled: false,
+  })
 
   const handleSubmit = async () => {
-    await findPlayer(server, tag, name, setProfile)
+    refetch()
   }
 
   return (
@@ -123,6 +129,8 @@ const ProfilePage: React.FC = () => {
       </View>
       <Button title="Search" onPress={handleSubmit} />
 
+      {isLoading && <Text>Loading...</Text>}
+      {error && <Text>Error fetching profile: {error.message}</Text>}
       {profile && <ProfileTable profile={profile} />}
     </ScrollView>
   )

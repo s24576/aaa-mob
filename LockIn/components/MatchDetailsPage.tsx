@@ -1,24 +1,14 @@
 import React from 'react'
 import { View, Text, FlatList, Image } from 'react-native'
 import { useRoute } from '@react-navigation/native'
-import { Info, Participant } from '../types/riot/matchClass'
+import { Participant } from '../types/riot/matchClass'
 import { useQuery } from '@tanstack/react-query'
 import { getMatchInfo } from '../api/riot/getMatchInfo'
-import { getMyAccounts } from '../api/profile/getMyAccounts'
 import { getVersion } from '../api/ddragon/version'
 
 const MatchDetailsPage: React.FC = () => {
   const route = useRoute()
   const { matchId } = route.params as { matchId: string }
-
-  const {
-    data: myAccounts,
-    isLoading: isMyAccountsLoading,
-    error: myAccountsError,
-  } = useQuery({
-    queryKey: ['myAccounts'],
-    queryFn: getMyAccounts,
-  })
 
   const {
     data: matchInfo,
@@ -40,7 +30,6 @@ const MatchDetailsPage: React.FC = () => {
   })
 
   console.log('Match Info:', matchInfo)
-  console.log('My Accounts:', myAccounts)
   console.log('Version:', version)
 
   if (isLoading || isVersionLoading) {

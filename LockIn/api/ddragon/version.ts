@@ -1,5 +1,4 @@
 import api from '../axios/useAxios'
-import axios from 'axios'
 import { handleError } from '../error/handleError'
 
 export const getVersion = async () => {
