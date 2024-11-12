@@ -3,14 +3,22 @@ import { handleError } from '../error/handleError'
 import api from '../axios/useAxios'
 
 export const findPlayer = async (
-  server: string,
-  tag: string,
-  name: string
+  server?: string,
+  tag?: string,
+  name?: string,
+  puuid?: string
 ): Promise<Profile> => {
   try {
-    const response = await api.get(
-      `/riot/findPlayer?server=${server}&tag=${tag}&name=${name}`
-    )
+    let url = '/riot/findPlayer?'
+    if (puuid && server) {
+      url += `server=${server}&puuid=${puuid}`
+    } else if (server && tag && name) {
+      url += `server=${server}&tag=${tag}&name=${name}`
+    } else {
+      throw new Error('Invalid search parameters')
+    }
+
+    const response = await api.get(url)
     const data = response.data
     const profileData = new Profile(data)
     console.log('Profile Data:', profileData)

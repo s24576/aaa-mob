@@ -34,12 +34,12 @@ const MatchDetailsPage: React.FC = () => {
   console.log('Match Info:', matchInfo)
   console.log('Version:', version)
 
-  const handleParticipantPress = (puuid: string) => {
-    navigation.navigate('RiotProfile', { server: 'EUW1', tag: '', name: puuid })
+  const handleParticipantPress = (server: string, puuid: string) => {
+    navigation.navigate('RiotProfile', { server, puuid })
   }
 
   const renderParticipant = ({ item }: { item: Participant }) => (
-    <TouchableOpacity onPress={() => handleParticipantPress(item.puuid)}>
+    <TouchableOpacity onPress={() => handleParticipantPress('EUW1', item.puuid)}>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
         <Image
           source={{

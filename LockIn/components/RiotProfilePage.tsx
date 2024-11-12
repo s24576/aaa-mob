@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, Button, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useEffect } from 'react'
+import { View, Text, ScrollView, TouchableOpacity, Button } from 'react-native'
 import { Profile } from '../types/riot/profileClass'
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { MatchDetailsScreenProps } from '../App'
@@ -8,7 +8,12 @@ import { useQuery } from '@tanstack/react-query'
 
 type RiotProfileRouteProp = RouteProp<
   {
-    RiotProfile: { server: string; tag: string; name: string }
+    RiotProfile: {
+      server?: string
+      tag?: string
+      name?: string
+      puuid?: string
+    }
   },
   'RiotProfile'
 >
@@ -93,9 +98,9 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 }
 
 const ProfilePage: React.FC = () => {
-  const [server, setServer] = useState('EUW1')
-  const [tag, setTag] = useState('ECPU')
-  const [name, setName] = useState('Oriol')
+  const navigation = useNavigation()
+  const route = useRoute<RiotProfileRouteProp>()
+  const { server, tag, name, puuid } = route.params || {}
 
   const {
     data: profile,
@@ -103,22 +108,21 @@ const ProfilePage: React.FC = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['profile', server, tag, name],
-    queryFn: () => findPlayer(server, tag, name),
-    enabled: !!server && !!tag && !!name,
+    queryKey: ['profile', server, tag, name, puuid],
+    queryFn: () => findPlayer(server, tag, name, puuid),
+    enabled: !!server && ((!!tag && !!name) || !!puuid),
   })
-
-  console.log('Profile Info:', profile)
-
-  const handleSubmit = async () => {
-    refetch()
-  }
 
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
       <Text className="text-2xl mb-4">Profile Page</Text>
       {isLoading && <Text>Loading...</Text>}
-      {error && <Text>Error fetching profile: {error.message}</Text>}
+      {error && (
+        <View>
+          <Text>Error fetching profile: {error.message}</Text>
+          <Button title="Go Back" onPress={() => navigation.goBack()} />
+        </View>
+      )}
       {profile && <ProfileTable profile={profile} />}
     </ScrollView>
   )

@@ -28,7 +28,7 @@ type RootStackParamList = {
   Register: undefined
   Home: undefined
   RiotSearch: undefined
-  RiotProfile: { server: string, tag: string, name: string }
+  RiotProfile: { server?: string; tag?: string; name?: string; puuid?: string }
   MatchDetails: { matchId: string }
 }
 
@@ -84,9 +84,10 @@ export const Layout = () => {
               ),
             })}
           >
+            <Drawer.Screen name="RiotSearch" component={RiotSearchPage} />
             <Drawer.Screen name="Home" component={Home} />
             <Drawer.Screen name="RiotProfile" component={RiotProfilePage} />
-            <Drawer.Screen name="RiotSearch" component={RiotSearchPage} />
+
             <Drawer.Screen
               name="MatchDetails"
               component={MatchDetails}
