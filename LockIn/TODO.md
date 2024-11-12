@@ -6,7 +6,7 @@
 - [ ] Split all database queries into `useQuery` hooks and separate requests (`Jest na przykladzie MatchDetailsPage.tsx`)
 - [ ] Implement user account redirection from match page
 - [ ] Add user follow functionality
-- [] Dodanie formularza do wyszukiwania do headera jako popup
+- [] Przemyślenie gdzie dać szukanie i ogolny layout
 
 ## Enhancements
 

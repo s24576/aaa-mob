@@ -44,7 +44,7 @@ instance.interceptors.response.use(
               },
             }
           )
-          const newToken = refreshResponse.data.token
+          const newToken = refreshResponse.data
           await AsyncStorage.setItem('token', newToken)
           originalRequest.headers.Authorization = `Bearer ${newToken}`
           return axios(originalRequest)
