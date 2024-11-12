@@ -13,6 +13,7 @@ export const findPlayer = async (
     )
     const data = response.data
     const profileData = new Profile(data)
+    console.log('Profile Data:', profileData)
     return profileData
   } catch (error) {
     console.error('Error fetching data:', error)

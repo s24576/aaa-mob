@@ -1,11 +1,11 @@
 import { View } from 'react-native'
 import React from 'react'
-import ProfilePage from '../components/ProfilePage'
+import RiotProfilePage from '../components/RiotProfilePage'
 
 const Profile = () => {
   return (
     <View>
-      <ProfilePage />
+      <RiotProfilePage />
     </View>
   )
 }

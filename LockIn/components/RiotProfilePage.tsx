@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  Alert,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native'
+import { View, Text, Button, ScrollView, TouchableOpacity } from 'react-native'
 import { Profile } from '../types/riot/profileClass'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { MatchDetailsScreenProps } from '../App'
 import { findPlayer } from '../api/riot/findPlayer'
 import { useQuery } from '@tanstack/react-query'
+
+type RiotProfileRouteProp = RouteProp<
+  {
+    RiotProfile: { server: string; tag: string; name: string }
+  },
+  'RiotProfile'
+>
 
 const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   const navigation = useNavigation<MatchDetailsScreenProps['navigation']>()
@@ -43,6 +42,14 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
       <View className="flex-row justify-between py-2 border-b border-gray-300">
         <Text className="flex-1 text-left">Summoner Level</Text>
         <Text className="flex-1 text-left">{profile.summonerLevel}</Text>
+      </View>
+      <View className="flex-row justify-between py-2 border-b border-gray-300">
+        <Text className="flex-1 text-left">Ranked Tier</Text>
+        <Text className="flex-1 text-left">{profile.rankedTier}</Text>
+      </View>
+      <View className="flex-row justify-between py-2 border-b border-gray-300">
+        <Text className="flex-1 text-left">Ranked Rank</Text>
+        <Text className="flex-1 text-left">{profile.rankedRank}</Text>
       </View>
       <Text className="text-lg mb-2 mt-4">Ranks</Text>
       {profile.ranks.map((rank, index) => (
@@ -90,11 +97,18 @@ const ProfilePage: React.FC = () => {
   const [tag, setTag] = useState('ECPU')
   const [name, setName] = useState('Oriol')
 
-  const { data: profile, isLoading, error, refetch } = useQuery({
+  const {
+    data: profile,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['profile', server, tag, name],
     queryFn: () => findPlayer(server, tag, name),
-    enabled: false,
+    enabled: !!server && !!tag && !!name,
   })
+
+  console.log('Profile Info:', profile)
 
   const handleSubmit = async () => {
     refetch()
@@ -103,32 +117,6 @@ const ProfilePage: React.FC = () => {
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
       <Text className="text-2xl mb-4">Profile Page</Text>
-      <View className="mb-3">
-        <Text>Server:</Text>
-        <TextInput
-          className="h-10 border border-gray-400 px-2"
-          value={server}
-          onChangeText={setServer}
-        />
-      </View>
-      <View className="mb-3">
-        <Text>Tag:</Text>
-        <TextInput
-          className="h-10 border border-gray-400 px-2"
-          value={tag}
-          onChangeText={setTag}
-        />
-      </View>
-      <View className="mb-3">
-        <Text>Name:</Text>
-        <TextInput
-          className="h-10 border border-gray-400 px-2"
-          value={name}
-          onChangeText={setName}
-        />
-      </View>
-      <Button title="Search" onPress={handleSubmit} />
-
       {isLoading && <Text>Loading...</Text>}
       {error && <Text>Error fetching profile: {error.message}</Text>}
       {profile && <ProfileTable profile={profile} />}

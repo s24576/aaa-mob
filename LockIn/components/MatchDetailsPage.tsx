@@ -1,13 +1,15 @@
 import React from 'react'
-import { View, Text, FlatList, Image } from 'react-native'
-import { useRoute } from '@react-navigation/native'
+import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
+import { useRoute, useNavigation } from '@react-navigation/native'
 import { Participant } from '../types/riot/matchClass'
 import { useQuery } from '@tanstack/react-query'
 import { getMatchInfo } from '../api/riot/getMatchInfo'
 import { getVersion } from '../api/ddragon/version'
+import { ProfileScreenProps } from '../App'
 
 const MatchDetailsPage: React.FC = () => {
   const route = useRoute()
+  const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const { matchId } = route.params as { matchId: string }
 
   const {
@@ -31,6 +33,36 @@ const MatchDetailsPage: React.FC = () => {
 
   console.log('Match Info:', matchInfo)
   console.log('Version:', version)
+
+  const handleParticipantPress = (puuid: string) => {
+    navigation.navigate('RiotProfile', { server: 'EUW1', tag: '', name: puuid })
+  }
+
+  const renderParticipant = ({ item }: { item: Participant }) => (
+    <TouchableOpacity onPress={() => handleParticipantPress(item.puuid)}>
+      <View className="flex-row justify-between py-2 border-b border-gray-300">
+        <Image
+          source={{
+            uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championName}.png`,
+          }}
+          style={{ width: 50, height: 50 }}
+        />
+        <Text className="flex-1 text-left"> {item.riotIdGameName}</Text>
+        <Text className="flex-1 text-left">
+          {item.kills}/{item.deaths}/{item.assists}
+        </Text>
+        <Text className="flex-1 text-left">
+          Question Marks:{item.enemyMissingPings}
+        </Text>
+        <Text className="flex-1 text-left">
+          Rank: {item.tier} {item.rank}
+        </Text>
+        <Text className="flex-1 text-left">
+          Summoner Spells: {item.summoner1Name}, {item.summoner2Name}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  )
 
   if (isLoading || isVersionLoading) {
     return (
@@ -69,24 +101,6 @@ const MatchDetailsPage: React.FC = () => {
 
   const team1 = matchInfo.info.participants.slice(0, 5)
   const team2 = matchInfo.info.participants.slice(5, 10)
-
-  const renderParticipant = ({ item }: { item: Participant }) => (
-    <View className="flex-row justify-between py-2 border-b border-gray-300">
-      <Image
-        source={{
-          uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championName}.png`,
-        }}
-        style={{ width: 50, height: 50 }}
-      />
-      <Text className="flex-1 text-left"> {item.riotIdGameName}</Text>
-      <Text className="flex-1 text-left">
-        {item.kills}/{item.deaths}/{item.assists}
-      </Text>
-      <Text className="flex-1 text-left">
-        Question Marks:{item.enemyMissingPings}
-      </Text>
-    </View>
-  )
 
   return (
     <FlatList

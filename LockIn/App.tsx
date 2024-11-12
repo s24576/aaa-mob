@@ -7,7 +7,8 @@ import {
 import Login from './screens/Login'
 import Register from './screens/Register'
 import Home from './screens/Home'
-import Profile from './screens/Profile'
+import RiotProfile from './screens/RiotProfile'
+import RiotSearch from './screens/RiotSearch'
 import MatchDetails from './screens/MatchDetails'
 import { UserContextProvider, UserContext } from './context/UserContext'
 import { initI18n } from './translations/i18n'
@@ -17,6 +18,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UserContextType } from './types/local/userContext'
 import { Button } from 'react-native'
+import RiotSearchPage from './components/RiotSearchPage'
+import RiotProfilePage from './components/RiotProfilePage'
 
 initI18n()
 
@@ -24,7 +27,8 @@ type RootStackParamList = {
   Login: undefined
   Register: undefined
   Home: undefined
-  Profile: undefined
+  RiotSearch: undefined
+  RiotProfile: { server: string, tag: string, name: string }
   MatchDetails: { matchId: string }
 }
 
@@ -81,7 +85,8 @@ export const Layout = () => {
             })}
           >
             <Drawer.Screen name="Home" component={Home} />
-            <Drawer.Screen name="Profile" component={Profile} />
+            <Drawer.Screen name="RiotProfile" component={RiotProfilePage} />
+            <Drawer.Screen name="RiotSearch" component={RiotSearchPage} />
             <Drawer.Screen
               name="MatchDetails"
               component={MatchDetails}
@@ -111,7 +116,7 @@ export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 export type ProfileScreenProps = NativeStackScreenProps<
   RootStackParamList,
-  'Profile'
+  'RiotProfile'
 >
 
 export type MatchDetailsScreenProps = NativeStackScreenProps<
