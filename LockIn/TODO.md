@@ -6,6 +6,7 @@
 - [ ] Implement user account redirection from match page
 - [ ] Add user follow functionality
 - [ ] Przemyślenie gdzie dać szukanie i ogolny layout
+- [ ] Dodać email do rejestracji
 
 ## Enhancements
 

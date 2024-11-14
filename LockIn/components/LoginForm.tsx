@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next'
 import { handleLogin } from '../api/user/login'
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('Test1234')
-  const [password, setPassword] = useState('Test1234')
+  const [username, setUsername] = useState('test1')
+  const [password, setPassword] = useState('test1')
   const navigation = useNavigation<LoginScreenProps['navigation']>()
 
   const { t } = useTranslation()
