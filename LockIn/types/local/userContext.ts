@@ -18,6 +18,16 @@ export class UserData {
     this.friends = friends
     this.username = username
   }
+
+  getUserData() {
+    return {
+      _id: this._id,
+      profileIcon: this.profileIcon,
+      bio: this.bio,
+      friends: this.friends,
+      username: this.username,
+    }
+  }
 }
 export interface UserContextType {
   userData: UserData | null

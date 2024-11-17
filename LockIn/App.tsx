@@ -18,6 +18,7 @@ import { UserContextType } from './types/local/userContext'
 import { Button } from 'react-native'
 import RiotSearchPage from './components/RiotSearchPage'
 import RiotProfilePage from './components/RiotProfilePage'
+import UserProfile from './screens/UserProfile'
 
 initI18n()
 
@@ -28,6 +29,7 @@ type RootStackParamList = {
   RiotSearch: undefined
   RiotProfile: { server?: string; tag?: string; name?: string; puuid?: string }
   MatchDetails: { matchId: string }
+  UserProfile: undefined
 }
 
 const Drawer = createDrawerNavigator<RootStackParamList>()
@@ -85,6 +87,7 @@ export const Layout = () => {
             <Drawer.Screen name="RiotSearch" component={RiotSearchPage} />
             <Drawer.Screen name="Home" component={Home} />
             <Drawer.Screen name="RiotProfile" component={RiotProfilePage} />
+            <Drawer.Screen name="UserProfile" component={UserProfile} />
 
             <Drawer.Screen
               name="MatchDetails"
