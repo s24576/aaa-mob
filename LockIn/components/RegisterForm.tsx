@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { handleRegister } from '../api/user/register'
 
 const RegisterForm = () => {
+  const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -15,6 +16,11 @@ const RegisterForm = () => {
 
   return (
     <View>
+      <TextInput
+        placeholder={t('emailInput')}
+        value={email}
+        onChangeText={setEmail}
+      />
       <TextInput
         placeholder={t('usernameInput')}
         value={username}
@@ -35,7 +41,7 @@ const RegisterForm = () => {
       <Button
         title={t('registerButton')}
         onPress={() =>
-          handleRegister(username, password, confirmPassword, navigation)
+          handleRegister(email, username, password, confirmPassword, navigation)
         }
       />
       <Button

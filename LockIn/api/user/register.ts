@@ -5,6 +5,7 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native'
 const BACKEND_ADDRESS = process.env.BACKEND_ADDRESS
 
 export const handleRegister = async (
+  email: string,
   username: string,
   password: string,
   confirmPassword: string,
@@ -19,7 +20,7 @@ export const handleRegister = async (
     console.log('Backend Address:', BACKEND_ADDRESS)
     await api.post(
       `${BACKEND_ADDRESS}/user/register`,
-      { username, password },
+      { email, username, password },
       { headers: { 'Accept-Language': 'en' } }
     )
 
