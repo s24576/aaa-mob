@@ -18,6 +18,7 @@ export const findPlayer = async (
       throw new Error('Invalid search parameters')
     }
 
+    console.log('REQUEST URL:', url)
     const response = await api.get(url)
     const data = response.data
     const profileData = new Profile(data)
