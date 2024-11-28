@@ -22,6 +22,7 @@ import RiotProfilePage from './components/RiotProfilePage'
 import UserProfile from './screens/UserProfile'
 import Messages from './screens/Messages'
 import Notifications from './screens/Notifications'
+import AccountsSearch from './screens/AccountsSearch'
 
 initI18n()
 
@@ -33,6 +34,10 @@ type RootStackParamList = {
   RiotProfile: { server?: string; tag?: string; name?: string; puuid?: string }
   MatchDetails: { matchId: string }
   UserProfile: undefined
+  Main: undefined
+  Messages: undefined
+  Notifications: undefined
+  Search: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -92,7 +97,7 @@ export const Layout = () => {
                         case 'RiotProfile':
                           iconName = 'stats-chart'
                           break
-                        case 'RiotSearch':
+                        case 'Search':
                           iconName = 'search'
                           break
                         case 'Home':
@@ -119,8 +124,8 @@ export const Layout = () => {
                   })}
                 >
                   <Tab.Screen name="UserProfile" component={UserProfile} />
-                  <Tab.Screen name="RiotProfile" component={RiotProfilePage} />
-                  <Tab.Screen name="RiotSearch" component={RiotSearchPage} />
+                  <Tab.Screen name="Search" component={AccountsSearch} />
+                  {/* <Tab.Screen name="RiotSearch" component={RiotSearchPage} /> */}
                   <Tab.Screen name="Home" component={Home} />
                   <Tab.Screen name="Messages" component={Messages} />
                   <Tab.Screen name="Notifications" component={Notifications} />
@@ -135,6 +140,7 @@ export const Layout = () => {
                 unmountOnBlur: true,
               }}
             />
+            <Stack.Screen name="RiotProfile" component={RiotProfilePage} />
           </Stack.Navigator>
         )}
       </QueryClientProvider>

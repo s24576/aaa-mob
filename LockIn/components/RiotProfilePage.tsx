@@ -56,6 +56,20 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
         <Text className="flex-1 text-left">Ranked Rank</Text>
         <Text className="flex-1 text-left">{profile.rankedRank}</Text>
       </View>
+      <View className="flex-row justify-between py-2 border-b border-gray-300">
+        <Button
+          title="Przypisz konto"
+          onPress={() => {
+            /* handle assign account */
+          }}
+        />
+        <Button
+          title="Obserwuj konto"
+          onPress={() => {
+            /* handle follow account */
+          }}
+        />
+      </View>
       <Text className="text-lg mb-2 mt-4">Ranks</Text>
       {profile.ranks.map((rank, index) => (
         <View
