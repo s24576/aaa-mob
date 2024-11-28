@@ -5,6 +5,8 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { MatchDetailsScreenProps } from '../App'
 import { findPlayer } from '../api/riot/findPlayer'
 import { useQuery } from '@tanstack/react-query'
+import { addToWatchList } from '../api/profile/addWatchList'
+import { addMyAccount } from '../api/profile/addMyAccount'
 
 type RiotProfileRouteProp = RouteProp<
   {
@@ -23,6 +25,24 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 
   const handleMatchPress = (matchId: string) => {
     navigation.navigate('MatchDetails', { matchId })
+  }
+
+  const handleAddToWatchList = async () => {
+    try {
+      await addToWatchList(profile.puuid)
+      alert('Added to watchlist successfully')
+    } catch (error) {
+      alert('Failed to add to watchlist')
+    }
+  }
+
+  const handleClaimAccount = async () => {
+    try {
+      await addMyAccount(profile.puuid)
+      alert('Account claimed successfully')
+    } catch (error) {
+      alert('Failed to claim account')
+    }
   }
 
   return (
@@ -59,15 +79,11 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
       <View className="flex-row justify-between py-2 border-b border-gray-300">
         <Button
           title="Przypisz konto"
-          onPress={() => {
-            /* handle assign account */
-          }}
+          onPress={handleClaimAccount}
         />
         <Button
           title="Obserwuj konto"
-          onPress={() => {
-            /* handle follow account */
-          }}
+          onPress={handleAddToWatchList}
         />
       </View>
       <Text className="text-lg mb-2 mt-4">Ranks</Text>

@@ -1,26 +1,13 @@
+import { View } from 'react-native'
+import React from 'react'
+import UserProfilePage from '../components/UserProfilePage'
 
-import React, { useContext } from 'react'
-import { View, Text, Image } from 'react-native'
-import { UserContext } from '../context/UserContext'
-import { UserContextType } from '../types/local/userContext'
-
-const UserProfile = () => {
-  const { userData } = useContext(UserContext) as UserContextType
-
-  if (!userData) {
-    return <Text>Loading...</Text>
-  }
-
-  const { _id, profileIcon, bio, username } = userData
-
+const Profile = () => {
   return (
     <View>
-      {profileIcon && <Image source={{ uri: profileIcon }} />}
-      <Text>ID: {_id}</Text>
-      <Text>Username: {username}</Text>
-      <Text>Bio: {bio}</Text>
+      <UserProfilePage />
     </View>
   )
 }
 
-export default UserProfile
+export default Profile

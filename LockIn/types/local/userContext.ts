@@ -41,3 +41,13 @@ export class Friend {
     public username2: string
   ) {}
 }
+
+export interface WatchListItem {
+  id: string;
+  name: string;
+}
+
+export interface MyAccountItem {
+  id: string;
+  name: string;
+}
