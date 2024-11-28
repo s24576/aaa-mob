@@ -45,14 +45,14 @@ const UserProfile = () => {
       <Text>Watchlist:</Text>
       <FlatList
         data={watchList}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text key={item.id}>{item.name}</Text>}
+        keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
+        renderItem={({ item, index }) => <Text key={`watchlist-${item.id}-${index}`}>{item.name}</Text>}
       />
       <Text>My Accounts:</Text>
       <FlatList
         data={myAccounts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text key={item.id}>{item.name}</Text>}
+        keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
+        renderItem={({ item, index }) => <Text key={`myaccount-${item.id}-${index}`}>{item.name}</Text>}
       />
     </View>
   )

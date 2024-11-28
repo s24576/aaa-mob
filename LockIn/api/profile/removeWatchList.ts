@@ -7,7 +7,6 @@ export const removeFromWatchList = async (server_puuid: string) => {
     const token = await AsyncStorage.getItem('token')
     const response = await api.put('/profile/removeWatchList', null, {
       params: { server_puuid },
-      headers: { Authorization: `Bearer ${token}` }
     })
     return response.data
   } catch (error) {

@@ -5,9 +5,7 @@ import { handleError } from '../error/handleError'
 export const getWatchList = async () => {
   try {
     const token = await AsyncStorage.getItem('token')
-    const response = await api.get('/profile/getWatchList', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    const response = await api.get('/profile/getWatchList')
     return response.data
   } catch (error) {
     handleError(error)

@@ -6,8 +6,7 @@ export const addMyAccount = async (server_puuid: string) => {
   try {
     const token = await AsyncStorage.getItem('token')
     const response = await api.put('/profile/addMyAccount', null, {
-      params: { server_puuid },
-      headers: { Authorization: `Bearer ${token}` }
+      params: { server_puuid }
     })
     return response.data
   } catch (error) {
