@@ -20,8 +20,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = 'user-auth-token' // Replace with actual token retrieval logic
-        const data = await getUserData(token)
+        const data = await getUserData()
         setUserData(data)
       } catch (error) {
         console.error('Error fetching user data:', error)

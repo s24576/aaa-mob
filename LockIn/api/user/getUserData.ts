@@ -3,14 +3,9 @@ import { handleError } from '../error/handleError'
 
 const BACKEND_ADDRESS = process.env.BACKEND_ADDRESS
 
-export const getUserData = async (token: string) => {
+export const getUserData = async () => {
   try {
-    const response = await api.get(`${BACKEND_ADDRESS}/user/getUserData`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Accept-Language': 'en',
-      },
-    })
+    const response = await api.get(`${BACKEND_ADDRESS}/user/getUserData`)
     return response.data
   } catch (error) {
     handleError(error)

@@ -25,7 +25,8 @@ export const handleLogin = async (
     console.log('Token:', token)
 
     await AsyncStorage.setItem('token', token)
-    await getUserData(token, setUserData)
+    const userData = await getUserData()
+    setUserData(userData)
 
     navigation.navigate('Home')
   } catch (error) {
