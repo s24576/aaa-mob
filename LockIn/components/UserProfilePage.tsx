@@ -1,34 +1,59 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, Image, FlatList } from 'react-native'
+import { useIsFocused } from '@react-navigation/native'
 import { UserContext } from '../context/UserContext'
 import {
   UserContextType,
   WatchListItem,
   MyAccountItem,
 } from '../types/local/userContext'
-import { getWatchList } from '../api/profile/getWatchList'
-import { getMyAccounts } from '../api/profile/getMyAccounts'
+import { getWatchlistRiotProfiles } from '../api/riot/getWatchlistRiotProfiles'
+import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
+import { getUserData } from '../api/user/getUserData'
 
 const UserProfile = () => {
-  const { userData } = useContext(UserContext) as UserContextType
+  const { userData, setUserData } = useContext(UserContext) as UserContextType
   const [watchList, setWatchList] = useState<WatchListItem[]>([])
   const [myAccounts, setMyAccounts] = useState<MyAccountItem[]>([])
+  const isFocused = useIsFocused()
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       try {
-        const watchListData = await getWatchList()
-        console.log('WatchList Data:', watchListData)
-        setWatchList(watchListData.map((id: string) => ({ id, name: id })))
-        const myAccountsData = await getMyAccounts()
-        console.log('My Accounts Data:', myAccountsData)
-        setMyAccounts(myAccountsData.map((id: string) => ({ id, name: id })))
+        const token = 'user-auth-token' // Replace with actual token retrieval logic
+        const data = await getUserData(token)
+        setUserData(data)
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error('Error fetching user data:', error)
       }
     }
-    fetchData()
-  }, [])
+
+    if (isFocused) {
+      fetchUserData()
+
+      const fetchData = async () => {
+        try {
+          const watchListData = await getWatchlistRiotProfiles()
+          setWatchList(
+            watchListData.map((profile: any) => ({
+              id: profile.puuid,
+              name: profile.gameName,
+            }))
+          )
+          const myAccountsData = await getMyRiotProfiles()
+          setMyAccounts(
+            myAccountsData.map((account: any) => ({
+              id: account.puuid,
+              name: account.gameName,
+            }))
+          )
+        } catch (error) {
+          console.error('Error fetching data:', error)
+        }
+      }
+      fetchData()
+    }
+  }, [isFocused])
 
   if (!userData) {
     return <Text>Loading...</Text>
@@ -46,13 +71,13 @@ const UserProfile = () => {
       <FlatList
         data={watchList}
         keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
-        renderItem={({ item, index }) => <Text key={`watchlist-${item.id}-${index}`}>{item.name}</Text>}
+        renderItem={({ item }) => <Text>{item.name}</Text>}
       />
       <Text>My Accounts:</Text>
       <FlatList
         data={myAccounts}
         keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
-        renderItem={({ item, index }) => <Text key={`myaccount-${item.id}-${index}`}>{item.name}</Text>}
+        renderItem={({ item }) => <Text>{item.name}</Text>}
       />
     </View>
   )
