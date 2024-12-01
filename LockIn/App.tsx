@@ -94,9 +94,6 @@ export const Layout = () => {
                         case 'UserProfile':
                           iconName = 'person'
                           break
-                        case 'RiotProfile':
-                          iconName = 'stats-chart'
-                          break
                         case 'Search':
                           iconName = 'search'
                           break
@@ -125,10 +122,19 @@ export const Layout = () => {
                 >
                   <Tab.Screen name="UserProfile" component={UserProfile} />
                   <Tab.Screen name="Search" component={AccountsSearch} />
-                  {/* <Tab.Screen name="RiotSearch" component={RiotSearchPage} /> */}
                   <Tab.Screen name="Home" component={Home} />
                   <Tab.Screen name="Messages" component={Messages} />
                   <Tab.Screen name="Notifications" component={Notifications} />
+                  <Tab.Screen
+                    name="RiotProfile"
+                    component={RiotProfilePage}
+                    options={{ tabBarButton: () => null }}
+                  />
+                  <Tab.Screen
+                    name="MatchDetails"
+                    component={MatchDetails}
+                    options={{ tabBarButton: () => null }}
+                  />
                 </Tab.Navigator>
               )}
             </Stack.Screen>
