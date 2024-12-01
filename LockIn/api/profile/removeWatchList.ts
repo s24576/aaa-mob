@@ -1,10 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import api from '../axios/useAxios'
 import { handleError } from '../error/handleError'
 
 export const removeFromWatchList = async (server_puuid: string) => {
   try {
-    const token = await AsyncStorage.getItem('token')
     const response = await api.put('/profile/removeWatchList', null, {
       params: { server_puuid },
     })

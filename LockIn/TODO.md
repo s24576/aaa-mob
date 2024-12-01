@@ -13,6 +13,7 @@
 - [ ] Optimize translation button performance
 - [ ] Enhance security for user account redirection
 - [ ] Add notifications for user follow actions
+- [] Przejrzeć Przypisywanie/Obserwowanie kont na RiotProfilePage w celu potencjalnej optymalizacji
 
 ## Bugs
 

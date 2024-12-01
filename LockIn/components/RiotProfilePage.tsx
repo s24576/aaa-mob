@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, TouchableOpacity, Button } from 'react-native'
 import { Profile } from '../types/riot/profileClass'
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
@@ -6,7 +6,11 @@ import { MatchDetailsScreenProps } from '../App'
 import { findPlayer } from '../api/riot/findPlayer'
 import { useQuery } from '@tanstack/react-query'
 import { addToWatchList } from '../api/profile/addWatchList'
+import { removeFromWatchList } from '../api/profile/removeWatchList'
 import { addMyAccount } from '../api/profile/addMyAccount'
+import { removeMyAccount } from '../api/profile/removeMyAccount'
+import { getWatchlistRiotProfiles } from '../api/riot/getWatchlistRiotProfiles'
+import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
 
 type RiotProfileRouteProp = RouteProp<
   {
@@ -21,7 +25,35 @@ type RiotProfileRouteProp = RouteProp<
 >
 
 const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
+  const [isWatching, setIsWatching] = useState(false)
+  const [isClaimed, setIsClaimed] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const navigation = useNavigation<MatchDetailsScreenProps['navigation']>()
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const watchlistProfiles = await getWatchlistRiotProfiles()
+        const myProfiles = await getMyRiotProfiles()
+
+        const isInWatchlist = watchlistProfiles.some(
+          (p: { puuid: string }) => p.puuid === profile.puuid
+        )
+        const isInMyAccounts = myProfiles.some(
+          (p: { puuid: string }) => p.puuid === profile.puuid
+        )
+
+        setIsWatching(isInWatchlist)
+        setIsClaimed(isInMyAccounts)
+      } catch (error) {
+        console.error('Error fetching account status:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchStatus()
+  }, [profile])
 
   const handleMatchPress = (matchId: string) => {
     navigation.navigate('MatchDetails', { matchId })
@@ -29,19 +61,33 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 
   const handleAddToWatchList = async () => {
     try {
-      await addToWatchList(profile.server + '_' + profile.puuid)
-      alert('Added to watchlist successfully')
+      if (isWatching) {
+        await removeFromWatchList(profile.server + '_' + profile.puuid)
+        alert('Removed from watchlist successfully')
+        setIsWatching(false)
+      } else {
+        await addToWatchList(profile.server + '_' + profile.puuid)
+        alert('Added to watchlist successfully')
+        setIsWatching(true)
+      }
     } catch (error) {
-      alert('Failed to add to watchlist')
+      alert('Failed to update watchlist')
     }
   }
 
   const handleClaimAccount = async () => {
     try {
-      await addMyAccount(profile.server + '_' + profile.puuid)
-      alert('Account claimed successfully')
+      if (isClaimed) {
+        await removeMyAccount(profile.server + '_' + profile.puuid)
+        alert('Account unclaimed successfully')
+        setIsClaimed(false)
+      } else {
+        await addMyAccount(profile.server + '_' + profile.puuid)
+        alert('Account claimed successfully')
+        setIsClaimed(true)
+      }
     } catch (error) {
-      alert('Failed to claim account')
+      alert('Failed to update account claim status')
     }
   }
 
@@ -77,8 +123,28 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
         <Text className="flex-1 text-left">{profile.rankedRank}</Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Button title="Przypisz konto" onPress={handleClaimAccount} />
-        <Button title="Obserwuj konto" onPress={handleAddToWatchList} />
+        <Button
+          title={
+            isLoading
+              ? 'Loading...'
+              : isClaimed
+                ? 'Porzuć konto'
+                : 'Przypisz konto'
+          }
+          onPress={handleClaimAccount}
+          disabled={isLoading}
+        />
+        <Button
+          title={
+            isLoading
+              ? 'Loading...'
+              : isWatching
+                ? 'Przestań obserwować'
+                : 'Obserwuj konto'
+          }
+          onPress={handleAddToWatchList}
+          disabled={isLoading}
+        />
       </View>
       <Text className="text-lg mb-2 mt-4">Ranks</Text>
       {profile.ranks.map((rank, index) => (

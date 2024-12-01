@@ -43,11 +43,13 @@ export class Friend {
 }
 
 export interface WatchListItem {
-  id: string;
-  name: string;
+  id: string
+  name: string
+  server: string
 }
 
 export interface MyAccountItem {
-  id: string;
-  name: string;
+  id: string
+  name: string
+  server: string
 }

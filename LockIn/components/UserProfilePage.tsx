@@ -39,6 +39,7 @@ const UserProfile = () => {
             watchListData.map((profile: any) => ({
               id: profile.puuid,
               name: profile.gameName,
+              server: profile.server,
             }))
           )
           const myAccountsData = await getMyRiotProfiles()
@@ -46,6 +47,7 @@ const UserProfile = () => {
             myAccountsData.map((account: any) => ({
               id: account.puuid,
               name: account.gameName,
+              server: account.server,
             }))
           )
         } catch (error) {
@@ -77,7 +79,7 @@ const UserProfile = () => {
         data={watchList}
         keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
         renderItem={({ item }) => (
-          <Text onPress={() => handleProfilePress('EUW1', item.id)}>
+          <Text onPress={() => handleProfilePress(item.server, item.id)}>
             {item.name}
           </Text>
         )}
@@ -87,7 +89,7 @@ const UserProfile = () => {
         data={myAccounts}
         keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
         renderItem={({ item }) => (
-          <Text onPress={() => handleProfilePress('EUW1', item.id)}>
+          <Text onPress={() => handleProfilePress(item.server, item.id)}>
             {item.name}
           </Text>
         )}
