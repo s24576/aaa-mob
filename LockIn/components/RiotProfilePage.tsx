@@ -29,7 +29,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 
   const handleAddToWatchList = async () => {
     try {
-      await addToWatchList(profile.puuid)
+      await addToWatchList(profile.server + '_' + profile.puuid)
       alert('Added to watchlist successfully')
     } catch (error) {
       alert('Failed to add to watchlist')
@@ -38,7 +38,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 
   const handleClaimAccount = async () => {
     try {
-      await addMyAccount(profile.puuid)
+      await addMyAccount(profile.server + '_' + profile.puuid)
       alert('Account claimed successfully')
     } catch (error) {
       alert('Failed to claim account')
@@ -77,14 +77,8 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
         <Text className="flex-1 text-left">{profile.rankedRank}</Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Button
-          title="Przypisz konto"
-          onPress={handleClaimAccount}
-        />
-        <Button
-          title="Obserwuj konto"
-          onPress={handleAddToWatchList}
-        />
+        <Button title="Przypisz konto" onPress={handleClaimAccount} />
+        <Button title="Obserwuj konto" onPress={handleAddToWatchList} />
       </View>
       <Text className="text-lg mb-2 mt-4">Ranks</Text>
       {profile.ranks.map((rank, index) => (
