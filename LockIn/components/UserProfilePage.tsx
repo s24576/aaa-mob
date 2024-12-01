@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, Image, FlatList } from 'react-native'
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { UserContext } from '../context/UserContext'
 import {
   UserContextType,
@@ -10,12 +10,14 @@ import {
 import { getWatchlistRiotProfiles } from '../api/riot/getWatchlistRiotProfiles'
 import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
 import { getUserData } from '../api/user/getUserData'
+import { ProfileScreenProps } from '../App'
 
 const UserProfile = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const [watchList, setWatchList] = useState<WatchListItem[]>([])
   const [myAccounts, setMyAccounts] = useState<MyAccountItem[]>([])
   const isFocused = useIsFocused()
+  const navigation = useNavigation<ProfileScreenProps['navigation']>()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -54,6 +56,10 @@ const UserProfile = () => {
     }
   }, [isFocused])
 
+  const handleProfilePress = (server: string, puuid: string) => {
+    navigation.navigate('RiotProfile', { server, puuid })
+  }
+
   if (!userData) {
     return <Text>Loading...</Text>
   }
@@ -70,13 +76,21 @@ const UserProfile = () => {
       <FlatList
         data={watchList}
         keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => (
+          <Text onPress={() => handleProfilePress('EUW1', item.id)}>
+            {item.name}
+          </Text>
+        )}
       />
       <Text>My Accounts:</Text>
       <FlatList
         data={myAccounts}
         keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => (
+          <Text onPress={() => handleProfilePress('EUW1', item.id)}>
+            {item.name}
+          </Text>
+        )}
       />
     </View>
   )
