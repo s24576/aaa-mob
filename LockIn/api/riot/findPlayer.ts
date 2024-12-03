@@ -3,14 +3,14 @@ import { handleError } from '../error/handleError'
 import api from '../axios/useAxios'
 
 export const findPlayer = async (
-  server?: string,
+  server: string,
+  puuid?: string,
   tag?: string,
-  name?: string,
-  puuid?: string
+  name?: string
 ): Promise<Profile> => {
   try {
     let url = '/riot/findPlayer?'
-    if (puuid && server) {
+    if (puuid) {
       url += `server=${server}&puuid=${puuid}`
     } else if (server && tag && name) {
       url += `server=${server}&tag=${tag}&name=${name}`

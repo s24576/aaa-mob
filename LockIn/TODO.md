@@ -1,11 +1,9 @@
 # TODO List
 
 ## Features
-
-- Load the profile every time it is accessed, not just once after logging in.
-- Make a request using name/tag/server on the profile (use puuid).
-- Transfer from user to riot.
-- Przejrzeć i poprawić MatchDetailsPage (handleParticipantPress)
+loading watchlisty
+filtrowanie buildow
+moje/zapisane buildy
 
 ## Enhancements
 

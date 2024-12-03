@@ -19,6 +19,7 @@ import { UserContextType } from './types/local/userContext'
 import { Button } from 'react-native'
 import RiotSearchPage from './components/RiotSearchPage'
 import RiotProfilePage from './components/RiotProfilePage'
+import BuildsBrowser from './components/BuildsBrowserPage'
 import UserProfile from './screens/UserProfile'
 import Messages from './screens/Messages'
 import Notifications from './screens/Notifications'
@@ -38,6 +39,7 @@ type RootStackParamList = {
   Messages: undefined
   Notifications: undefined
   Search: undefined
+  BuildsBrowser: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -133,6 +135,11 @@ export const Layout = () => {
                   <Tab.Screen
                     name="MatchDetails"
                     component={MatchDetails}
+                    options={{ tabBarButton: () => null }}
+                  />
+                  <Tab.Screen
+                    name="BuildsBrowser"
+                    component={BuildsBrowser}
                     options={{ tabBarButton: () => null }}
                   />
                 </Tab.Navigator>
