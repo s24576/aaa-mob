@@ -1,6 +1,27 @@
 # TODO List
 
 ## Features
+
+WEBSOCKET
+/user/{username}
+
+/notification
+na jakiekolwiek powiadomienia
+
+/friendRequest/to
+otrzymano zaproszenie do listy wyslanych zaproszen
+/friendRequest/from
+otrzymano zaproszenie do listy otrzymanych zaproszen
+
+/delete/friendRequest/to
+zaproszenie z listy wyslanych? zostalo resolved
+/delete/friendRequest/from
+zaproszenie z listy otrzymanych? zostalo resolved
+
+
+/messenger/message
+/team/answer
+
 loading watchlisty
 filtrowanie buildow
 moje/zapisane buildy
@@ -11,7 +32,7 @@ moje/zapisane buildy
 - [ ] Optimize translation button performance
 - [ ] Enhance security for user account redirection
 - [ ] Add notifications for user follow actions
-- [] Przejrzeć Przypisywanie/Obserwowanie kont na RiotProfilePage w celu potencjalnej optymalizacji
+- [ ] Przejrzeć Przypisywanie/Obserwowanie kont na RiotProfilePage w celu potencjalnej optymalizacji
 
 ## Bugs
 

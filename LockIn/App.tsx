@@ -20,11 +20,10 @@ import { Button } from 'react-native'
 import RiotSearchPage from './components/RiotSearchPage'
 import RiotProfilePage from './components/RiotProfilePage'
 import BuildsBrowser from './components/BuildsBrowserPage'
-import UserProfile from './screens/UserProfile'
+import UserProfilePage from './components/UserProfilePage'
 import Messages from './screens/Messages'
 import Notifications from './screens/Notifications'
 import AccountsSearch from './screens/AccountsSearch'
-import { SocketProvider } from './context/SocketProvider'
 
 initI18n()
 
@@ -51,9 +50,7 @@ const queryClient = new QueryClient()
 export default function App() {
   return (
     <UserContextProvider>
-      <SocketProvider>
-        <Layout />
-      </SocketProvider>
+      <Layout />
     </UserContextProvider>
   )
 }
@@ -125,7 +122,7 @@ export const Layout = () => {
                     ),
                   })}
                 >
-                  <Tab.Screen name="UserProfile" component={UserProfile} />
+                  <Tab.Screen name="UserProfile" component={UserProfilePage} />
                   <Tab.Screen name="Search" component={AccountsSearch} />
                   <Tab.Screen name="Home" component={Home} />
                   <Tab.Screen name="Messages" component={Messages} />
