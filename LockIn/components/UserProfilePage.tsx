@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, Image, FlatList } from 'react-native'
+import { View, Text, Image, FlatList, Button } from 'react-native'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { UserContext } from '../context/UserContext'
 import {
@@ -11,6 +11,10 @@ import { getWatchlistRiotProfiles } from '../api/riot/getWatchlistRiotProfiles'
 import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
 import { getUserData } from '../api/user/getUserData'
 import { ProfileScreenProps } from '../App'
+import { getToFriendRequests } from '../api/profile/getToFriendRequests'
+import { getFromFriendRequests } from '../api/profile/getFromFriendRequests'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { respondFriendRequest } from '../api/profile/respondFriendRequest'
 
 const UserProfile = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -18,6 +22,19 @@ const UserProfile = () => {
   const [myAccounts, setMyAccounts] = useState<MyAccountItem[]>([])
   const isFocused = useIsFocused()
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
+  const queryClient = useQueryClient()
+
+  const { data: toFriendRequests, refetch: refetchToFriendRequests } = useQuery(
+    {
+      queryKey: ['toFriendRequests'],
+      queryFn: getToFriendRequests,
+    }
+  )
+  const { data: fromFriendRequests, refetch: refetchFromFriendRequests } =
+    useQuery({
+      queryKey: ['fromFriendRequests'],
+      queryFn: getFromFriendRequests,
+    })
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -62,6 +79,20 @@ const UserProfile = () => {
     navigation.navigate('RiotProfile', { server, puuid })
   }
 
+  const handleAcceptRequest = async (requestId: string) => {
+    // Handle accepting the friend request
+    await respondFriendRequest({ requestId, accept: true })
+    refetchToFriendRequests()
+    refetchFromFriendRequests()
+  }
+
+  const handleRejectRequest = async (requestId: string) => {
+    // Handle rejecting the friend request
+    await respondFriendRequest({ requestId, accept: false })
+    refetchToFriendRequests()
+    refetchFromFriendRequests()
+  }
+
   if (!userData) {
     return <Text>Loading...</Text>
   }
@@ -92,6 +123,43 @@ const UserProfile = () => {
           <Text onPress={() => handleProfilePress(item.server, item.id)}>
             {item.name}
           </Text>
+        )}
+      />
+      <Text>Awaiting Friend Requests:</Text>
+      <Text>To:</Text>
+      <FlatList
+        data={toFriendRequests || []}
+        keyExtractor={(item, index) => `toFriendRequest-${item.id}-${index}`}
+        renderItem={({ item }) => (
+          <View>
+            <Text>{item.name}</Text>
+            <Button
+              title="Accept"
+              onPress={() => handleAcceptRequest(item.id)}
+            />
+            <Button
+              title="Reject"
+              onPress={() => handleRejectRequest(item.id)}
+            />
+          </View>
+        )}
+      />
+      <Text>From:</Text>
+      <FlatList
+        data={fromFriendRequests || []}
+        keyExtractor={(item, index) => `fromFriendRequest-${item.id}-${index}`}
+        renderItem={({ item }) => (
+          <View>
+            <Text>{item.name}</Text>
+            <Button
+              title="Accept"
+              onPress={() => handleAcceptRequest(item.id)}
+            />
+            <Button
+              title="Reject"
+              onPress={() => handleRejectRequest(item.id)}
+            />
+          </View>
         )}
       />
     </View>

@@ -24,6 +24,7 @@ import UserProfile from './screens/UserProfile'
 import Messages from './screens/Messages'
 import Notifications from './screens/Notifications'
 import AccountsSearch from './screens/AccountsSearch'
+import { SocketProvider } from './context/SocketProvider'
 
 initI18n()
 
@@ -50,7 +51,9 @@ const queryClient = new QueryClient()
 export default function App() {
   return (
     <UserContextProvider>
-      <Layout />
+      <SocketProvider>
+        <Layout />
+      </SocketProvider>
     </UserContextProvider>
   )
 }

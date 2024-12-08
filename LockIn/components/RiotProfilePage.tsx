@@ -190,7 +190,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 const ProfilePage: React.FC = () => {
   const navigation = useNavigation()
   const route = useRoute<RiotProfileRouteProp>()
-  const { server, tag, name, puuid } = route.params || {}
+  const { server = '', tag = '', name = '', puuid = '' } = route.params || {}
 
   const {
     data: profile,
