@@ -2,29 +2,35 @@
 
 ## Features
 
-WEBSOCKET
-/user/{username}
+-!- websocket powinien obslugiwac juz wszystko, /friendRequest/to przestestowałem, działa i daje response -!-
 
-/notification
-na jakiekolwiek powiadomienia
+### WEBSOCKET
 
-/friendRequest/to
-otrzymano zaproszenie do listy wyslanych zaproszen
-/friendRequest/from
-otrzymano zaproszenie do listy otrzymanych zaproszen
+- /user/{username}
+- /notification
+  - na jakiekolwiek powiadomienia
+- /friendRequest/to
+  - otrzymano zaproszenie do listy wyslanych zaproszen
+- /friendRequest/from
+  - otrzymano zaproszenie do listy otrzymanych zaproszen
+- /delete/friendRequest/to
+  - zaproszenie z listy wyslanych? zostalo resolved
+- /delete/friendRequest/from
+  - zaproszenie z listy otrzymanych? zostalo resolved
+- /messenger/message
+- /team/answer (to jest cos do duo)
 
-/delete/friendRequest/to
-zaproszenie z listy wyslanych? zostalo resolved
-/delete/friendRequest/from
-zaproszenie z listy otrzymanych? zostalo resolved
+## Features
 
-
-/messenger/message
-/team/answer
-
-loading watchlisty
-filtrowanie buildow
-moje/zapisane buildy
+- loading watchlisty
+- lista wysłanych i odebrancyh zaproszeń do znaj
+- refresh listy zaproszen i listy znaj po wiadomosci od websocketa (żeby usunac/odswiezyc po tym jak ktos odpowiedzial na zapro)
+- wyszukiwanie profili lockin
+- guziki na: dodawanie do znaj, usuwanie ze znaj, akceptowanie odrzucanie i anulowanie zaproszen do znaj
+- zapisywanie notifications gdzies (cachu czy cos) i wyswietalnie historii nw 10-20 w notifications
+- wszystko z msgerem
+- filtrowanie buildow
+- moje/zapisane buildy
 
 ## Enhancements
 

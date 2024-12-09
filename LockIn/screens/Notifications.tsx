@@ -1,17 +1,14 @@
-import React, { useState } from 'react'
-import { View, Text, Button } from 'react-native'
-import useWebSocket from '../api/socket/useWebSocket' // Import the custom hook
+import React from 'react'
+import { View, Text } from 'react-native'
+import { useSocket } from '../context/SocketProvider'
 
 const NotificationScreen: React.FC = () => {
-  const [username, setUsername] = useState<string>('test1000')
-  const { receivedMessage, connectionStatus } = useWebSocket(username)
+  const { receivedMessage, connectionStatus } = useSocket()
 
   return (
     <View>
-      <Text>Username: {username}</Text>
       <Text>Connection Status: {connectionStatus}</Text>
       <Text>Received Message: {receivedMessage}</Text>
-      <Button title="Change Username" onPress={() => setUsername('user2')} />
     </View>
   )
 }
