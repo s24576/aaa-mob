@@ -24,12 +24,18 @@ const useWebSocket = (username: string): UseWebSocketResult => {
       onConnect: () => {
         console.log('Connected')
         setConnectionStatus('Connected')
-        stompClient.subscribe(
+        const subscriptions = [
           `/user/${username}/notification`,
-          (message: IMessage) => {
+          `/user/${username}/friendRequest/to`,
+          `/user/${username}/friendRequest/from`,
+          `/user/${username}/delete/friendRequest/to`,
+          `/user/${username}/delete/friendRequest/from`,
+        ]
+        subscriptions.forEach((sub) => {
+          stompClient.subscribe(sub, (message: IMessage) => {
             setReceivedMessage(message.body || 'No message content')
-          }
-        )
+          })
+        })
       },
       onStompError: (frame: IFrame) => {
         console.error('STOMP error: ', frame)
