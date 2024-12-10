@@ -25,6 +25,7 @@ import Messages from './screens/Messages'
 import Notifications from './screens/Notifications'
 import AccountsSearch from './screens/AccountsSearch'
 import { SocketProvider } from './context/SocketProvider'
+import FriendListPage from './components/FriendListPage'
 
 initI18n()
 
@@ -41,6 +42,7 @@ type RootStackParamList = {
   Notifications: undefined
   Search: undefined
   BuildsBrowser: undefined
+  FriendList: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -143,6 +145,11 @@ export const Layout = () => {
                   <Tab.Screen
                     name="BuildsBrowser"
                     component={BuildsBrowser}
+                    options={{ tabBarButton: () => null }}
+                  />
+                  <Tab.Screen
+                    name="FriendList"
+                    component={FriendListPage}
                     options={{ tabBarButton: () => null }}
                   />
                 </Tab.Navigator>

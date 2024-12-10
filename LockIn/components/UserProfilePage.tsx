@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, Image, FlatList } from 'react-native'
+import { View, Text, Image, FlatList, Button } from 'react-native'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { UserContext } from '../context/UserContext'
 import {
@@ -93,6 +93,10 @@ const UserProfile = () => {
             {item.name}
           </Text>
         )}
+      />
+      <Button
+        title="Lista znajomych"
+        onPress={() => navigation.navigate('FriendList')}
       />
     </View>
   )

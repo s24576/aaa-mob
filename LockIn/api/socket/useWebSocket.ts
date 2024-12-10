@@ -15,7 +15,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
 
   useEffect(() => {
     // Initialize SockJS and STOMP client
-    const socket = new SockJS('https://whrnn3rw-8080.euw.devtunnels.ms/ws')
+    const socket = new SockJS('https://vwjgdmhs-8080.euw.devtunnels.ms/ws')
     const stompClient = new Client({
       webSocketFactory: () => socket,
       debug: function (str: string) {
