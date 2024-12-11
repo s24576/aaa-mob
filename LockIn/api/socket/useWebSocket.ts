@@ -35,6 +35,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
         ]
         subscriptions.forEach((sub) => {
           stompClient.subscribe(sub, (message: IMessage) => {
+            console.log('STOMP Debug: Received data', message)
             setReceivedMessage(message.body || 'No message content')
           })
         })

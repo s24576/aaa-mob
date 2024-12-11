@@ -16,6 +16,12 @@ const LoginForm = () => {
 
   const { setUserData } = useContext(UserContext) as UserContextType
 
+  const handleAutoComplete = (usernameValue: string, passwordValue: string) => {
+    setUsername(usernameValue)
+    setPassword(passwordValue)
+    handleLogin(usernameValue, passwordValue, setUserData, navigation)
+  }
+
   return (
     <View>
       <TextInput
@@ -36,6 +42,22 @@ const LoginForm = () => {
       <Button
         title={t('toRegistrerButton')}
         onPress={() => navigation.navigate('Register')}
+      />
+      <Button
+        title="Test1234"
+        onPress={() => handleAutoComplete('Test1234', 'Test1234')}
+      />
+      <Button
+        title="test1000"
+        onPress={() => handleAutoComplete('test1000', 'test1000')}
+      />
+      <Button
+        title="test2000"
+        onPress={() => handleAutoComplete('test2000', 'test2000')}
+      />
+      <Button
+        title="test3000"
+        onPress={() => handleAutoComplete('test3000', 'test3000')}
       />
     </View>
   )

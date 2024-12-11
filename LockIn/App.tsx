@@ -17,16 +17,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UserContextType } from './types/local/userContext'
 import { Button } from 'react-native'
-import RiotSearchPage from './components/RiotSearchPage'
-import RiotProfilePage from './components/RiotProfilePage'
+import RiotProfile from './components/RiotProfilePage'
 import BuildsBrowser from './components/BuildsBrowserPage'
-import UserProfilePage from './components/UserProfilePage'
+import UserProfile from './screens/UserProfile'
 import Messages from './screens/Messages'
 import Notifications from './screens/Notifications'
 import AccountsSearch from './screens/AccountsSearch'
 import { SocketProvider } from './context/SocketProvider'
-import FriendListPage from './components/FriendListPage'
+import FriendList from './screens/FriendList'
 import LockInProfile from './screens/LockInProfile'
+import FriendRequests from './screens/FriendRequests'
 
 initI18n()
 
@@ -45,6 +45,7 @@ type RootStackParamList = {
   BuildsBrowser: undefined
   FriendList: undefined
   LockInProfile: { username: string }
+  FriendRequests: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -129,14 +130,14 @@ export const Layout = () => {
                     ),
                   })}
                 >
-                  <Tab.Screen name="UserProfile" component={UserProfilePage} />
+                  <Tab.Screen name="UserProfile" component={UserProfile} />
                   <Tab.Screen name="Search" component={AccountsSearch} />
                   <Tab.Screen name="Home" component={Home} />
                   <Tab.Screen name="Messages" component={Messages} />
                   <Tab.Screen name="Notifications" component={Notifications} />
                   <Tab.Screen
                     name="RiotProfile"
-                    component={RiotProfilePage}
+                    component={RiotProfile}
                     options={{ tabBarButton: () => null }}
                   />
                   <Tab.Screen
@@ -151,12 +152,17 @@ export const Layout = () => {
                   />
                   <Tab.Screen
                     name="FriendList"
-                    component={FriendListPage}
+                    component={FriendList}
                     options={{ tabBarButton: () => null }}
                   />
                   <Tab.Screen
                     name="LockInProfile"
                     component={LockInProfile}
+                    options={{ tabBarButton: () => null }}
+                  />
+                  <Tab.Screen
+                    name="FriendRequests"
+                    component={FriendRequests}
                     options={{ tabBarButton: () => null }}
                   />
                 </Tab.Navigator>
