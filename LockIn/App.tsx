@@ -26,6 +26,7 @@ import Notifications from './screens/Notifications'
 import AccountsSearch from './screens/AccountsSearch'
 import { SocketProvider } from './context/SocketProvider'
 import FriendListPage from './components/FriendListPage'
+import LockInProfile from './screens/LockInProfile'
 
 initI18n()
 
@@ -43,6 +44,7 @@ type RootStackParamList = {
   Search: undefined
   BuildsBrowser: undefined
   FriendList: undefined
+  LockInProfile: { username: string }
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -152,6 +154,11 @@ export const Layout = () => {
                     component={FriendListPage}
                     options={{ tabBarButton: () => null }}
                   />
+                  <Tab.Screen
+                    name="LockInProfile"
+                    component={LockInProfile}
+                    options={{ tabBarButton: () => null }}
+                  />
                 </Tab.Navigator>
               )}
             </Stack.Screen>
@@ -163,7 +170,6 @@ export const Layout = () => {
                 unmountOnBlur: true,
               }}
             />
-            <Stack.Screen name="RiotProfile" component={RiotProfilePage} />
           </Stack.Navigator>
         )}
       </QueryClientProvider>

@@ -24,7 +24,6 @@
 
 - lista wysłanych i odebrancyh zaproszeń do znaj
 - refresh listy zaproszen i listy znaj po wiadomosci od websocketa (żeby usunac/odswiezyc po tym jak ktos odpowiedzial na zapro)
-- wyszukiwanie profili lockin
 - guziki na: dodawanie do znaj, usuwanie ze znaj, akceptowanie odrzucanie i anulowanie zaproszen do znaj
 - zapisywanie notifications gdzies (cachu czy cos) i wyswietalnie historii nw 10-20 w notifications
 - wszystko z msgerem

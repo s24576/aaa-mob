@@ -4,11 +4,11 @@ import { useNavigation } from '@react-navigation/native'
 import { ProfileScreenProps } from '../App'
 
 const LockInAccountSearch: React.FC = () => {
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState('test1000')
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
 
   const handleSearch = () => {
-    // navigation.navigate('LockInProfile', { username })
+    navigation.navigate('LockInProfile', { username })
   }
 
   return (
