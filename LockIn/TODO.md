@@ -22,7 +22,6 @@
 
 ## Features
 
-- loading watchlisty
 - lista wysłanych i odebrancyh zaproszeń do znaj
 - refresh listy zaproszen i listy znaj po wiadomosci od websocketa (żeby usunac/odswiezyc po tym jak ktos odpowiedzial na zapro)
 - wyszukiwanie profili lockin

@@ -7,6 +7,8 @@ interface UseWebSocketResult {
   connectionStatus: string
 }
 
+const BACKEND_WS_ADDRESS = process.env.BACKEND_ADDRESS + '/ws'
+
 const useWebSocket = (username: string): UseWebSocketResult => {
   const [receivedMessage, setReceivedMessage] = useState<string>('')
   const [connectionStatus, setConnectionStatus] =
@@ -15,7 +17,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
 
   useEffect(() => {
     // Initialize SockJS and STOMP client
-    const socket = new SockJS('https://vwjgdmhs-8080.euw.devtunnels.ms/ws')
+    const socket = new SockJS(BACKEND_WS_ADDRESS)
     const stompClient = new Client({
       webSocketFactory: () => socket,
       debug: function (str: string) {

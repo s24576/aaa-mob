@@ -11,9 +11,9 @@ export const findPlayer = async (
   try {
     let url = '/riot/findPlayer?'
     if (puuid) {
-      url += `server=${server}&puuid=${puuid}`
+      url += `server=${encodeURIComponent(server)}&puuid=${encodeURIComponent(puuid)}`
     } else if (server && tag && name) {
-      url += `server=${server}&tag=${tag}&name=${name}`
+      url += `server=${encodeURIComponent(server)}&tag=${encodeURIComponent(tag)}&name=${encodeURIComponent(name)}`
     } else {
       throw new Error('Invalid search parameters')
     }

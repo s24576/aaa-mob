@@ -198,7 +198,7 @@ const ProfilePage: React.FC = () => {
     error,
   } = useQuery({
     queryKey: ['profile', server, tag, name, puuid],
-    queryFn: () => findPlayer(server, tag, name, puuid),
+    queryFn: () => findPlayer(server, puuid, tag, name),
     enabled: !!server && ((!!tag && !!name) || !!puuid),
   })
 
