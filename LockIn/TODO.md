@@ -22,9 +22,11 @@
 
 ## Features
 
-- lista wysłanych i odebrancyh zaproszeń do znaj
+- lockinpage sie zjebalo
+- cofanie z listy wyslanych zapro
+- przenoszenie na profil znaj z listy twoich znaj
 - refresh listy zaproszen i listy znaj po wiadomosci od websocketa (żeby usunac/odswiezyc po tym jak ktos odpowiedzial na zapro)
-- guziki na: dodawanie do znaj, usuwanie ze znaj, akceptowanie odrzucanie i anulowanie zaproszen do znaj
+- guziki na: dodawanie do znaj, usuwanie ze znaj, akceptowanie i odrzucanie zaproszen do znaj
 - zapisywanie notifications gdzies (cachu czy cos) i wyswietalnie historii nw 10-20 w notifications
 - wszystko z msgerem
 - filtrowanie buildow
