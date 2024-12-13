@@ -24,10 +24,15 @@ const LockInProfilePage: React.FC = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['lockInProfile', { username }],
+    queryKey: ['LockInProfile', { username }],
     queryFn: () => findProfile(username),
     enabled: !!username,
   })
+
+  const handleOnPress = (friendUsername: string) => {
+    console.log('Destination:', friendUsername)
+    navigation.navigate('LockInProfile', { username: friendUsername })
+  }
 
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
@@ -41,18 +46,38 @@ const LockInProfilePage: React.FC = () => {
       )}
       {profile && (
         <View>
-          <Image
-            source={{
-              uri: `data:${profile.image.contentType};base64,${profile.image.data}`,
-            }}
-            style={{ width: 100, height: 100, borderRadius: 50 }}
-          />
+          {profile.image && profile.image.contentType && profile.image.data ? (
+            <Image
+              source={{
+                uri: `data:${profile.image.contentType};base64,${profile.image.data}`,
+              }}
+              style={{ width: 100, height: 100, borderRadius: 50 }}
+            />
+          ) : (
+            <View
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 50,
+                backgroundColor: '#ddd',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text>No Image</Text>
+            </View>
+          )}
           <Text>Username: {profile.username}</Text>
           <Text>Email: {profile.email}</Text>
           <Text>Bio: {profile.bio}</Text>
           <Text>Friends:</Text>
           {profile.friends.map((friend: { _id: string; username: string }) => (
-            <Text key={friend._id}>{friend.username}</Text>
+            <Text
+              onPress={() => handleOnPress(friend.username)}
+              key={friend._id}
+            >
+              {friend.username}
+            </Text>
           ))}
         </View>
       )}

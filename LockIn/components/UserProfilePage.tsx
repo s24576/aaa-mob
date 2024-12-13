@@ -70,7 +70,12 @@ const UserProfile = () => {
 
   return (
     <View>
-      {profileIcon && <Image source={{ uri: profileIcon }} />}
+      {profileIcon ? (
+        // <Image source={{ uri: profileIcon }} />
+        <Text>Profile icon available</Text>
+      ) : (
+        <Text>No profile icon available</Text>
+      )}
       <Text>ID: {_id}</Text>
       <Text>Username: {username}</Text>
       <Text>Bio: {bio}</Text>

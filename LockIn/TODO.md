@@ -22,7 +22,6 @@
 
 ## Features
 
-- lockinpage sie zjebalo
 - cofanie z listy wyslanych zapro
 - przenoszenie na profil znaj z listy twoich znaj
 - refresh listy zaproszen i listy znaj po wiadomosci od websocketa (żeby usunac/odswiezyc po tym jak ktos odpowiedzial na zapro)

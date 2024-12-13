@@ -1,16 +1,43 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, FlatList, Button } from 'react-native'
 import { UserContext } from '../context/UserContext'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { UserContextType } from '../types/local/userContext'
+import { getUserData } from '../api/user/getUserData'
 import { ProfileScreenProps } from '../App'
 
 const FriendListPage = () => {
-  const { userData } = useContext(UserContext) as UserContextType
+  const { userData, setUserData } = useContext(UserContext) as UserContextType
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await getUserData()
+        setUserData(data)
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+      }
+    }
+
+    fetchUserData()
+  }, [])
+
+  const usernameABC = userData?.username || ''
 
   if (!userData || !userData.friends) {
     return <Text>Loading...</Text>
+  }
+
+  const handleFriendRequest = (item: {
+    _id: string
+    username: string
+    username2: string
+  }) => {
+    const usernameToSend: string =
+      usernameABC === item.username ? item.username2 : item.username
+    console.log('Sending to:', usernameToSend)
+    navigation.navigate('LockInProfile', { username: usernameToSend })
   }
 
   return (
@@ -24,7 +51,7 @@ const FriendListPage = () => {
         data={userData.friends}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <Text>
+          <Text onPress={() => handleFriendRequest(item)}>
             {item.username} ({item.username2})
           </Text>
         )}
