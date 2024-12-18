@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Button, Image } from 'react-native'
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { findProfile } from '../api/profile/findProfile'
-import FriendRequestsPage from '../screens/FriendRequests'
+import { sendFriendRequest } from '../api/profile/sendFriendRequest'
 
 type LockInProfileRouteProp = RouteProp<
   {
@@ -32,6 +32,21 @@ const LockInProfilePage: React.FC = () => {
   const handleOnPress = (friendUsername: string) => {
     console.log('Destination:', friendUsername)
     navigation.navigate('LockInProfile', { username: friendUsername })
+  }
+
+  const handleSendFriendRequest = async () => {
+    try {
+      const targetUsername = username || profile?._id
+      if (!targetUsername) {
+        alert('Invalid profile data.')
+        return
+      }
+      await sendFriendRequest(targetUsername)
+      alert('Friend request sent!')
+    } catch (error) {
+      console.error(error)
+      alert('Failed to send friend request.')
+    }
   }
 
   return (
@@ -67,6 +82,7 @@ const LockInProfilePage: React.FC = () => {
               <Text>No Image</Text>
             </View>
           )}
+          <Button title="Add Friend" onPress={handleSendFriendRequest} />
           <Text>Username: {profile.username}</Text>
           <Text>Email: {profile.email}</Text>
           <Text>Bio: {profile.bio}</Text>

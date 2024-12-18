@@ -23,11 +23,14 @@
 ## Features
 
 - cofanie z listy wyslanych zapro
+- usuwanie z listy znajomych
+- jak zaproszenie jest juz wyslane to inny guzik
 - przenoszenie na profil znaj z listy twoich znaj
-- refresh listy zaproszen i listy znaj po wiadomosci od websocketa (żeby usunac/odswiezyc po tym jak ktos odpowiedzial na zapro)
-- guziki na: dodawanie do znaj, usuwanie ze znaj, akceptowanie i odrzucanie zaproszen do znaj
+
 - zapisywanie notifications gdzies (cachu czy cos) i wyswietalnie historii nw 10-20 w notifications
+
 - wszystko z msgerem
+
 - filtrowanie buildow
 - moje/zapisane buildy
 

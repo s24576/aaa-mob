@@ -58,12 +58,12 @@ const FriendListPage = () => {
   }
 
   return (
-    <View>
+    <View className="p-5">
       <Button
         title="Zaproszenia do znajomych"
         onPress={() => navigation.navigate('FriendRequests')}
       />
-      <Text>Lista znajomych:</Text>
+      <Text className="mt-5 mb-2">Lista znajomych:</Text>
       <FlatList
         data={userData.friends}
         keyExtractor={(item) => item._id}

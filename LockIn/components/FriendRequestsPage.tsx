@@ -80,19 +80,20 @@ const FriendRequestsPage: React.FC = () => {
   }
 
   return (
-    <View>
+    <View className="p-5">
       <TextInput
+        className="h-10 border border-gray-400 mb-3 px-2"
         placeholder="Search..."
         value={searchQuery}
         onChangeText={handleSearchChange}
       />
       <Button title="Send Friend Request" onPress={handleSendRequest} />
-      <Text>Incoming Friend Requests</Text>
+      <Text className="mt-5 mb-2">Incoming Friend Requests</Text>
       <FlatList
         data={incomingRequests}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View>
+          <View className="mb-2">
             <Text>
               {item.from} - {item.to}
             </Text>
@@ -107,12 +108,12 @@ const FriendRequestsPage: React.FC = () => {
           </View>
         )}
       />
-      <Text>Outgoing Friend Requests</Text>
+      <Text className="mt-5 mb-2">Outgoing Friend Requests</Text>
       <FlatList
         data={outgoingRequests}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View>
+          <View className="mb-2">
             <Text>
               {item.from} - {item.to}
             </Text>

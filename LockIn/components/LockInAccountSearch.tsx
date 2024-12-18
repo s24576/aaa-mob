@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { View, TextInput, Button, StyleSheet } from 'react-native'
+import { View, TextInput, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { ProfileScreenProps } from '../App'
 
 const LockInAccountSearch: React.FC = () => {
-  const [username, setUsername] = useState('test1000')
+  const [username, setUsername] = useState('inzynierka')
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
 
   const handleSearch = () => {
@@ -12,9 +12,9 @@ const LockInAccountSearch: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 p-5">
       <TextInput
-        style={styles.input}
+        className="h-10 border border-gray-400 mb-3 px-2"
         placeholder="Username"
         value={username}
         onChangeText={setUsername}
@@ -23,19 +23,5 @@ const LockInAccountSearch: React.FC = () => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-  },
-})
 
 export default LockInAccountSearch

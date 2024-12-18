@@ -6,6 +6,7 @@ export const findProfile = async (username: string) => {
     const response = await api.get('/profile/findProfile', {
       params: { username },
     })
+    console.log('findProfile response:', response.data)
     return response.data
   } catch (error) {
     handleError(error)
