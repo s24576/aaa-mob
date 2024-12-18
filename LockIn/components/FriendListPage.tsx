@@ -5,10 +5,12 @@ import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { UserContextType } from '../types/local/userContext'
 import { getUserData } from '../api/user/getUserData'
 import { ProfileScreenProps } from '../App'
+import { useSocket } from '../context/SocketProvider'
 
 const FriendListPage = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
+  const { receivedMessage } = useSocket()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -22,6 +24,21 @@ const FriendListPage = () => {
 
     fetchUserData()
   }, [])
+
+  useEffect(() => {
+    if (receivedMessage) {
+      const fetchUserData = async () => {
+        try {
+          const data = await getUserData()
+          setUserData(data)
+        } catch (error) {
+          console.error('Error fetching user data:', error)
+        }
+      }
+
+      fetchUserData()
+    }
+  }, [receivedMessage])
 
   const usernameABC = userData?.username || ''
 
