@@ -1,6 +1,7 @@
 export interface Build {
   _id: string
   championId: string
+  championName: string
   item1: string
   item2: string
   item3: string

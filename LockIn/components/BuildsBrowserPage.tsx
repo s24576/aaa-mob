@@ -2,7 +2,21 @@ import React from 'react'
 import { View, Text, FlatList, Image } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { getBuilds } from '../api/build/getBuilds'
-import { Build } from '../types/build/buildClass'
+import { getVersion } from '../api/ddragon/version'
+
+interface Build {
+  _id: string
+  title: string
+  description: string
+  championId: string
+  item1: number
+  item2: number
+  item3: number
+  item4: number
+  item5: number
+  item6: number
+  username: string
+}
 
 const BuildsBrowserPage: React.FC = () => {
   const {
@@ -14,7 +28,16 @@ const BuildsBrowserPage: React.FC = () => {
     queryFn: () => getBuilds(),
   })
 
-  if (isLoading) {
+  const {
+    data: version,
+    isLoading: isVersionLoading,
+    error: versionError,
+  } = useQuery({
+    queryKey: ['version'],
+    queryFn: getVersion,
+  })
+
+  if (isLoading || isVersionLoading) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text>Loading...</Text>
@@ -22,10 +45,10 @@ const BuildsBrowserPage: React.FC = () => {
     )
   }
 
-  if (error) {
+  if (error || versionError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Error fetching builds: {error.message}</Text>
+        <Text>Error: {(error || versionError)?.message}</Text>
       </View>
     )
   }
@@ -34,6 +57,12 @@ const BuildsBrowserPage: React.FC = () => {
     <View className="p-4 border-b border-gray-300">
       <Text className="text-lg font-bold">{item.title}</Text>
       <Text className="text-sm mb-2">{item.description}</Text>
+      <Image
+        source={{
+          uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championId}.png`,
+        }}
+        className="w-12 h-12 mb-2"
+      />
       <View className="flex-row mb-2">
         {[
           item.item1,
@@ -46,7 +75,7 @@ const BuildsBrowserPage: React.FC = () => {
           <Image
             key={index}
             source={{
-              uri: `https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/${itemId}.png`,
+              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${itemId}.png`,
             }}
             className="w-12 h-12 mr-2"
           />
