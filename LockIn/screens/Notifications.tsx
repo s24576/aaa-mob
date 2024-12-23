@@ -1,14 +1,11 @@
 import React from 'react'
-import { View, Text } from 'react-native'
-import { useSocket } from '../context/SocketProvider'
+import { View } from 'react-native'
+import NotificationComponent from '../components/NotificationPage'
 
 const NotificationScreen: React.FC = () => {
-  const { receivedMessage, connectionStatus } = useSocket()
-
   return (
     <View>
-      <Text>Connection Status: {connectionStatus}</Text>
-      <Text>Received Message: {receivedMessage}</Text>
+      <NotificationComponent />
     </View>
   )
 }

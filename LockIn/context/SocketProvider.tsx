@@ -6,6 +6,8 @@ import { UserContextType } from '../types/local/userContext'
 interface SocketContextType {
   receivedMessage: string
   connectionStatus: string
+  messengerMessage: string
+  memberEvent: string // Add this line
 }
 
 interface SocketProviderProps {
@@ -17,10 +19,13 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined)
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { userData } = useContext(UserContext) as UserContextType
   const username = userData?.username || 'defaultUser'
-  const { receivedMessage, connectionStatus } = useWebSocket(username)
+  const { receivedMessage, connectionStatus, messengerMessage, memberEvent } =
+    useWebSocket(username) // Update this line
 
   return (
-    <SocketContext.Provider value={{ receivedMessage, connectionStatus }}>
+    <SocketContext.Provider
+      value={{ receivedMessage, connectionStatus, messengerMessage, memberEvent }} // Update this line
+    >
       {children}
     </SocketContext.Provider>
   )

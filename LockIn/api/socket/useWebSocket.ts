@@ -5,6 +5,8 @@ import { Client, IMessage, IFrame } from '@stomp/stompjs'
 interface UseWebSocketResult {
   receivedMessage: string
   connectionStatus: string
+  messengerMessage: string
+  memberEvent: string
 }
 
 const BACKEND_WS_ADDRESS = process.env.BACKEND_ADDRESS + '/ws'
@@ -13,6 +15,8 @@ const useWebSocket = (username: string): UseWebSocketResult => {
   const [receivedMessage, setReceivedMessage] = useState<string>('')
   const [connectionStatus, setConnectionStatus] =
     useState<string>('Connecting...')
+  const [messengerMessage, setMessengerMessage] = useState<string>('')
+  const [memberEvent, setMemberEvent] = useState<string>('')
   const [client, setClient] = useState<Client | null>(null)
 
   useEffect(() => {
@@ -32,11 +36,19 @@ const useWebSocket = (username: string): UseWebSocketResult => {
           `/user/${username}/friendRequest/from`,
           `/user/${username}/delete/friendRequest/to`,
           `/user/${username}/delete/friendRequest/from`,
+          `/user/${username}/messenger/message`,
+          `/user/${username}/member/event`,
         ]
         subscriptions.forEach((sub) => {
           stompClient.subscribe(sub, (message: IMessage) => {
             console.log('STOMP Debug: Received data', message)
-            setReceivedMessage(message.body || 'No message content')
+            if (sub.includes('messenger/message')) {
+              setMessengerMessage(message.body || 'No message content')
+            } else if (sub.includes('member/event')) {
+              setMemberEvent(message.body || 'No event content')
+            } else {
+              setReceivedMessage(message.body || 'No message content')
+            }
           })
         })
       },
@@ -60,7 +72,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     }
   }, [username])
 
-  return { receivedMessage, connectionStatus }
+  return { receivedMessage, connectionStatus, messengerMessage, memberEvent }
 }
 
 export default useWebSocket
