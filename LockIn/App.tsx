@@ -27,6 +27,7 @@ import { SocketProvider } from './context/SocketProvider'
 import FriendList from './screens/FriendList'
 import LockInProfile from './screens/LockInProfile'
 import FriendRequests from './screens/FriendRequests'
+import BuildDetails from './screens/BuildDetails'
 
 initI18n()
 
@@ -46,6 +47,7 @@ type RootStackParamList = {
   FriendList: undefined
   LockInProfile: { username: string }
   FriendRequests: undefined
+  BuildDetails: { buildId: string }
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -164,12 +166,25 @@ export const Layout = () => {
                     component={FriendRequests}
                     options={{ tabBarButton: () => null }}
                   />
+                  <Tab.Screen
+                    name="BuildDetails"
+                    component={BuildDetails}
+                    options={{ tabBarButton: () => null }}
+                  />
                 </Tab.Navigator>
               )}
             </Stack.Screen>
             <Stack.Screen
               name="MatchDetails"
               component={MatchDetails}
+              options={{
+                tabBarStyle: { display: 'none' },
+                unmountOnBlur: true,
+              }}
+            />
+            <Stack.Screen
+              name="BuildDetails"
+              component={BuildDetails}
               options={{
                 tabBarStyle: { display: 'none' },
                 unmountOnBlur: true,
@@ -198,4 +213,9 @@ export type ProfileScreenProps = NativeStackScreenProps<
 export type MatchDetailsScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'MatchDetails'
+>
+
+export type BuildDetailsScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'BuildDetails'
 >
