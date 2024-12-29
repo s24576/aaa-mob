@@ -54,7 +54,6 @@ const FriendListPage = () => {
   }) => {
     const usernameToSend: string =
       usernameABC === item.username ? item.username2 : item.username
-    console.log('Sending to:', usernameToSend)
     navigation.navigate('LockInProfile', { username: usernameToSend })
   }
 

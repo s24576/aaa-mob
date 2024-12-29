@@ -31,9 +31,6 @@ const MatchDetailsPage: React.FC = () => {
     queryFn: getVersion,
   })
 
-  console.log('Match Info:', matchInfo)
-  console.log('Version:', version)
-
   const handleParticipantPress = (server: string, puuid: string) => {
     navigation.navigate('RiotProfile', { server, puuid })
   }
@@ -75,7 +72,6 @@ const MatchDetailsPage: React.FC = () => {
   }
 
   if (error || versionError) {
-    console.log(error || versionError)
     return (
       <View className="flex-1 justify-center items-center">
         <Text className="text-lg">

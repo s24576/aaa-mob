@@ -14,7 +14,6 @@ export const handleLogin = async (
   navigation: NavigationProp<ParamListBase>
 ) => {
   try {
-    console.log('Backend Address:', BACKEND_ADDRESS)
     const response = await axios.post(
       `${BACKEND_ADDRESS}/user/login`,
       { username, password },
@@ -22,7 +21,6 @@ export const handleLogin = async (
     )
 
     const token: string = response.data
-    console.log('Token:', token)
 
     await AsyncStorage.setItem('token', token)
     const userData = await getUserData()

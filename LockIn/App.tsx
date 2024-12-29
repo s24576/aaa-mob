@@ -70,7 +70,6 @@ export const Layout = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       const token = await AsyncStorage.getItem('token')
-      console.log('Token:', token)
       setIsLoggedIn(!!token)
     }
     checkLoginStatus()

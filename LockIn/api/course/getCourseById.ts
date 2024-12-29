@@ -4,7 +4,6 @@ import { handleError } from '../error/handleError'
 export const getCourseById = async (courseId: string) => {
   try {
     const response = await api.get(`/course/getCourseById?courseId=${courseId}`)
-    console.log(response.data)
     return response.data
   } catch (error) {
     handleError(error)

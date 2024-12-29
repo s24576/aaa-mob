@@ -6,10 +6,9 @@ export const react = async (objectId: string, value: boolean) => {
     const response = await api.put('/comments/react', null, {
       params: {
         objectId,
-        value
-      }
+        value,
+      },
     })
-    console.log(response.data)
     return response.data
   } catch (error) {
     handleError(error)

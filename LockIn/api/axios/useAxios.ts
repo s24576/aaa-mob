@@ -10,6 +10,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem('token')
+    console.log('Token:', token)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -33,7 +34,7 @@ instance.interceptors.response.use(
 
       const refreshToken = await AsyncStorage.getItem('token')
       if (refreshToken) {
-        console.log('Odśwież token:', refreshToken)
+        // console.log('Odśwież token:', refreshToken)
         try {
           const refreshResponse = await axios.post(
             `${process.env.BACKEND_ADDRESS}/user/refreshToken`,
@@ -46,6 +47,7 @@ instance.interceptors.response.use(
           )
           const newToken = refreshResponse.data
           await AsyncStorage.setItem('token', newToken)
+          console.log('Nowy token:', newToken)
           originalRequest.headers.Authorization = `Bearer ${newToken}`
           return axios(originalRequest)
         } catch (refreshError) {

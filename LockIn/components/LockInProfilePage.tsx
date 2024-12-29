@@ -30,7 +30,6 @@ const LockInProfilePage: React.FC = () => {
   })
 
   const handleOnPress = (friendUsername: string) => {
-    console.log('Destination:', friendUsername)
     navigation.navigate('LockInProfile', { username: friendUsername })
   }
 

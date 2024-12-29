@@ -3,8 +3,9 @@ import { handleError } from '../error/handleError'
 
 export const findMessages = async (chatId: string, value: string) => {
   try {
-    const response = await api.get(`/messenger/findMessages?chatId=${chatId}&value=${value}`)
-    console.log(response.data)
+    const response = await api.get(
+      `/messenger/findMessages?chatId=${chatId}&value=${value}`
+    )
     return response.data
   } catch (error) {
     handleError(error)

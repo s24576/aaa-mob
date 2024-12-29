@@ -16,6 +16,15 @@ interface Build {
   item5: number
   item6: number
   username: string
+  likesCount: number
+  dislikesCount: number
+  runes: {
+    keyStone1Id: string
+    runes1: string[]
+    keyStone2Id: string
+    runes2: string[]
+    statShards: string[]
+  }
 }
 
 const BuildsBrowserPage: React.FC = () => {
@@ -81,7 +90,24 @@ const BuildsBrowserPage: React.FC = () => {
           />
         ))}
       </View>
+      {item.runes && (
+        <View className="mt-2">
+          <View className="mt-1">
+            <Text>Główna runa (Dark Harvest/Electrocute itd):</Text>
+
+            {item.runes.runes1.length > 0 && (
+              <Text className="text-sm">{item.runes.runes1[0]}</Text>
+            )}
+            <Text>
+              Drugie drzewko (Inspiracja/Dominacja itd):{' '}
+              {item.runes.keyStone2Id}
+            </Text>
+          </View>
+        </View>
+      )}
       <Text>By: {item.username}</Text>
+      <Text>Upvotes: {item.likesCount}</Text>
+      <Text>Downvotes: {item.dislikesCount}</Text>
     </View>
   )
 

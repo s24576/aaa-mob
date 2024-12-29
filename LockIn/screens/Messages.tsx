@@ -6,7 +6,6 @@ const Messages = () => {
   const handleSendFriendRequest = async () => {
     try {
       const response = await sendFriendRequest('Oriol')
-      console.log('Friend request sent:', response)
     } catch (error) {
       console.error('Error sending friend request:', error)
     }

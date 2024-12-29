@@ -6,10 +6,9 @@ export const getResponses = async (commentId: string, pageable: any) => {
     const response = await api.get('/comments/getResponses', {
       params: {
         commentId,
-        ...pageable
-      }
+        ...pageable,
+      },
     })
-    console.log(response.data)
     return response.data
   } catch (error) {
     handleError(error)

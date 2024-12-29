@@ -5,10 +5,9 @@ export const deleteComment = async (commentId: string) => {
   try {
     const response = await api.delete('/comments/deleteComment', {
       params: {
-        commentId
-      }
+        commentId,
+      },
     })
-    console.log(response.data)
     return response.data
   } catch (error) {
     handleError(error)

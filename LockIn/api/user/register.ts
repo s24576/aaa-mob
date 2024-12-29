@@ -17,7 +17,6 @@ export const handleRegister = async (
   }
 
   try {
-    console.log('Backend Address:', BACKEND_ADDRESS)
     await api.post(
       `${BACKEND_ADDRESS}/user/register`,
       { email, username, password },

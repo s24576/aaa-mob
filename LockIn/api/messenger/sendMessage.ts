@@ -8,7 +8,6 @@ export const sendMessage = async (chatId: string, message: MessageProp) => {
       `/messenger/sendMessage?chatId=${chatId}`,
       message
     )
-    console.log(response.data)
     return response.data
   } catch (error) {
     handleError(error)
