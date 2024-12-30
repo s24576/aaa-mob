@@ -28,6 +28,7 @@ import FriendList from './screens/FriendList'
 import LockInProfile from './screens/LockInProfile'
 import FriendRequests from './screens/FriendRequests'
 import BuildDetails from './screens/BuildDetails'
+import ChatPage from './components/ChatPage'
 
 initI18n()
 
@@ -48,6 +49,7 @@ type RootStackParamList = {
   LockInProfile: { username: string }
   FriendRequests: undefined
   BuildDetails: { buildId: string }
+  ChatPage: { chatId: string }
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -190,6 +192,14 @@ export const Layout = () => {
                 unmountOnBlur: true,
               }}
             />
+            <Stack.Screen
+              name="ChatPage"
+              component={ChatPage}
+              options={{
+                tabBarStyle: { display: 'none' },
+                unmountOnBlur: true,
+              }}
+            />
           </Stack.Navigator>
         )}
       </QueryClientProvider>
@@ -218,4 +228,9 @@ export type MatchDetailsScreenProps = NativeStackScreenProps<
 export type BuildDetailsScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'BuildDetails'
+>
+
+export type ChatPageScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ChatPage'
 >
