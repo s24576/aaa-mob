@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, FlatList, TextInput, Button } from 'react-native'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRoute } from '@react-navigation/native'
@@ -9,6 +9,7 @@ import { MessageProp } from '../types/messenger/MessageProp'
 import { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
+import { useSocket } from '../context/SocketProvider'
 
 interface Message {
   _id: string
@@ -42,11 +43,13 @@ const ChatPage: React.FC = () => {
   const queryClient = useQueryClient()
   const [newMessage, setNewMessage] = useState('')
   const { userData } = useContext(UserContext) as UserContextType
+  const { receivedMessage, messengerMessage } = useSocket()
 
   const {
     data: chatData,
     isLoading: isChatLoading,
     error: chatError,
+    refetch: refetchChatData,
   } = useQuery({
     queryKey: ['chat', chatId],
     queryFn: () => getChatById(chatId),
@@ -56,6 +59,7 @@ const ChatPage: React.FC = () => {
     data: messagesData,
     isLoading: isMessagesLoading,
     error: messagesError,
+    refetch: refetchMessages,
   } = useQuery({
     queryKey: ['messages', chatId],
     queryFn: () => getMessages(chatId),
@@ -68,6 +72,13 @@ const ChatPage: React.FC = () => {
       setNewMessage('')
     },
   })
+
+  useEffect(() => {
+    if (messengerMessage) {
+      refetchChatData()
+      refetchMessages()
+    }
+  }, [messengerMessage, refetchChatData, refetchMessages])
 
   if (isChatLoading || isMessagesLoading) {
     return (

@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, Text, FlatList, Button } from 'react-native'
+import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query'
 import { UserContext } from '../context/UserContext'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { UserContextType } from '../types/local/userContext'
 import { getUserData } from '../api/user/getUserData'
 import { deleteFriend } from '../api/profile/deleteFriend'
@@ -12,39 +13,32 @@ const FriendListPage = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const { receivedMessage } = useSocket()
+  const queryClient = useQueryClient()
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const data = await getUserData()
-        setUserData(data)
-      } catch (error) {
-        console.error('Error fetching user data:', error)
-      }
-    }
-
-    fetchUserData()
-  }, [])
+  const {
+    data: userDataQuery,
+    isLoading,
+    error,
+    refetch: refetchUserData,
+  } = useQuery({
+    queryKey: ['userData'],
+    queryFn: getUserData,
+  })
 
   useEffect(() => {
     if (receivedMessage) {
-      const fetchUserData = async () => {
-        try {
-          const data = await getUserData()
-          setUserData(data)
-        } catch (error) {
-          console.error('Error fetching user data:', error)
-        }
-      }
-
-      fetchUserData()
+      refetchUserData()
     }
-  }, [receivedMessage])
+  }, [receivedMessage, refetchUserData])
 
   const usernameABC = userData?.username || ''
 
-  if (!userData || !userData.friends) {
+  if (isLoading) {
     return <Text>Loading...</Text>
+  }
+
+  if (error) {
+    return <Text>Error: {error.message}</Text>
   }
 
   const handleFriendRequest = (item: {
@@ -60,10 +54,7 @@ const FriendListPage = () => {
   const handleDeleteFriend = async (friendId: string) => {
     try {
       await deleteFriend(friendId)
-      setUserData({
-        ...userData,
-        friends: userData.friends.filter((friend) => friend._id !== friendId),
-      })
+      queryClient.invalidateQueries({ queryKey: ['userData'] })
     } catch (error) {
       console.error('Error deleting friend:', error)
     }
@@ -77,7 +68,7 @@ const FriendListPage = () => {
       />
       <Text className="mt-5 mb-2">Lista znajomych:</Text>
       <FlatList
-        data={userData.friends}
+        data={userDataQuery?.friends}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View>

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, FlatList, TouchableOpacity } from 'react-native'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigation } from '@react-navigation/native'
 import { getChats } from '../api/messenger/getChats'
 import { ChatPageScreenProps } from '../App'
+import { useSocket } from '../context/SocketProvider'
 
 interface Chat {
   _id: string
@@ -24,15 +25,24 @@ interface Chat {
 
 const MessagesPage: React.FC = () => {
   const navigation = useNavigation<ChatPageScreenProps['navigation']>()
+  const queryClient = useQueryClient()
+  const { receivedMessage, messengerMessage } = useSocket()
 
   const {
     data: chatsData,
     isLoading,
     error,
+    refetch: refetchChats,
   } = useQuery({
     queryKey: ['chats'],
     queryFn: getChats,
   })
+
+  useEffect(() => {
+    if (messengerMessage) {
+      refetchChats()
+    }
+  }, [messengerMessage, refetchChats])
 
   if (isLoading) {
     return (

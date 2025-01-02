@@ -7,7 +7,7 @@ interface SocketContextType {
   receivedMessage: string
   connectionStatus: string
   messengerMessage: string
-  memberEvent: string // Add this line
+  memberEvent: string
 }
 
 interface SocketProviderProps {
@@ -20,11 +20,16 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { userData } = useContext(UserContext) as UserContextType
   const username = userData?.username || 'defaultUser'
   const { receivedMessage, connectionStatus, messengerMessage, memberEvent } =
-    useWebSocket(username) // Update this line
+    useWebSocket(username)
 
   return (
     <SocketContext.Provider
-      value={{ receivedMessage, connectionStatus, messengerMessage, memberEvent }} // Update this line
+      value={{
+        receivedMessage,
+        connectionStatus,
+        messengerMessage,
+        memberEvent,
+      }}
     >
       {children}
     </SocketContext.Provider>

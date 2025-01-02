@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, TextInput, FlatList, Text, Button } from 'react-native'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getToFriendRequests } from '../api/profile/getToFriendRequests'
 import { getFromFriendRequests } from '../api/profile/getFromFriendRequests'
 import { sendFriendRequest } from '../api/profile/sendFriendRequest'
@@ -15,33 +16,35 @@ interface FriendRequest {
 
 const FriendRequestsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [incomingRequests, setIncomingRequests] = useState<FriendRequest[]>([])
-  const [outgoingRequests, setOutgoingRequests] = useState<FriendRequest[]>([])
-
+  const queryClient = useQueryClient()
   const { receivedMessage } = useSocket()
 
-  const fetchFriendRequests = async () => {
-    try {
-      const [incoming, outgoing] = await Promise.all([
-        getToFriendRequests(),
-        getFromFriendRequests(),
-      ])
-      setIncomingRequests(incoming.content)
-      setOutgoingRequests(outgoing.content)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const {
+    data: incomingRequestsData,
+    isLoading: isIncomingLoading,
+    error: incomingError,
+    refetch: refetchIncomingRequests,
+  } = useQuery({
+    queryKey: ['incomingRequests'],
+    queryFn: getToFriendRequests,
+  })
 
-  useEffect(() => {
-    fetchFriendRequests()
-  }, [])
+  const {
+    data: outgoingRequestsData,
+    isLoading: isOutgoingLoading,
+    error: outgoingError,
+    refetch: refetchOutgoingRequests,
+  } = useQuery({
+    queryKey: ['outgoingRequests'],
+    queryFn: getFromFriendRequests,
+  })
 
   useEffect(() => {
     if (receivedMessage) {
-      fetchFriendRequests()
+      refetchIncomingRequests()
+      refetchOutgoingRequests()
     }
-  }, [receivedMessage])
+  }, [receivedMessage, refetchIncomingRequests, refetchOutgoingRequests])
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
@@ -51,6 +54,7 @@ const FriendRequestsPage: React.FC = () => {
     try {
       await sendFriendRequest(searchQuery)
       alert('Friend request sent!')
+      refetchOutgoingRequests()
     } catch (error) {
       console.error(error)
       alert('Failed to send friend request.')
@@ -61,7 +65,7 @@ const FriendRequestsPage: React.FC = () => {
     try {
       await respondFriendRequest({ requestId: id, response: true })
       alert('Friend request accepted!')
-      fetchFriendRequests()
+      refetchIncomingRequests()
     } catch (error) {
       console.error(error)
       alert('Failed to accept friend request.')
@@ -72,11 +76,27 @@ const FriendRequestsPage: React.FC = () => {
     try {
       await respondFriendRequest({ requestId: id, response: false })
       alert('Friend request declined!')
-      fetchFriendRequests()
+      refetchIncomingRequests()
     } catch (error) {
       console.error(error)
       alert('Failed to decline friend request.')
     }
+  }
+
+  if (isIncomingLoading || isOutgoingLoading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text>Loading...</Text>
+      </View>
+    )
+  }
+
+  if (incomingError || outgoingError) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text>Error: {(incomingError || outgoingError)?.message}</Text>
+      </View>
+    )
   }
 
   return (
@@ -90,7 +110,7 @@ const FriendRequestsPage: React.FC = () => {
       <Button title="Send Friend Request" onPress={handleSendRequest} />
       <Text className="mt-5 mb-2">Incoming Friend Requests</Text>
       <FlatList
-        data={incomingRequests}
+        data={incomingRequestsData.content}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View className="mb-2">
@@ -110,7 +130,7 @@ const FriendRequestsPage: React.FC = () => {
       />
       <Text className="mt-5 mb-2">Outgoing Friend Requests</Text>
       <FlatList
-        data={outgoingRequests}
+        data={outgoingRequestsData.content}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View className="mb-2">

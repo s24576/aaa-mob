@@ -28,7 +28,7 @@ import FriendList from './screens/FriendList'
 import LockInProfile from './screens/LockInProfile'
 import FriendRequests from './screens/FriendRequests'
 import BuildDetails from './screens/BuildDetails'
-import ChatPage from './components/ChatPage'
+import ChatPage from './components/MessageRoomPage'
 
 initI18n()
 

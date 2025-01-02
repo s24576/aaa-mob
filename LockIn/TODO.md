@@ -7,7 +7,7 @@
 - Filtrowanie buildów po championie i twórcy (czekamy na back)
 - Sortowanie buildów po dacie utworzenia (czekamy na back)
 - Messenger:
-- websocket autorefresh on msg recieved
+- websocket autorefresh on msg recieved (jest)
 - dodawanie ludzi do chatu
 - usuwanie ludzi z chatu
 - usuwanie chatu
@@ -17,11 +17,11 @@
 - odpowiedzi na wiadomosci
 - ladowanie wiecej niz 5 wiad
 - co jak jest rozmowa i wyslecie sobie 5+ wiad
-
+ 2 ostatnie zrobimy ze wyswietla 10 wiad (albo tyle ile sie miesci na ekranie) i jak scrollujesz do gory to mozesz kliknac zaladuj wiecej, albo auto fetch
 
 - Kursy
 - Ogłoszenia
-- Powiadomienia
+- Powiadomienia (jest ale zapisuja sie w pamieci urzadzenia i jak przelogujesz sie to zostaja te same)
 
 ## Enhancements
 
