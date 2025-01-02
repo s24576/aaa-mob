@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { getBuilds } from '../api/build/getBuilds'
 import { getVersion } from '../api/ddragon/version'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { BuildDetailsScreenProps } from '../App'
 
 interface Build {
@@ -36,6 +36,8 @@ const BuildsBrowserPage: React.FC = () => {
     data: buildsData,
     isLoading,
     error,
+    refetch,
+    isFetching,
   } = useQuery({
     queryKey: ['builds'],
     queryFn: () => getBuilds(),
@@ -50,7 +52,13 @@ const BuildsBrowserPage: React.FC = () => {
     queryFn: getVersion,
   })
 
-  if (isLoading || isVersionLoading) {
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch()
+    }, [refetch])
+  )
+
+  if (isLoading || isVersionLoading || isFetching) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text>Loading...</Text>
