@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, Image, Button } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getBuildById } from '../api/build/getBuildById'
 import { getVersion } from '../api/ddragon/version'
 import { react } from '../api/comments/react'
+import { saveBuild } from '../api/build/saveBuild'
 
 const BuildDetailsPage: React.FC = () => {
   const route = useRoute()
   const { buildId } = route.params as { buildId: string }
   const queryClient = useQueryClient()
+  const [isSaved, setIsSaved] = useState(false)
 
   const {
     data: build,
@@ -35,6 +37,14 @@ const BuildDetailsPage: React.FC = () => {
       react(objectId, value),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['build', buildId] })
+    },
+  })
+
+  const saveMutation = useMutation({
+    mutationFn: ({ buildId, save }: { buildId: string; save: boolean }) =>
+      saveBuild(buildId, save),
+    onSuccess: () => {
+      setIsSaved((prev) => !prev)
     },
   })
 
@@ -68,6 +78,10 @@ const BuildDetailsPage: React.FC = () => {
 
   const handleDislike = () => {
     mutation.mutate({ objectId: buildId, value: false })
+  }
+
+  const handleSave = () => {
+    saveMutation.mutate({ buildId, save: !isSaved })
   }
 
   return (
@@ -118,6 +132,10 @@ const BuildDetailsPage: React.FC = () => {
       <View className="flex-row mt-4">
         <Button title="Like" onPress={handleLike} />
         <Button title="Dislike" onPress={handleDislike} />
+        <Button
+          title={isSaved ? 'Unsave Build' : 'Save Build'}
+          onPress={handleSave}
+        />
       </View>
     </View>
   )
