@@ -10,32 +10,8 @@ import { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
 import { useSocket } from '../context/SocketProvider'
-
-interface Message {
-  _id: string
-  chatId: string
-  userId: string
-  respondingTo: string | null
-  message: string
-  timestamp: number
-}
-
-interface Chat {
-  _id: string
-  name: string
-  privateChat: boolean
-  members: { username: string; nickname: string | null }[]
-  lastMessage: {
-    _id: string
-    chatId: string
-    userId: string
-    respondingTo: string
-    message: string
-    timestamp: number
-  } | null
-  totalMessages: number
-  timestamp: number
-}
+import { Chat } from '../types/messenger/Chat'
+import { Message } from '../types/messenger/Message'
 
 const ChatPage: React.FC = () => {
   const route = useRoute()

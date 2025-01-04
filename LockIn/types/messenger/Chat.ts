@@ -1,6 +1,16 @@
 export interface Chat {
-  id: string
+  _id: string
   name: string
-  participants: string[]
-  messages: string[]
+  privateChat: boolean
+  members: { username: string; nickname: string | null }[]
+  lastMessage: {
+    _id: string
+    chatId: string
+    userId: string
+    respondingTo: string
+    message: string
+    timestamp: number
+  } | null
+  totalMessages: number
+  timestamp: number
 }

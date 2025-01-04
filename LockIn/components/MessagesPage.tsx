@@ -5,23 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { getChats } from '../api/messenger/getChats'
 import { ChatPageScreenProps } from '../App'
 import { useSocket } from '../context/SocketProvider'
-
-interface Chat {
-  _id: string
-  name: string
-  privateChat: boolean
-  members: { username: string; nickname: string | null }[]
-  lastMessage: {
-    _id: string
-    chatId: string
-    userId: string
-    respondingTo: string
-    message: string
-    timestamp: number
-  } | null
-  totalMessages: number
-  timestamp: number
-}
+import { Chat } from '../types/messenger/Chat'
 
 const MessagesPage: React.FC = () => {
   const navigation = useNavigation<ChatPageScreenProps['navigation']>()
