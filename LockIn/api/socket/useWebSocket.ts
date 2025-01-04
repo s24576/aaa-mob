@@ -25,10 +25,10 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     const stompClient = new Client({
       webSocketFactory: () => socket,
       debug: function (str: string) {
-        console.log('STOMP Debug: ', str)
+        // console.log('STOMP Debug: ', str)
       },
       onConnect: () => {
-        console.log('Connected')
+        // console.log('Connected')
         setConnectionStatus('Connected')
         const subscriptions = [
           `/user/${username}/notification`,
@@ -41,7 +41,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
         ]
         subscriptions.forEach((sub) => {
           stompClient.subscribe(sub, (message: IMessage) => {
-            console.log('STOMP Debug: Received data', message)
+            // console.log('STOMP Debug: Received data', message)
             if (sub.includes('messenger/message')) {
               setMessengerMessage(message.body || 'No message content')
             } else if (sub.includes('member/event')) {

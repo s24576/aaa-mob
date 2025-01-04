@@ -75,6 +75,7 @@ const BuildsBrowserPage: React.FC = () => {
   }
 
   const handleBuildPress = (buildId: string) => {
+    console.log('buildId:', buildId)
     navigation.navigate('BuildDetails', { buildId })
   }
 

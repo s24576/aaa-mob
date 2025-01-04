@@ -6,7 +6,7 @@ export const getBuilds = async (author?: string, pageable?: object) => {
     const response = await api.get('/build/getBuilds', {
       params: { author, size: 40, ...pageable },
     })
-    console.log('Dane buildu:', response.data)
+    console.log('Dane buildów:', response.data)
     return response.data
   } catch (error) {
     handleError(error)

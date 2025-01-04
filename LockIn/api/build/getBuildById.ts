@@ -6,7 +6,7 @@ export const getBuildById = async (buildId: string) => {
     const response = await api.get(`/build/getBuildById`, {
       params: { buildId },
     })
-    console.log(response.data)
+    console.log('Dane buildu:', response.data)
     return response.data
   } catch (error) {
     handleError(error)

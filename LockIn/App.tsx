@@ -179,26 +179,26 @@ export const Layout = () => {
             <Stack.Screen
               name="MatchDetails"
               component={MatchDetails}
-              options={{
-                tabBarStyle: { display: 'none' },
-                unmountOnBlur: true,
-              }}
+              // options={{
+              //   tabBarStyle: { display: 'none' },
+              //   unmountOnBlur: true,
+              // }}
             />
             <Stack.Screen
               name="BuildDetails"
               component={BuildDetails}
-              options={{
-                tabBarStyle: { display: 'none' },
-                unmountOnBlur: true,
-              }}
+              // options={{
+              //   tabBarStyle: { display: 'none' },
+              //   unmountOnBlur: true,
+              // }}
             />
             <Stack.Screen
               name="ChatPage"
               component={ChatPage}
-              options={{
-                tabBarStyle: { display: 'none' },
-                unmountOnBlur: true,
-              }}
+              // options={{
+              //   tabBarStyle: { display: 'none' },
+              //   unmountOnBlur: true,
+              // }}
             />
           </Stack.Navigator>
         )}

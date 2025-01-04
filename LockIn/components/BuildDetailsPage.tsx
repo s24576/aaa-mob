@@ -6,6 +6,7 @@ import { getBuildById } from '../api/build/getBuildById'
 import { getVersion } from '../api/ddragon/version'
 import { react } from '../api/comments/react'
 import { saveBuild } from '../api/build/saveBuild'
+import { getComments } from '../api/comments/getComments'
 
 const BuildDetailsPage: React.FC = () => {
   const route = useRoute()
@@ -32,6 +33,16 @@ const BuildDetailsPage: React.FC = () => {
     queryFn: getVersion,
   })
 
+  const {
+    data: comments,
+    isLoading: isCommentsLoading,
+    error: commentsError,
+  } = useQuery({
+    queryKey: ['comments', buildId],
+    queryFn: () => getComments(buildId, { size: 10 }),
+    enabled: !!buildId,
+  })
+
   const mutation = useMutation({
     mutationFn: ({ objectId, value }: { objectId: string; value: boolean }) =>
       react(objectId, value),
@@ -48,7 +59,7 @@ const BuildDetailsPage: React.FC = () => {
     },
   })
 
-  if (isLoading || isVersionLoading) {
+  if (isLoading || isVersionLoading || isCommentsLoading) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text>Loading...</Text>
@@ -56,10 +67,10 @@ const BuildDetailsPage: React.FC = () => {
     )
   }
 
-  if (error || versionError) {
+  if (error || versionError || commentsError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Error: {(error || versionError)?.message}</Text>
+        <Text>Error: {(error || versionError || commentsError)?.message}</Text>
       </View>
     )
   }
@@ -136,6 +147,15 @@ const BuildDetailsPage: React.FC = () => {
           title={isSaved ? 'Unsave Build' : 'Save Build'}
           onPress={handleSave}
         />
+      </View>
+      <View className="mt-4">
+        <Text className="text-xl font-bold">Comments</Text>
+        {comments?.content.map((comment) => (
+          <View key={comment._id} className="mt-2 p-2 border-b border-gray-300">
+            <Text className="font-bold">{comment.username}</Text>
+            <Text>{comment.comment}</Text>
+          </View>
+        ))}
       </View>
     </View>
   )
