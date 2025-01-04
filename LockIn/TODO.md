@@ -6,14 +6,12 @@
 - moje/zapisane buildy
 - Filtrowanie buildów po championie i twórcy (czekamy na back)
 - Sortowanie buildów po dacie utworzenia (czekamy na back)
-- Messenger:
+
+- Messenger: (prywatne czaty tworza sie automatyzcnie po dodaniu kogos do znajomych, publiczne sa tworzone przez uzytkownikow)
 - websocket autorefresh on msg recieved (jest)
-- dodawanie ludzi do chatu
-- usuwanie ludzi z chatu
-- usuwanie chatu
-- tworzenie chatu
-- wyszukiwanie wiadomosci
-- oposzczanie chatu
+- tworzenie chatu publicznego z kilkoma osobami ktore osoba tworzaca ma na swojej liscie znajomych
+- dodawanie ludzi do chatu publicznego (wybor z osob ktore ma na liscie znajomych)
+- opuszczanie chatu publicznego
 - odpowiedzi na wiadomosci
 - ladowanie wiecej niz 5 wiad
 - co jak jest rozmowa i wyslecie sobie 5+ wiad
@@ -32,8 +30,6 @@
 ## Bugs
 
 - usuwanie z listy znajomych (działa, ale nie ma na to websocketa)
-
-## Questions
 
 {
     "_id": "8f248487-479c-40e8-902f-a9a3509eba5f",
