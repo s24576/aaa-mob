@@ -79,6 +79,26 @@ const BuildDetailsPage: React.FC = () => {
     },
   })
 
+  const responseMutation = useMutation({
+    mutationFn: ({
+      responseId,
+      value,
+    }: {
+      responseId: string
+      value: boolean
+    }) => react(responseId, value),
+    onSuccess: (_, { responseId }) => {
+      const parentCommentId = Object.keys(responses).find((key) =>
+        responses[key]?.some((response) => response._id === responseId)
+      )
+      if (parentCommentId) {
+        getResponses(parentCommentId, { size: 5 }).then((data) => {
+          setResponses((prev) => ({ ...prev, [parentCommentId]: data.content }))
+        })
+      }
+    },
+  })
+
   const handleLike = () => {
     mutation.mutate({ objectId: buildId, value: true })
   }
@@ -97,6 +117,14 @@ const BuildDetailsPage: React.FC = () => {
 
   const handleCommentDislike = (commentId: string) => {
     commentMutation.mutate({ commentId, value: false })
+  }
+
+  const handleResponseLike = (responseId: string) => {
+    responseMutation.mutate({ responseId, value: true })
+  }
+
+  const handleResponseDislike = (responseId: string) => {
+    responseMutation.mutate({ responseId, value: false })
   }
 
   if (isLoading || isVersionLoading || isCommentsLoading) {
@@ -154,14 +182,11 @@ const BuildDetailsPage: React.FC = () => {
       {build.runes && (
         <View className="mt-2">
           <View className="mt-1">
-            <Text>Główna runa (Dark Harvest/Electrocute itd):</Text>
+            <Text>Główna runa:</Text>
             {build.runes.runes1.length > 0 && (
               <Text className="text-sm">{build.runes.runes1[0]}</Text>
             )}
-            <Text>
-              Drugie drzewko (Inspiracja/Dominacja itd):{' '}
-              {build.runes.keyStone2Id}
-            </Text>
+            <Text>Drugie drzewko: {build.runes.keyStone2Id}</Text>
           </View>
         </View>
       )}
@@ -210,11 +235,11 @@ const BuildDetailsPage: React.FC = () => {
                       <View className="flex-row mt-2">
                         <Button
                           title="Like"
-                          onPress={() => handleCommentLike(response._id)}
+                          onPress={() => handleResponseLike(response._id)}
                         />
                         <Button
                           title="Dislike"
-                          onPress={() => handleCommentDislike(response._id)}
+                          onPress={() => handleResponseDislike(response._id)}
                         />
                       </View>
                     </View>
