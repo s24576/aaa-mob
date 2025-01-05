@@ -36,7 +36,7 @@ const MessagesPage: React.FC = () => {
     refetch: refetchChats,
   } = useQuery({
     queryKey: ['chats', page],
-    queryFn: () => getChats(page, 10),
+    queryFn: () => getChats(page, 5),
   })
 
   const filteredFriends = userData?.friends.map((friend) =>

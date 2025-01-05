@@ -30,6 +30,7 @@ const ChatPage: React.FC = () => {
   const size = 8
   const isFirstLoad = useRef(true)
   const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false)
+  const [allMessages, setAllMessages] = useState<Message[]>([])
 
   const messagesQueries = useQuery({
     queryKey: ['messages', chatId, pages],
@@ -45,6 +46,14 @@ const ChatPage: React.FC = () => {
     },
   })
 
+  // Merge new messages with existing messages
+  useEffect(() => {
+    if (messagesQueries.data) {
+      // Reset messages when refetching
+      setAllMessages(messagesQueries.data)
+    }
+  }, [messagesQueries.data])
+
   const { data: chatData, isLoading: isChatLoading } = useQuery({
     queryKey: ['chat', chatId],
     queryFn: () => getChatById(chatId),
@@ -57,8 +66,6 @@ const ChatPage: React.FC = () => {
       setNewMessage('')
     },
   })
-
-  const allMessages = messagesQueries.data || []
 
   const renderMessage = ({ item }: { item: Message }) => (
     <View
@@ -95,17 +102,13 @@ const ChatPage: React.FC = () => {
       setReplyingTo(null)
     }
   }
-
+  useEffect(() => {
+    console.log('allMessages:', allMessages)
+  }, [allMessages])
   const loadMoreMessages = () => {
-    console.log('Loaded messages: ', allMessages.length)
-
-    // Ensure there are more messages to load
     if (chatData?.totalMessages > allMessages.length) {
-      const nextPage = pages.length
-      setPages((prevPages) => [...prevPages, nextPage])
-
-      // We need to refetch the messages with the new page
-      messagesQueries.refetch()
+      const nextPage = Math.max(...pages) + 1
+      setPages([...pages, nextPage])
     }
 
     console.log('Total messages: ', chatData?.totalMessages)
@@ -132,7 +135,7 @@ const ChatPage: React.FC = () => {
       {/* FlatList for messages */}
       <FlatList
         data={allMessages}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item, index) => `${item._id}-${index}`} // Ensure unique keys
         renderItem={renderMessage}
         inverted
         onEndReached={loadMoreMessages}
