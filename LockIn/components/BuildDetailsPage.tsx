@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, Image, Button, ScrollView } from 'react-native'
+import React, { useState, useEffect, useContext } from 'react'
+import { View, Text, Image, Button, ScrollView, TextInput } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getBuildById } from '../api/build/getBuildById'
@@ -8,13 +8,19 @@ import { react } from '../api/comments/react'
 import { saveBuild } from '../api/build/saveBuild'
 import { getComments } from '../api/comments/getComments'
 import { getResponses } from '../api/comments/getResponses'
+import { addComment } from '../api/comments/addComment'
+import { getUserData } from '../api/user/getUserData'
+import { UserContext } from '../context/UserContext'
+import { UserContextType } from '../types/local/userContext'
 
 const BuildDetailsPage: React.FC = () => {
+  const { userData, setUserData } = useContext(UserContext) as UserContextType
   const route = useRoute()
   const { buildId } = route.params as { buildId: string }
   const queryClient = useQueryClient()
   const [isSaved, setIsSaved] = useState(false)
   const [responses, setResponses] = useState<{ [key: string]: any[] }>({})
+  const [newComment, setNewComment] = useState('')
 
   const {
     data: build,
@@ -44,6 +50,17 @@ const BuildDetailsPage: React.FC = () => {
     queryFn: () => getComments(buildId, { size: 10 }),
     enabled: !!buildId,
   })
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await getUserData()
+        setUserData(data)
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (comments?.content) {
@@ -99,6 +116,14 @@ const BuildDetailsPage: React.FC = () => {
     },
   })
 
+  const addCommentMutation = useMutation({
+    mutationFn: (comment: any) => addComment(comment),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', buildId] })
+      setNewComment('')
+    },
+  })
+
   const handleLike = () => {
     mutation.mutate({ objectId: buildId, value: true })
   }
@@ -149,6 +174,22 @@ const BuildDetailsPage: React.FC = () => {
         <Text>No build information found.</Text>
       </View>
     )
+  }
+
+  if (!userData) {
+    return <Text>Loading...</Text>
+  }
+
+  const { username } = userData
+
+  const handleAddComment = () => {
+    const commentPayload = {
+      objectId: buildId,
+      comment: newComment,
+      username: username,
+      timestamp: Date.now(),
+    }
+    addCommentMutation.mutate(commentPayload)
   }
 
   return (
@@ -203,6 +244,13 @@ const BuildDetailsPage: React.FC = () => {
       </View>
       <View className="mt-4 mb-6">
         <Text className="text-xl font-bold">Comments</Text>
+        <TextInput
+          value={newComment}
+          onChangeText={setNewComment}
+          placeholder="Add a comment"
+          className="border p-2 mb-2"
+        />
+        <Button title="Submit Comment" onPress={handleAddComment} />
         {comments?.content.length > 0 ? (
           comments.content.map((comment: any) => (
             <View
@@ -249,7 +297,7 @@ const BuildDetailsPage: React.FC = () => {
             </View>
           ))
         ) : (
-          <Text>No comments found.</Text>
+          <Text>Empty</Text>
         )}
       </View>
     </ScrollView>
