@@ -132,6 +132,25 @@ const ChatPage: React.FC = () => {
         )}
       </View>
 
+      {/* Loading indicator */}
+      {messagesQueries.isLoading && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            padding: 10,
+            backgroundColor: '#f5f5f5',
+            zIndex: 1,
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator size="small" color="#0000ff" />
+          <Text>Loading messages...</Text>
+        </View>
+      )}
+
       {/* FlatList for messages */}
       <FlatList
         data={allMessages}
