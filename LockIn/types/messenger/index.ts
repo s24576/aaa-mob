@@ -3,6 +3,7 @@ export interface MessageProp {
   content: string;
   timestamp: number;
   message: string;
+  respondingTo: string | null; // Added property
 }
 
 export interface Message {
