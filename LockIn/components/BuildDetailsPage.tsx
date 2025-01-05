@@ -8,7 +8,7 @@ import { react } from '../api/comments/react'
 import { saveBuild } from '../api/build/saveBuild'
 import { getComments } from '../api/comments/getComments'
 import { getResponses } from '../api/comments/getResponses'
-import { addComment } from '../api/comments/addComment'
+import { addComment, addReply } from '../api/comments/addComment'
 import { getUserData } from '../api/user/getUserData'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
@@ -21,6 +21,8 @@ const BuildDetailsPage: React.FC = () => {
   const [isSaved, setIsSaved] = useState(false)
   const [responses, setResponses] = useState<{ [key: string]: any[] }>({})
   const [newComment, setNewComment] = useState('')
+  const [replyingTo, setReplyingTo] = useState<string | null>(null)
+  const [replyTexts, setReplyTexts] = useState<{ [key: string]: string }>({})
 
   const {
     data: build,
@@ -124,6 +126,16 @@ const BuildDetailsPage: React.FC = () => {
     },
   })
 
+  const addReplyMutation = useMutation({
+    mutationFn: ({ commentId, reply }: { commentId: string; reply: any }) =>
+      addReply(commentId, reply),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', buildId] })
+      setNewComment('')
+      setReplyingTo(null)
+    },
+  })
+
   const handleLike = () => {
     mutation.mutate({ objectId: buildId, value: true })
   }
@@ -150,6 +162,37 @@ const BuildDetailsPage: React.FC = () => {
 
   const handleResponseDislike = (responseId: string) => {
     responseMutation.mutate({ responseId, value: false })
+  }
+
+  const handleAddComment = () => {
+    const commentPayload = {
+      objectId: buildId,
+      comment: newComment,
+      username: username,
+      timestamp: Date.now(),
+    }
+    addCommentMutation.mutate(commentPayload)
+  }
+
+  const handleAddReply = (commentId: string) => {
+    const replyPayload = {
+      objectId: buildId,
+      comment: replyTexts[commentId],
+      username: username,
+      timestamp: Date.now(),
+    }
+    addReplyMutation.mutate(
+      { commentId, reply: replyPayload },
+      {
+        onSuccess: () => {
+          setReplyTexts((prev) => ({ ...prev, [commentId]: '' }))
+        },
+      }
+    )
+  }
+
+  const handleReplyTextChange = (commentId: string, text: string) => {
+    setReplyTexts((prev) => ({ ...prev, [commentId]: text }))
   }
 
   if (isLoading || isVersionLoading || isCommentsLoading) {
@@ -181,16 +224,6 @@ const BuildDetailsPage: React.FC = () => {
   }
 
   const { username } = userData
-
-  const handleAddComment = () => {
-    const commentPayload = {
-      objectId: buildId,
-      comment: newComment,
-      username: username,
-      timestamp: Date.now(),
-    }
-    addCommentMutation.mutate(commentPayload)
-  }
 
   return (
     <ScrollView className="flex-1 p-4">
@@ -247,10 +280,15 @@ const BuildDetailsPage: React.FC = () => {
         <TextInput
           value={newComment}
           onChangeText={setNewComment}
-          placeholder="Add a comment"
+          placeholder={replyingTo ? 'Add a reply' : 'Add a comment'}
           className="border p-2 mb-2"
         />
-        <Button title="Submit Comment" onPress={handleAddComment} />
+        <Button
+          title={replyingTo ? 'Submit Reply' : 'Submit Comment'}
+          onPress={
+            replyingTo ? () => handleAddReply(replyingTo) : handleAddComment
+          }
+        />
         {comments?.content.length > 0 ? (
           comments.content.map((comment: any) => (
             <View
@@ -271,6 +309,18 @@ const BuildDetailsPage: React.FC = () => {
                   onPress={() => handleCommentDislike(comment._id)}
                 />
               </View>
+              <TextInput
+                value={replyTexts[comment._id] || ''}
+                onChangeText={(text) =>
+                  handleReplyTextChange(comment._id, text)
+                }
+                placeholder="Add a reply"
+                className="border p-2 mt-2"
+              />
+              <Button
+                title="Submit Reply"
+                onPress={() => handleAddReply(comment._id)}
+              />
               {responses[comment._id]?.length > 0 && (
                 <View className="ml-4 mt-2">
                   <Text className="font-bold">Responses:</Text>
