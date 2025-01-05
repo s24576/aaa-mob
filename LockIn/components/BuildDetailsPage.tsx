@@ -10,6 +10,7 @@ import { getComments } from '../api/comments/getComments'
 import { getResponses } from '../api/comments/getResponses'
 import { addComment, addReply } from '../api/comments/addComment'
 import { getUserData } from '../api/user/getUserData'
+import { deleteComment } from '../api/comments/deleteComment'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
 
@@ -136,6 +137,27 @@ const BuildDetailsPage: React.FC = () => {
     },
   })
 
+  const deleteCommentMutation = useMutation({
+    mutationFn: (commentId: string) => deleteComment(commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', buildId] })
+    },
+  })
+
+  const deleteResponseMutation = useMutation({
+    mutationFn: (responseId: string) => deleteComment(responseId),
+    onSuccess: (_, responseId) => {
+      const parentCommentId = Object.keys(responses).find((key) =>
+        responses[key]?.some((response) => response._id === responseId)
+      )
+      if (parentCommentId) {
+        getResponses(parentCommentId, { size: 5 }).then((data) => {
+          setResponses((prev) => ({ ...prev, [parentCommentId]: data.content }))
+        })
+      }
+    },
+  })
+
   const handleLike = () => {
     mutation.mutate({ objectId: buildId, value: true })
   }
@@ -193,6 +215,14 @@ const BuildDetailsPage: React.FC = () => {
 
   const handleReplyTextChange = (commentId: string, text: string) => {
     setReplyTexts((prev) => ({ ...prev, [commentId]: text }))
+  }
+
+  const handleDeleteComment = (commentId: string) => {
+    deleteCommentMutation.mutate(commentId)
+  }
+
+  const handleDeleteResponse = (responseId: string) => {
+    deleteResponseMutation.mutate(responseId)
   }
 
   if (isLoading || isVersionLoading || isCommentsLoading) {
@@ -308,6 +338,12 @@ const BuildDetailsPage: React.FC = () => {
                   title="Dislike"
                   onPress={() => handleCommentDislike(comment._id)}
                 />
+                {comment.username === username && (
+                  <Button
+                    title="Delete"
+                    onPress={() => handleDeleteComment(comment._id)}
+                  />
+                )}
               </View>
               <TextInput
                 value={replyTexts[comment._id] || ''}
@@ -339,6 +375,12 @@ const BuildDetailsPage: React.FC = () => {
                           title="Dislike"
                           onPress={() => handleResponseDislike(response._id)}
                         />
+                        {response.username === username && (
+                          <Button
+                            title="Delete"
+                            onPress={() => handleDeleteResponse(response._id)}
+                          />
+                        )}
                       </View>
                     </View>
                   ))}
