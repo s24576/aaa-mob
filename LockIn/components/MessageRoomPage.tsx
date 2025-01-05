@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  ActivityIndicator,
+  ActivityIndicator, // Import ActivityIndicator
 } from 'react-native'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRoute, useNavigation } from '@react-navigation/native'
@@ -28,6 +28,8 @@ const ChatPage: React.FC = () => {
   const [replyingTo, setReplyingTo] = useState<Message | null>(null)
   const [pages, setPages] = useState<number[]>([0])
   const size = 8
+  const isFirstLoad = useRef(true)
+  const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false)
 
   const messagesQueries = useQuery({
     queryKey: ['messages', chatId, pages],
@@ -35,6 +37,10 @@ const ChatPage: React.FC = () => {
       const responses = await Promise.all(
         pages.map((page) => getMessages(chatId, page, size))
       )
+      if (isFirstLoad.current) {
+        isFirstLoad.current = false
+        setIsInitialDataLoaded(true)
+      }
       return responses.flatMap((res) => res.content)
     },
   })
@@ -91,16 +97,24 @@ const ChatPage: React.FC = () => {
   }
 
   const loadMoreMessages = () => {
-    setPages((prev) => [...prev, prev.length])
+    console.log('Loaded messages: ', allMessages.length)
+
+    // Ensure there are more messages to load
+    if (chatData?.totalMessages > allMessages.length) {
+      const nextPage = pages.length
+      setPages((prevPages) => [...prevPages, nextPage])
+
+      // We need to refetch the messages with the new page
+      messagesQueries.refetch()
+    }
+
+    console.log('Total messages: ', chatData?.totalMessages)
+    console.log('Messages after load: ', allMessages.length)
   }
 
   return (
     <View style={{ flex: 1 }}>
-      {(isChatLoading || messagesQueries.isLoading) && (
-        <View style={{ position: 'absolute', top: 16, left: '50%', zIndex: 1 }}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      )}
+      {/* Chat header with members list */}
       <View
         style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ccc' }}
       >
@@ -114,14 +128,17 @@ const ChatPage: React.FC = () => {
           </Text>
         )}
       </View>
+
+      {/* FlatList for messages */}
       <FlatList
         data={allMessages}
         keyExtractor={(item) => item._id}
         renderItem={renderMessage}
         inverted
         onEndReached={loadMoreMessages}
-        onEndReachedThreshold={0.1}
       />
+
+      {/* Reply and message input section */}
       <View style={{ padding: 16, borderTopWidth: 1, borderTopColor: '#ccc' }}>
         {replyingTo && (
           <View style={{ marginBottom: 10 }}>

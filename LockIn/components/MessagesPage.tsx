@@ -28,7 +28,6 @@ const MessagesPage: React.FC = () => {
   const [selectedFriends, setSelectedFriends] = useState<string[]>([])
   const [chatName, setChatName] = useState('')
   const [page, setPage] = useState(0)
-  const [size] = useState(5)
 
   const {
     data: chatsData,
@@ -36,8 +35,8 @@ const MessagesPage: React.FC = () => {
     error,
     refetch: refetchChats,
   } = useQuery({
-    queryKey: ['chats', page, size],
-    queryFn: () => getChats(page, size),
+    queryKey: ['chats', page],
+    queryFn: () => getChats(page, 10),
   })
 
   const filteredFriends = userData?.friends.map((friend) =>
@@ -175,7 +174,11 @@ const MessagesPage: React.FC = () => {
         ListEmptyComponent={<Text>No chats available</Text>}
       />
       <View className="flex-row justify-between mt-2">
-        <Button title="Previous Page" onPress={handlePreviousPage} disabled={page === 0} />
+        <Button
+          title="Previous Page"
+          onPress={handlePreviousPage}
+          disabled={page === 0}
+        />
         <Button title="Next Page" onPress={handleNextPage} />
       </View>
     </View>

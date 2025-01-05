@@ -36,3 +36,13 @@ export interface CreatePublicChat {
   name: string;
   members: string[];
 }
+
+export interface MessagesResponse {
+  content: Message[];
+  page: {
+    number: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}
