@@ -7,6 +7,7 @@ interface UseWebSocketResult {
   connectionStatus: string
   messengerMessage: string
   memberEvent: string
+  memberAction: string  // Added new property
 }
 
 const BACKEND_WS_ADDRESS = process.env.BACKEND_ADDRESS + '/ws'
@@ -17,6 +18,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     useState<string>('Connecting...')
   const [messengerMessage, setMessengerMessage] = useState<string>('')
   const [memberEvent, setMemberEvent] = useState<string>('')
+  const [memberAction, setMemberAction] = useState<string>('')  // Added new state
   const [client, setClient] = useState<Client | null>(null)
 
   useEffect(() => {
@@ -38,6 +40,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
           `/user/${username}/delete/friendRequest/from`,
           `/user/${username}/messenger/message`,
           `/user/${username}/member/event`,
+          `/user/${username}/messenger/members`,  // Added new subscription
         ]
         subscriptions.forEach((sub) => {
           stompClient.subscribe(sub, (message: IMessage) => {
@@ -46,6 +49,8 @@ const useWebSocket = (username: string): UseWebSocketResult => {
               setMessengerMessage(message.body || 'No message content')
             } else if (sub.includes('member/event')) {
               setMemberEvent(message.body || 'No event content')
+            } else if (sub.includes('messenger/members')) {  // Added new condition
+              setMemberAction(message.body || 'No action content')
             } else {
               setReceivedMessage(message.body || 'No message content')
             }
@@ -72,7 +77,13 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     }
   }, [username])
 
-  return { receivedMessage, connectionStatus, messengerMessage, memberEvent }
+  return { 
+    receivedMessage, 
+    connectionStatus, 
+    messengerMessage, 
+    memberEvent,
+    memberAction  // Added new return value
+  }
 }
 
 export default useWebSocket
