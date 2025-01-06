@@ -17,6 +17,10 @@ import { MessageProp, Message } from '../types/messenger'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
 import { Ionicons } from '@expo/vector-icons'
+import Modal from 'react-native-modal'
+import Checkbox from 'expo-checkbox'
+import { addChatter } from '../api/messenger/addChatter'
+import { leaveChat } from '../api/messenger/leaveChat'
 
 const ChatPage: React.FC = () => {
   const route = useRoute()
@@ -31,6 +35,9 @@ const ChatPage: React.FC = () => {
   const isFirstLoad = useRef(true)
   const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false)
   const [allMessages, setAllMessages] = useState<Message[]>([])
+  const [isAddFriendModalVisible, setAddFriendModalVisible] = useState(false)
+  const [isLeaveChatModalVisible, setLeaveChatModalVisible] = useState(false)
+  const [selectedFriends, setSelectedFriends] = useState<string[]>([])
 
   const messagesQueries = useQuery({
     queryKey: ['messages', chatId, pages],
@@ -66,6 +73,61 @@ const ChatPage: React.FC = () => {
       setNewMessage('')
     },
   })
+
+  const addChatterMutation = useMutation({
+    mutationFn: ({ chatId, username }: { chatId: string; username: string }) =>
+      addChatter(chatId, username),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chat', chatId] })
+    },
+  })
+
+  const leaveChatMutation = useMutation({
+    mutationFn: (chatId: string) => leaveChat(chatId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chats'] })
+      navigation.goBack()
+    },
+  })
+
+  const toggleAddFriendModal = () => {
+    setAddFriendModalVisible(!isAddFriendModalVisible)
+  }
+
+  const toggleLeaveChatModal = () => {
+    setLeaveChatModalVisible(!isLeaveChatModalVisible)
+  }
+
+  const handleAddFriendToChat = () => {
+    selectedFriends.forEach((friend) => {
+      addChatterMutation.mutate({ chatId, username: friend })
+    })
+    setSelectedFriends([])
+    toggleAddFriendModal()
+  }
+
+  const handleLeaveChat = () => {
+    leaveChatMutation.mutate(chatId)
+  }
+
+  const filteredFriends = userData?.friends
+    .map((friend) =>
+      friend.username === userData.username ? friend.username2 : friend.username
+    )
+    .filter(
+      (friend) =>
+        chatData &&
+        chatData.members &&
+        !chatData.members.some((member: any) => member.username === friend)
+    )
+
+  const handleFriendSelection = (username: string) => {
+    setSelectedFriends((prev) =>
+      prev.includes(username)
+        ? prev.filter((name) => name !== username)
+        : [...prev, username]
+    )
+  }
 
   const renderMessage = ({ item }: { item: Message }) => (
     <View
@@ -131,7 +193,18 @@ const ChatPage: React.FC = () => {
           </Text>
         )}
       </View>
-
+      {chatData?.privateChat === false && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            padding: 16,
+          }}
+        >
+          <Button title="Add Friend" onPress={toggleAddFriendModal} />
+          <Button title="Leave Chat" onPress={toggleLeaveChatModal} />
+        </View>
+      )}
       {/* Loading indicator */}
       {messagesQueries.isLoading && (
         <View
@@ -181,6 +254,49 @@ const ChatPage: React.FC = () => {
         />
         <Button title="Send" onPress={handleSendMessage} />
       </View>
+      <Modal isVisible={isAddFriendModalVisible}>
+        <View
+          style={{ padding: 16, backgroundColor: 'white', borderRadius: 8 }}
+        >
+          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16 }}>
+            Add Friend to Chat
+          </Text>
+          <FlatList
+            data={filteredFriends}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginBottom: 8,
+                }}
+              >
+                <Checkbox
+                  value={selectedFriends.includes(item)}
+                  onValueChange={() => handleFriendSelection(item)}
+                />
+                <Text style={{ marginLeft: 8 }}>{item}</Text>
+              </View>
+            )}
+            ListEmptyComponent={<Text>No friends available</Text>}
+          />
+          <Button title="Add" onPress={handleAddFriendToChat} />
+          <Button title="Cancel" onPress={toggleAddFriendModal} />
+        </View>
+      </Modal>
+      <Modal isVisible={isLeaveChatModalVisible}>
+        <View
+          style={{ padding: 16, backgroundColor: 'white', borderRadius: 8 }}
+        >
+          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16 }}>
+            Leave Chat
+          </Text>
+          <Text>Are you sure you want to leave this chat?</Text>
+          <Button title="Leave" onPress={handleLeaveChat} />
+          <Button title="Cancel" onPress={toggleLeaveChatModal} />
+        </View>
+      </Modal>
     </View>
   )
 }
