@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { getBuilds } from '../api/build/getBuilds'
 import { getVersion } from '../api/ddragon/version'
+import { getChampionNames } from '../api/ddragon/getChampionNames'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { BuildDetailsScreenProps } from '../App'
+import { Menu, Button } from 'react-native-paper' // Import Menu and Button
+// import { Image } from 'react-native' // Import Image
 
 interface Build {
   _id: string
@@ -31,7 +34,10 @@ interface Build {
 
 const BuildsBrowserPage: React.FC = () => {
   const navigation = useNavigation<BuildDetailsScreenProps['navigation']>()
+  const [selectedChampion, setSelectedChampion] = useState<string | null>(null)
+  const [menuVisible, setMenuVisible] = useState(false)
 
+  // Fetch builds
   const {
     data: buildsData,
     isLoading,
@@ -43,6 +49,7 @@ const BuildsBrowserPage: React.FC = () => {
     queryFn: () => getBuilds(),
   })
 
+  // Fetch version
   const {
     data: version,
     isLoading: isVersionLoading,
@@ -52,13 +59,23 @@ const BuildsBrowserPage: React.FC = () => {
     queryFn: getVersion,
   })
 
+  // Fetch champion names
+  const {
+    data: champions,
+    isLoading: isChampionsLoading,
+    error: championsError,
+  } = useQuery({
+    queryKey: ['champions'],
+    queryFn: getChampionNames,
+  })
+
   useFocusEffect(
     React.useCallback(() => {
       refetch()
     }, [refetch])
   )
 
-  if (isLoading || isVersionLoading || isFetching) {
+  if (isLoading || isVersionLoading || isFetching || isChampionsLoading) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text>Loading...</Text>
@@ -66,10 +83,10 @@ const BuildsBrowserPage: React.FC = () => {
     )
   }
 
-  if (error || versionError) {
+  if (error || versionError || championsError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Error: {(error || versionError)?.message}</Text>
+        <Text>Error: {(error || versionError || championsError)?.message}</Text>
       </View>
     )
   }
@@ -130,12 +147,63 @@ const BuildsBrowserPage: React.FC = () => {
     </TouchableOpacity>
   )
 
+  // Toggle the visibility of the menu
+  const toggleMenu = () => setMenuVisible(!menuVisible)
+
+  // Handle champion selection
+  const handleChampionSelect = (champion: string) => {
+    setSelectedChampion(champion)
+    setMenuVisible(false)
+  }
+
   return (
-    <FlatList
-      data={buildsData.content}
-      keyExtractor={(item) => item._id}
-      renderItem={renderBuild}
-    />
+    <View>
+      {/* Champion select dropdown */}
+      <View className="items-center">
+        <Menu
+          visible={menuVisible}
+          onDismiss={() => setMenuVisible(false)}
+          anchor={<Button onPress={toggleMenu}>Select Champion</Button>}
+        >
+          {champions &&
+            Object.keys(champions)
+              .sort()
+              .map((champion) => (
+                <Menu.Item
+                  key={champion}
+                  title={
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                      <Image
+                        source={{
+                          uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion}.png`,
+                        }}
+                        style={{ width: 20, height: 20, marginRight: 10 }}
+                      />
+                      <Text>{champions[champion]}</Text>
+                    </View>
+                  }
+                  onPress={() => handleChampionSelect(champion)}
+                />
+              ))}
+        </Menu>
+      </View>
+
+      {/* Selected Champion */}
+      {selectedChampion && (
+        <View className="p-4">
+          <Text>Selected Champion: {champions[selectedChampion]}</Text>
+        </View>
+      )}
+
+      {/* Build list */}
+      <FlatList
+        data={buildsData.content}
+        keyExtractor={(item) => item._id}
+        renderItem={renderBuild}
+      />
+    </View>
   )
 }
 

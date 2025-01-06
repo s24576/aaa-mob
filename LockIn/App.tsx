@@ -29,6 +29,7 @@ import LockInProfile from './screens/LockInProfile'
 import FriendRequests from './screens/FriendRequests'
 import BuildDetails from './screens/BuildDetails'
 import ChatPage from './components/MessageRoomPage'
+import { Provider as PaperProvider } from 'react-native-paper'
 
 initI18n()
 
@@ -61,7 +62,9 @@ export default function App() {
   return (
     <UserContextProvider>
       <SocketProvider>
-        <Layout />
+        <PaperProvider>
+          <Layout />
+        </PaperProvider>
       </SocketProvider>
     </UserContextProvider>
   )
