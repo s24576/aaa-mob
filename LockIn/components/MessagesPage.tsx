@@ -22,7 +22,7 @@ import { Chat } from '../types/messenger'
 const MessagesPage: React.FC = () => {
   const navigation = useNavigation<ChatPageScreenProps['navigation']>()
   const queryClient = useQueryClient()
-  const { receivedMessage, messengerMessage } = useSocket()
+  const { receivedMessage, messengerMessage, memberAction } = useSocket()
   const { userData } = useContext(UserContext) as UserContextType
   const [isModalVisible, setModalVisible] = useState(false)
   const [selectedFriends, setSelectedFriends] = useState<string[]>([])
@@ -48,6 +48,12 @@ const MessagesPage: React.FC = () => {
       refetchChats()
     }
   }, [messengerMessage, refetchChats])
+
+  useEffect(() => {
+    if (memberAction) {
+      refetchChats()
+    }
+  }, [memberAction, refetchChats])
 
   useEffect(() => {
     console.log('userData:', userData)

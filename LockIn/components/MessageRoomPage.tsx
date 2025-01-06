@@ -21,6 +21,12 @@ import Modal from 'react-native-modal'
 import Checkbox from 'expo-checkbox'
 import { addChatter } from '../api/messenger/addChatter'
 import { leaveChat } from '../api/messenger/leaveChat'
+import { useSocket } from '../context/SocketProvider'
+
+interface MemberAction {
+  chatId: string
+  action: boolean
+}
 
 const ChatPage: React.FC = () => {
   const route = useRoute()
@@ -38,6 +44,7 @@ const ChatPage: React.FC = () => {
   const [isAddFriendModalVisible, setAddFriendModalVisible] = useState(false)
   const [isLeaveChatModalVisible, setLeaveChatModalVisible] = useState(false)
   const [selectedFriends, setSelectedFriends] = useState<string[]>([])
+  const { memberAction } = useSocket()
 
   const messagesQueries = useQuery({
     queryKey: ['messages', chatId, pages],
@@ -176,6 +183,14 @@ const ChatPage: React.FC = () => {
     console.log('Total messages: ', chatData?.totalMessages)
     console.log('Messages after load: ', allMessages.length)
   }
+
+  // Refresh chat rooms and current chat when memberAction is received
+  useEffect(() => {
+    if (memberAction && memberAction.includes(chatId)) {
+      queryClient.invalidateQueries({ queryKey: ['chat', chatId] })
+      queryClient.invalidateQueries({ queryKey: ['messages', chatId] })
+    }
+  }, [memberAction, queryClient, chatId])
 
   return (
     <View style={{ flex: 1 }}>
