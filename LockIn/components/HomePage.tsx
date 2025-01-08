@@ -16,6 +16,10 @@ const HomePage = () => {
         title="Go to Builds Browser"
         onPress={() => navigation.navigate('BuildsBrowser')}
       />
+      <Button
+        title="Go to Announcements"
+        onPress={() => navigation.navigate('Announcements')}
+      />
     </View>
   )
 }

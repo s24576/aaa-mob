@@ -30,6 +30,7 @@ import FriendRequests from './screens/FriendRequests'
 import BuildDetails from './screens/BuildDetails'
 import ChatPage from './components/MessageRoomPage'
 import { Provider as PaperProvider } from 'react-native-paper'
+import Announcements from './screens/Announcements'
 
 initI18n()
 
@@ -51,6 +52,7 @@ type RootStackParamList = {
   FriendRequests: undefined
   BuildDetails: { buildId: string }
   ChatPage: { chatId: string }
+  Announcements: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -174,6 +176,11 @@ export const Layout = () => {
                   <Tab.Screen
                     name="BuildDetails"
                     component={BuildDetails}
+                    options={{ tabBarButton: () => null }}
+                  />
+                  <Tab.Screen
+                    name="Announcements"
+                    component={Announcements}
                     options={{ tabBarButton: () => null }}
                   />
                 </Tab.Navigator>
