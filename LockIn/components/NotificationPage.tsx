@@ -1,123 +1,108 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useSocket } from '../context/SocketProvider'
+import { View, Text, Button, Platform } from 'react-native'
+import * as Device from 'expo-device'
+import * as Notifications from 'expo-notifications'
+import Constants from 'expo-constants' // Added Constants import
 
-interface Notification {
-  type: string
-  description: string
-}
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+})
 
 const NotificationComponent: React.FC = () => {
-  const { receivedMessage, connectionStatus, messengerMessage, memberEvent } =
-    useSocket()
-  const [notifications, setNotifications] = useState<Notification[]>([])
+  const [expoPushToken, setExpoPushToken] = useState('')
 
   useEffect(() => {
-    const loadNotifications = async () => {
-      try {
-        const storedNotifications = await AsyncStorage.getItem('notifications')
-        if (storedNotifications) {
-          setNotifications(JSON.parse(storedNotifications))
-        }
-      } catch (error) {
-        console.error('Failed to load notifications from storage:', error)
-      }
-    }
-
-    loadNotifications()
+    console.log('registering for notifs')
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        console.log('Token 1:', token)
+        setExpoPushToken(token)
+        console.log('Token 2:', expoPushToken)
+      })
+      .catch((err) => {
+        console.log('Error:', err)
+      })
   }, [])
 
-  useEffect(() => {
-    const saveNotifications = async (newNotifications: Notification[]) => {
-      try {
-        await AsyncStorage.setItem(
-          'notifications',
-          JSON.stringify(newNotifications)
-        )
-      } catch (error) {
-        console.error('Failed to save notifications to storage:', error)
-      }
-    }
+  async function registerForPushNotificationsAsync() {
+    let token
 
-    if (receivedMessage) {
-      setNotifications((prevNotifications) => {
-        const updatedNotifications = [
-          { type: 'Notification', description: receivedMessage },
-          ...prevNotifications,
-        ].slice(0, 20)
-        saveNotifications(updatedNotifications)
-        return updatedNotifications
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('myNotificationChannel', {
+        name: 'A channel is needed for the permissions prompt to appear',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
       })
     }
-  }, [receivedMessage])
 
-  useEffect(() => {
-    const saveNotifications = async (newNotifications: Notification[]) => {
-      try {
-        await AsyncStorage.setItem(
-          'notifications',
-          JSON.stringify(newNotifications)
-        )
-      } catch (error) {
-        console.error('Failed to save notifications to storage:', error)
+    if (Device.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync()
+      let finalStatus = existingStatus
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync()
+        finalStatus = status
       }
-    }
-
-    if (messengerMessage) {
-      const messageData = JSON.parse(messengerMessage)
-      setNotifications((prevNotifications) => {
-        const updatedNotifications = [
-          {
-            type: 'Messenger',
-            description: `User: ${messageData.userId}, Message: ${messageData.message}`,
-          },
-          ...prevNotifications,
-        ].slice(0, 20)
-        saveNotifications(updatedNotifications)
-        return updatedNotifications
-      })
-    }
-  }, [messengerMessage])
-
-  useEffect(() => {
-    const saveNotifications = async (newNotifications: Notification[]) => {
-      try {
-        await AsyncStorage.setItem(
-          'notifications',
-          JSON.stringify(newNotifications)
-        )
-      } catch (error) {
-        console.error('Failed to save notifications to storage:', error)
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!')
+        return
       }
+
+      try {
+        const projectId =
+          Constants?.expoConfig?.extra?.eas?.projectId ??
+          Constants?.easConfig?.projectId
+        console.log('Project ID:', projectId)
+        if (!projectId) {
+          throw new Error('Project ID not found')
+        }
+        token = (
+          await Notifications.getExpoPushTokenAsync({
+            projectId,
+          })
+        ).data
+        console.log(token)
+      } catch (e) {
+        token = `${e}`
+      }
+    } else {
+      alert('Must use physical device for Push Notifications')
     }
 
-    if (memberEvent) {
-      setNotifications((prevNotifications) => {
-        const updatedNotifications = [
-          { type: 'Member Event', description: memberEvent },
-          ...prevNotifications,
-        ].slice(0, 20)
-        saveNotifications(updatedNotifications)
-        return updatedNotifications
-      })
+    return token
+  }
+
+  const sendNotification = async () => {
+    console.log('sending notif')
+
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: 'Original Title',
+      body: 'And here is the body!',
+      data: { someData: 'goes here' },
     }
-  }, [memberEvent])
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    })
+  }
 
   return (
     <View className="p-5">
-      <Text className="text-lg mb-3">
-        Connection Status: {connectionStatus}
-      </Text>
       <Text className="text-lg mb-3">Notifications:</Text>
-      <ScrollView>
-        {notifications.map((notification, index) => (
-          <View key={index} className="p-3 my-2 border border-gray-300 rounded">
-            <Text className="font-bold">{notification.type}</Text>
-            <Text>{notification.description}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      <Button title="Like" onPress={sendNotification} />
     </View>
   )
 }
