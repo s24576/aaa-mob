@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { getBuilds } from '../api/build/getBuilds'
 import { getVersion } from '../api/ddragon/version'
 import { getChampionNames } from '../api/ddragon/getChampionNames'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { BuildDetailsScreenProps } from '../App'
-import { Menu, Button } from 'react-native-paper' // Import Menu and Button
-// import { Image } from 'react-native' // Import Image
+import { Menu, Button, TextInput } from 'react-native-paper'
 
 interface Build {
   _id: string
@@ -34,10 +40,18 @@ interface Build {
 
 const BuildsBrowserPage: React.FC = () => {
   const navigation = useNavigation<BuildDetailsScreenProps['navigation']>()
-  const [selectedChampion, setSelectedChampion] = useState<string | null>(null)
+  const [selectedChampion, setSelectedChampion] = useState<string | undefined>(
+    undefined
+  )
   const [menuVisible, setMenuVisible] = useState(false)
+  const [authorName, setAuthorName] = useState<string | undefined>(undefined)
+  const [filterChampion, setFilterChampion] = useState<string | undefined>(
+    undefined
+  )
+  const [filterAuthorName, setFilterAuthorName] = useState<string | undefined>(
+    undefined
+  )
 
-  // Fetch builds
   const {
     data: buildsData,
     isLoading,
@@ -45,11 +59,11 @@ const BuildsBrowserPage: React.FC = () => {
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ['builds'],
-    queryFn: () => getBuilds(),
+    queryKey: ['builds', filterChampion, filterAuthorName],
+    queryFn: () => getBuilds(filterAuthorName, filterChampion),
+    enabled: false,
   })
 
-  // Fetch version
   const {
     data: version,
     isLoading: isVersionLoading,
@@ -59,7 +73,6 @@ const BuildsBrowserPage: React.FC = () => {
     queryFn: getVersion,
   })
 
-  // Fetch champion names
   const {
     data: champions,
     isLoading: isChampionsLoading,
@@ -71,9 +84,17 @@ const BuildsBrowserPage: React.FC = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      refetch()
-    }, [refetch])
+      if (!filterChampion && !filterAuthorName) {
+        refetch()
+      }
+    }, [refetch, filterChampion, filterAuthorName])
   )
+
+  useEffect(() => {
+    if (filterChampion !== undefined || filterAuthorName !== undefined) {
+      refetch()
+    }
+  }, [filterChampion, filterAuthorName, refetch])
 
   if (isLoading || isVersionLoading || isFetching || isChampionsLoading) {
     return (
@@ -156,9 +177,20 @@ const BuildsBrowserPage: React.FC = () => {
     setMenuVisible(false)
   }
 
+  const handleFilterPress = () => {
+    setFilterChampion(selectedChampion)
+    setFilterAuthorName(authorName)
+  }
+
+  const handleClearFilters = () => {
+    setSelectedChampion(undefined)
+    setAuthorName(undefined)
+    setFilterChampion(undefined)
+    setFilterAuthorName(undefined)
+  }
+
   return (
-    <View>
-      {/* Champion select dropdown */}
+    <ScrollView>
       <View className="items-center">
         <Menu
           visible={menuVisible}
@@ -189,21 +221,29 @@ const BuildsBrowserPage: React.FC = () => {
               ))}
         </Menu>
       </View>
-
-      {/* Selected Champion */}
+      <View className="p-4">
+        <TextInput
+          label="Author Name"
+          value={authorName}
+          onChangeText={setAuthorName}
+        />
+        <Button onPress={handleFilterPress}>Filter</Button>
+      </View>
       {selectedChampion && (
         <View className="p-4">
           <Text>Selected Champion: {champions[selectedChampion]}</Text>
+          <Button onPress={handleClearFilters}>Clear Filters</Button>
         </View>
       )}
-
-      {/* Build list */}
-      <FlatList
-        data={buildsData.content}
-        keyExtractor={(item) => item._id}
-        renderItem={renderBuild}
-      />
-    </View>
+      {buildsData && (
+        <FlatList
+          className="mb-24"
+          data={buildsData.content}
+          keyExtractor={(item) => item._id}
+          renderItem={renderBuild}
+        />
+      )}
+    </ScrollView>
   )
 }
 
