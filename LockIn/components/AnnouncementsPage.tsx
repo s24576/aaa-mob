@@ -1,60 +1,3 @@
-// import React, { useEffect, useState } from 'react'
-// import { View, Text, FlatList, StyleSheet } from 'react-native'
-// import { getDuos } from '../api/duo/getDuos'
-
-// interface Announcement {
-//   _id: string
-//   author: string
-//   positions: string[]
-//   minRank: string
-//   maxRank: string
-//   languages: string[]
-//   championIds: string[]
-//   server: string
-//   timestamp: number
-//   saved: boolean
-// }
-
-// const AnnouncementsPage = () => {
-//   const [announcements, setAnnouncements] = useState<Announcement[]>([])
-
-//   useEffect(() => {
-//     const fetchAnnouncements = async () => {
-//       try {
-//         const data = await getDuos({}, {})
-//         console.log('Announcements:', data)
-//         setAnnouncements(data)
-//       } catch (error) {
-//         console.error('Error fetching announcements:', error)
-//       }
-//     }
-
-//     fetchAnnouncements()
-//   }, [])
-
-//   const renderAnnouncement = ({ item }: { item: Announcement }) => (
-//     <View>
-//       <Text>Author: {item.author}</Text>
-//       <Text>Server: {item.server}</Text>
-//       <Text>
-//         Ranks: {item.minRank} - {item.maxRank}
-//       </Text>
-//     </View>
-//   )
-
-//   return (
-//     <View>
-//       <FlatList
-//         data={announcements}
-//         renderItem={renderAnnouncement}
-//         keyExtractor={(item) => item._id}
-//       />
-//     </View>
-//   )
-// }
-
-// export default AnnouncementsPage
-
 import React, { useEffect, useState } from 'react'
 import { View, Text, FlatList, StyleSheet } from 'react-native'
 import { getDuos } from '../api/duo/getDuos'
@@ -80,7 +23,7 @@ const AnnouncementsPage = () => {
       try {
         const data = await getDuos({}, {})
         console.log('Announcements:', data)
-        setAnnouncements(data.content) // Upewnij się, że ustawiasz właściwe dane
+        setAnnouncements(data.content)
       } catch (error) {
         console.error('Error fetching announcements:', error)
       }
