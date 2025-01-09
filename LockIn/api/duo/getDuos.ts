@@ -15,8 +15,25 @@ interface Pageable {
   direction?: 'ASC' | 'DESC'
 }
 
-export const getDuos = async (searchDuo: SearchDuo, pageable: Pageable) => {
+// export const getDuos = async (searchDuo: SearchDuo, pageable: Pageable) => {
+//   try {
+//     const response = await api.post('api/duo/getDuos', searchDuo, {
+//       params: pageable,
+//     })
+//     console.log('Otrzymane duo:', response.data)
+//     return response.data
+//   } catch (error) {
+//     handleError(error)
+//     throw error
+//   }
+// }
+
+export const getDuos = async (
+  searchDuo: SearchDuo = {},
+  pageable: Pageable = {}
+) => {
   try {
+    console.log('Wysłane zapytanie:', searchDuo)
     const response = await api.post('api/duo/getDuos', searchDuo, {
       params: pageable,
     })

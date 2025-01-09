@@ -20,6 +20,7 @@ interface Announcement {
   _id: string
   author: string
   positions: string[]
+  lookedPositions: string[] | null
   minRank: string
   maxRank: string
   languages: string[]
@@ -27,6 +28,7 @@ interface Announcement {
   server: string
   timestamp: number
   saved: boolean
+  puuid: string
 }
 
 const AnnouncementsPage = () => {
@@ -59,6 +61,13 @@ const AnnouncementsPage = () => {
   const [champions, setChampions] = useState<{ [key: string]: string }>({})
   const [selectedChampions, setSelectedChampions] = useState<string[]>([])
   const [version, setVersion] = useState<string>('')
+  const [filters, setFilters] = useState<SearchDuo>({
+    minRank: '',
+    maxRank: '',
+    positions: [],
+    champions: [],
+    languages: [],
+  })
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -143,19 +152,174 @@ const AnnouncementsPage = () => {
     })
   }
 
+  const resetFilters = () => {
+    setFilters({
+      minRank: '',
+      maxRank: '',
+      positions: [],
+      champions: [],
+      languages: [],
+    })
+  }
+
   const renderAnnouncement = ({ item }: { item: Announcement }) => (
     <View className="border 1px solid black my-2">
       <Text>Author: {item.author}</Text>
       <Text>Server: {item.server}</Text>
+      <Text>PUUID: {item.puuid}</Text>
       <Text>
         Ranks: {item.minRank} - {item.maxRank}
       </Text>
+      <Text>Positions: {item.positions.join(', ')}</Text>
+      <Text>
+        Looked Positions:{' '}
+        {item.lookedPositions ? item.lookedPositions.join(', ') : 'None'}
+      </Text>
+      <Text>Champion IDs: {item.championIds.join(', ')}</Text>
     </View>
   )
 
   return (
-    <View>
+    <ScrollView>
       <Button title="Add announcement" onPress={() => setModalVisible(true)} />
+      <View>
+        <Text>Filters</Text>
+        <View className="my-2">
+          <Text>Min rank</Text>
+          <Button
+            title={filters.minRank || 'Select Min Rank'}
+            onPress={() =>
+              openPickerModal(
+                'Min rank',
+                [
+                  'Challenger',
+                  'Grandmaster',
+                  'Master',
+                  'Diamond',
+                  'Emerald',
+                  'Platinum',
+                  'Gold',
+                  'Silver',
+                  'Bronze',
+                  'Iron',
+                ],
+                (values) => setFilters({ ...filters, minRank: values[0] })
+              )
+            }
+          />
+        </View>
+        <View className="my-2">
+          <Text>Max rank</Text>
+          <Button
+            title={filters.maxRank || 'Select Max Rank'}
+            onPress={() =>
+              openPickerModal(
+                'Max rank',
+                [
+                  'Challenger',
+                  'Grandmaster',
+                  'Master',
+                  'Diamond',
+                  'Emerald',
+                  'Platinum',
+                  'Gold',
+                  'Silver',
+                  'Bronze',
+                  'Iron',
+                ],
+                (values) => setFilters({ ...filters, maxRank: values[0] })
+              )
+            }
+          />
+        </View>
+        <View className="my-2">
+          <Text>Positions</Text>
+          <Button
+            title={
+              filters.positions.length
+                ? filters.positions.join(', ')
+                : 'Select Positions'
+            }
+            onPress={() =>
+              openPickerModal(
+                'Positions',
+                ['Top', 'Jungle', 'Mid', 'Bot', 'Support', 'Fill'],
+                (values) => setFilters({ ...filters, positions: values }),
+                true,
+                filters.positions
+              )
+            }
+          />
+        </View>
+        <View className="my-2">
+          <Text>Languages</Text>
+          <Button
+            title={
+              filters.languages.length
+                ? filters.languages.join(', ')
+                : 'Select Languages'
+            }
+            onPress={() =>
+              openPickerModal(
+                'Languages',
+                [
+                  'English',
+                  'German',
+                  'French',
+                  'Spanish',
+                  'Polish',
+                  'Chinese',
+                  'Japanese',
+                  'Korean',
+                  'Other',
+                ],
+                (values) => setFilters({ ...filters, languages: values }),
+                true,
+                filters.languages
+              )
+            }
+          />
+        </View>
+        <View className="my-2">
+          <Text>Champions</Text>
+          <Button
+            title={
+              filters.champions.length
+                ? filters.champions.map((champ) => champions[champ]).join(', ')
+                : 'Select Champions'
+            }
+            onPress={() =>
+              openPickerModal(
+                'Champions',
+                Object.keys(champions),
+                (values) => setFilters({ ...filters, champions: values }),
+                true,
+                filters.champions
+              )
+            }
+          />
+        </View>
+        <View className="my-2">
+          <Button
+            title="Apply Filters"
+            onPress={async () => {
+              try {
+                const data = await getDuos(filters, {
+                  size: 5,
+                  sort: 'timestamp',
+                  direction: 'DESC',
+                })
+                setAnnouncements(data.content)
+              } catch (error) {
+                console.error('Error fetching filtered announcements:', error)
+              }
+            }}
+          />
+        </View>
+        <View className="my-2">
+          <Button title="RESET FILTERS" onPress={resetFilters} />
+        </View>
+      </View>
       <FlatList
         data={announcements}
         keyExtractor={(item) => item._id}
@@ -400,7 +564,7 @@ const AnnouncementsPage = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   )
 }
 
