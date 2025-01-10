@@ -3,6 +3,7 @@ import { View, Text, Image, ActivityIndicator } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { getCoursePreviewById } from '../api/course/getCoursePreviewById'
+import YoutubePlayer from 'react-native-youtube-iframe'
 
 const CourseDetailsPage = () => {
   const route = useRoute()
@@ -58,6 +59,7 @@ const CourseDetailsPage = () => {
       <Text style={{ fontSize: 16, marginVertical: 4 }}>
         By: {course.username}
       </Text>
+      <YoutubePlayer height={200} play={false} videoId={'F5g8HJskYp4'} />
     </View>
   )
 }
