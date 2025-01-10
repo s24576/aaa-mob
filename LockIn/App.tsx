@@ -31,6 +31,8 @@ import BuildDetails from './screens/BuildDetails'
 import ChatPage from './components/MessageRoomPage'
 import { Provider as PaperProvider } from 'react-native-paper'
 import Announcements from './screens/Announcements'
+import CoursesBrowser from './screens/CoursesBrowser'
+import CourseDetails from './screens/CourseDetails'
 
 initI18n()
 
@@ -53,7 +55,11 @@ type RootStackParamList = {
   BuildDetails: { buildId: string }
   ChatPage: { chatId: string }
   Announcements: undefined
+  CoursesBrowser: undefined
+  CourseDetails: { courseId: string }
 }
+
+export { RootStackParamList }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootStackParamList>()
@@ -183,6 +189,11 @@ export const Layout = () => {
                     component={Announcements}
                     options={{ tabBarButton: () => null }}
                   />
+                  <Tab.Screen
+                    name="CoursesBrowser"
+                    component={CoursesBrowser}
+                    options={{ tabBarButton: () => null }}
+                  />
                 </Tab.Navigator>
               )}
             </Stack.Screen>
@@ -210,6 +221,7 @@ export const Layout = () => {
               //   unmountOnBlur: true,
               // }}
             />
+            <Stack.Screen name="CourseDetails" component={CourseDetails} />
           </Stack.Navigator>
         )}
       </QueryClientProvider>
@@ -226,6 +238,7 @@ export type RegisterScreenProps = NativeStackScreenProps<
   'Register'
 >
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>
+
 export type ProfileScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'RiotProfile'
@@ -243,4 +256,9 @@ export type BuildDetailsScreenProps = NativeStackScreenProps<
 export type ChatPageScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'ChatPage'
+>
+
+export type CourseDetailsScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'CourseDetails'
 >

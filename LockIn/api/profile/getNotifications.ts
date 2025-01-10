@@ -1,11 +1,9 @@
 import api from '../axios/useAxios'
 import { handleError } from '../error/handleError'
 
-export const getNotifications = async (page: number, size: number) => {
+export const getNotifications = async () => {
   try {
-    const response = await api.get('/profile/getNotifications', {
-      params: { page, size },
-    })
+    const response = await api.get('/profile/getNotifications')
     console.log('Notifications fetched:', response.data)
     return response.data
   } catch (error) {

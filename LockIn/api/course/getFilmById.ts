@@ -3,7 +3,7 @@ import { handleError } from '../error/handleError'
 
 export const getFilmById = async (filmId: string) => {
   try {
-    const response = await api.get(`/course/getFilmById?filmId=${filmId}`)
+    const response = await api.get(`/api/course/getFilmById?filmId=${filmId}`)
     return response.data
   } catch (error) {
     handleError(error)
