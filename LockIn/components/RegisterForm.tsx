@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { RegisterScreenProps } from '../App'
 import { useTranslation } from 'react-i18next'
 import { handleRegister } from '../api/user/register'
@@ -18,6 +18,7 @@ const RegisterForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState('')
   const navigation = useNavigation<RegisterScreenProps['navigation']>()
 
   const { t } = useTranslation()
@@ -26,8 +27,28 @@ const RegisterForm = () => {
     !email.trim() ||
     !username.trim() ||
     !password.trim() ||
-    !confirmPassword.trim() ||
-    password !== confirmPassword
+    !confirmPassword.trim()
+
+  const handleRegisterPress = async () => {
+    try {
+      await handleRegister(
+        email,
+        username,
+        password,
+        confirmPassword,
+        navigation,
+        setError
+      )
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setError('')
+    }, [])
+  )
 
   return (
     <ScrollView
@@ -113,9 +134,7 @@ const RegisterForm = () => {
         }}
       />
       <TouchableOpacity
-        onPress={() =>
-          handleRegister(email, username, password, confirmPassword, navigation)
-        }
+        onPress={handleRegisterPress}
         disabled={isDisabled}
         style={{
           backgroundColor: isDisabled ? '#D3D3D3' : '#F5B800',
@@ -136,7 +155,6 @@ const RegisterForm = () => {
           {t('registerButton')}
         </Text>
       </TouchableOpacity>
-
       <Text
         style={{ color: '#F5F5F5', fontSize: 16, fontFamily: 'Chewy-Regular' }}
       >
@@ -153,6 +171,14 @@ const RegisterForm = () => {
       >
         {t('clickableLogin')}
       </Text>
+
+      {error ? (
+        <Text
+          style={{ color: 'red', marginTop: 15, fontFamily: 'Chewy-Regular' }}
+        >
+          {error}
+        </Text>
+      ) : null}
     </ScrollView>
   )
 }

@@ -7,8 +7,8 @@ import {
   ScrollView,
   Button,
 } from 'react-native'
-import React, { useState, useContext } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import React, { useState, useContext, useEffect } from 'react'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { LoginScreenProps } from '../App'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
@@ -30,6 +30,12 @@ const LoginForm = () => {
     setPassword(passwordValue)
     handleLogin(usernameValue, passwordValue, setUserData, navigation, setError)
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setError('')
+    }, [])
+  )
 
   return (
     <ScrollView
@@ -131,7 +137,7 @@ const LoginForm = () => {
         <Text
           style={{ color: 'red', marginTop: 15, fontFamily: 'Chewy-Regular' }}
         >
-          {t('invalidPassword')}
+          {error}
         </Text>
       ) : null}
 
