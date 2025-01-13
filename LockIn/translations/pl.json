@@ -2,8 +2,14 @@
   "confirmPasswordInput": "Potwierdź hasło",
   "loginButton": "Zaloguj się",
   "passwordInput": "Hasło",
-  "registerButton": "Zarejestruj",
-  "toLoginButton": "Przejdź do logowania",
-  "toRegistrerButton": "Nie masz konta? Zarejestruj się",
-  "usernameInput": "Nazwa użytkownika"
+  "registerButton": "Zarejestruj się",
+  "noAccount": "Nie masz jeszcze konta?",
+  "clickableRegister": "Zarejestruj się",
+  "usernameInput": "Nazwa użytkownika",
+  "alreadyHaveAccount": "Masz już konto?",
+  "clickableLogin": "Zaloguj się",
+  "emailPlaceholder": "Email",
+  "usernamePlaceholder": "Nazwa użytkownika",
+  "passwordPlaceholder": "Hasło",
+  "confirmPasswordPlaceholder": "Potwierdź hasło"
 }

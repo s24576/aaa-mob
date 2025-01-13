@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getUserData } from './getUserData'
-import { handleError } from '../error/handleError'
 import { UserData } from '../../types/local/userContext'
 import axios from 'axios'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
@@ -11,7 +10,8 @@ export const handleLogin = async (
   username: string,
   password: string,
   setUserData: (userData: UserData) => void,
-  navigation: NavigationProp<ParamListBase>
+  navigation: NavigationProp<ParamListBase>,
+  setError: React.Dispatch<React.SetStateAction<string>>
 ) => {
   try {
     const response = await axios.post(
@@ -28,6 +28,18 @@ export const handleLogin = async (
 
     navigation.navigate('Home')
   } catch (error) {
-    handleError(error)
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        setError(`${error.response.data}`)
+      } else if (error.request) {
+        setError('No response from server')
+      } else {
+        setError(`Axios error: ${error.message}`)
+      }
+    } else if (error instanceof Error) {
+      setError(`Unexpected error: ${error.message}`)
+    } else {
+      setError('Unknown error occurred')
+    }
   }
 }

@@ -3,7 +3,13 @@
   "loginButton": "Login",
   "passwordInput": "Password",
   "registerButton": "Register",
-  "toLoginButton": "Already have an account? Log in",
-  "toRegistrerButton": "Don't have an account? Register",
-  "usernameInput": "Username"
+  "noAccount": "Don't have an account?",
+  "clickableRegister": "Register",
+  "usernameInput": "Username",
+  "alreadyHaveAccount": "Already have an account?",
+  "clickableLogin": "Log in",
+  "emailPlaceholder": "Email",
+  "usernamePlaceholder": "Username",
+  "passwordPlaceholder": "Password",
+  "confirmPasswordPlaceholder": "Confirm Password"
 }

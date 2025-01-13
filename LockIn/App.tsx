@@ -33,6 +33,7 @@ import { Provider as PaperProvider } from 'react-native-paper'
 import Announcements from './screens/Announcements'
 import CoursesBrowser from './screens/CoursesBrowser'
 import CourseDetails from './screens/CourseDetails'
+import { useFonts } from 'expo-font'
 
 initI18n()
 
@@ -67,6 +68,15 @@ const Tab = createBottomTabNavigator<RootStackParamList>()
 const queryClient = new QueryClient()
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    'Bangers-Regular': require('./assets/fonts/Bangers-Regular.ttf'),
+    'Chewy-Regular': require('./assets/fonts/Chewy-Regular.ttf'),
+  })
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
     <UserContextProvider>
       <SocketProvider>
@@ -98,132 +108,139 @@ export const Layout = () => {
   return (
     <NavigationContainer>
       <QueryClientProvider client={queryClient}>
-        {!isLoggedIn ? (
-          <Stack.Navigator screenOptions={{ headerBackVisible: false }}>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="Home" component={Home} />
-            {/* nie usuawać home stad bo jest error*/}
-          </Stack.Navigator>
-        ) : (
-          <Stack.Navigator>
-            <Stack.Screen name="Main" options={{ headerShown: false }}>
-              {() => (
-                <Tab.Navigator
-                  screenOptions={({ route }) => ({
-                    tabBarIcon: ({ color, size }) => {
-                      let iconName
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#131313',
+            },
+            headerTitle: ' LOCK.IN ',
+            headerTitleStyle: {
+              color: '#F5B800',
+              fontFamily: 'Bangers-Regular',
+              fontSize: 82,
+            },
+            headerTitleAlign: 'center',
+            headerBackVisible: false,
+          }}
+        >
+          {!isLoggedIn ? (
+            <>
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Register" component={Register} />
+              <Stack.Screen name="Home" component={Home} />
+            </>
+          ) : (
+            <>
+              <Stack.Screen name="Main" options={{ headerShown: false }}>
+                {() => (
+                  <Tab.Navigator
+                    screenOptions={({ route }) => ({
+                      tabBarIcon: ({ color, size }) => {
+                        let iconName
 
-                      switch (route.name) {
-                        case 'UserProfile':
-                          iconName = 'person'
-                          break
-                        case 'Search':
-                          iconName = 'search'
-                          break
-                        case 'Home':
-                          iconName = 'home'
-                          break
-                        case 'Messages':
-                          iconName = 'chatbubbles'
-                          break
-                        case 'Notifications':
-                          iconName = 'notifications'
-                          break
-                        default:
-                          iconName = 'ellipse'
-                      }
+                        switch (route.name) {
+                          case 'UserProfile':
+                            iconName = 'person'
+                            break
+                          case 'Search':
+                            iconName = 'search'
+                            break
+                          case 'Home':
+                            iconName = 'home'
+                            break
+                          case 'Messages':
+                            iconName = 'chatbubbles'
+                            break
+                          case 'Notifications':
+                            iconName = 'notifications'
+                            break
+                          default:
+                            iconName = 'ellipse'
+                        }
 
-                      return <Icon name={iconName} size={size} color={color} />
-                    },
-                    headerRight: () => (
-                      <>
-                        <LanguageToggleButton />
-                        <Button title="Logout" onPress={handleLogout} />
-                      </>
-                    ),
-                  })}
-                >
-                  <Tab.Screen name="UserProfile" component={UserProfile} />
-                  <Tab.Screen name="Search" component={AccountsSearch} />
-                  <Tab.Screen name="Home" component={Home} />
-                  <Tab.Screen name="Messages" component={Messages} />
-                  <Tab.Screen name="Notifications" component={Notifications} />
-                  <Tab.Screen
-                    name="RiotProfile"
-                    component={RiotProfile}
-                    options={{ tabBarButton: () => null }}
-                  />
-                  <Tab.Screen
-                    name="MatchDetails"
-                    component={MatchDetails}
-                    options={{ tabBarButton: () => null }}
-                  />
-                  <Tab.Screen
-                    name="BuildsBrowser"
-                    component={BuildsBrowser}
-                    options={{ tabBarButton: () => null }}
-                  />
-                  <Tab.Screen
-                    name="FriendList"
-                    component={FriendList}
-                    options={{ tabBarButton: () => null }}
-                  />
-                  <Tab.Screen
-                    name="LockInProfile"
-                    component={LockInProfile}
-                    options={{ tabBarButton: () => null }}
-                  />
-                  <Tab.Screen
-                    name="FriendRequests"
-                    component={FriendRequests}
-                    options={{ tabBarButton: () => null }}
-                  />
-                  <Tab.Screen
-                    name="BuildDetails"
-                    component={BuildDetails}
-                    options={{ tabBarButton: () => null }}
-                  />
-                  <Tab.Screen
-                    name="Announcements"
-                    component={Announcements}
-                    options={{ tabBarButton: () => null }}
-                  />
-                  <Tab.Screen
-                    name="CoursesBrowser"
-                    component={CoursesBrowser}
-                    options={{ tabBarButton: () => null }}
-                  />
-                </Tab.Navigator>
-              )}
-            </Stack.Screen>
-            <Stack.Screen
-              name="MatchDetails"
-              component={MatchDetails}
-              // options={{
-              //   tabBarStyle: { display: 'none' },
-              //   unmountOnBlur: true,
-              // }}
-            />
-            <Stack.Screen
-              name="BuildDetails"
-              component={BuildDetails}
-              // options={{
-              //   tabBarStyle: { display: 'none' },
-              //   unmountOnBlur: true,
-              // }}
-            />
-            <Stack.Screen
-              name="ChatPage"
-              component={ChatPage}
-              // options={{
-              //   tabBarStyle: { display: 'none' },
-              //   unmountOnBlur: true,
-              // }}
-            />
-            <Stack.Screen name="CourseDetails" component={CourseDetails} />
-          </Stack.Navigator>
-        )}
+                        return (
+                          <Icon name={iconName} size={size} color={color} />
+                        )
+                      },
+                      headerStyle: { backgroundColor: '#131313' },
+                      headerTintColor: '#fff',
+                      headerTitle: 'LOCK.IN',
+                      headerTitleStyle: {
+                        color: '#F5B800',
+                        fontFamily: 'Bangers-Regular',
+                      },
+                      headerTitleAlign: 'center',
+                      headerRight: () => (
+                        <>
+                          <LanguageToggleButton />
+                          <Button title="Logout" onPress={handleLogout} />
+                        </>
+                      ),
+                    })}
+                  >
+                    <Tab.Screen name="UserProfile" component={UserProfile} />
+                    <Tab.Screen name="Search" component={AccountsSearch} />
+                    <Tab.Screen name="Home" component={Home} />
+                    <Tab.Screen name="Messages" component={Messages} />
+                    <Tab.Screen
+                      name="Notifications"
+                      component={Notifications}
+                    />
+                    <Tab.Screen
+                      name="RiotProfile"
+                      component={RiotProfile}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
+                      name="MatchDetails"
+                      component={MatchDetails}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
+                      name="BuildsBrowser"
+                      component={BuildsBrowser}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
+                      name="FriendList"
+                      component={FriendList}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
+                      name="LockInProfile"
+                      component={LockInProfile}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
+                      name="FriendRequests"
+                      component={FriendRequests}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
+                      name="BuildDetails"
+                      component={BuildDetails}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
+                      name="Announcements"
+                      component={Announcements}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
+                      name="CoursesBrowser"
+                      component={CoursesBrowser}
+                      options={{ tabBarButton: () => null }}
+                    />
+                  </Tab.Navigator>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="MatchDetails" component={MatchDetails} />
+              <Stack.Screen name="BuildDetails" component={BuildDetails} />
+              <Stack.Screen name="ChatPage" component={ChatPage} />
+              <Stack.Screen name="CourseDetails" component={CourseDetails} />
+            </>
+          )}
+        </Stack.Navigator>
       </QueryClientProvider>
     </NavigationContainer>
   )

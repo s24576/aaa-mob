@@ -4,7 +4,7 @@ import LoginForm from '../components/LoginForm'
 
 const Login = () => {
   return (
-    <View className="flex-1 bg-pink-500">
+    <View className="w-full h-full bg-[#131313]">
       <LoginForm />
     </View>
   )

@@ -4,7 +4,7 @@ import RegisterForm from '../components/RegisterForm'
 
 const Register = () => {
   return (
-    <View>
+    <View className="w-full h-full bg-[#131313]">
       <RegisterForm />
     </View>
   )
