@@ -8,7 +8,7 @@ export const getUserData = async () => {
     const response = await api.get(`${BACKEND_ADDRESS}/user/getUserData`)
     return {
       ...response.data,
-      friends: response.data.friends || [], // Ensure friends is always an array
+      friends: response.data.friends || [],
     }
   } catch (error) {
     handleError(error)

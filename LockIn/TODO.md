@@ -8,7 +8,10 @@
 - Sortowanie buildów po dacie utworzenia (czekamy na back)
 
 - Kursy:
-- https://www.npmjs.com/package/react-native-youtube-iframe
+dodawanie kom do kursu
+poprawa oplacony/nie
+text na nieoplacony
+laready liked/disliked
 
 - Ogłoszenia
 
