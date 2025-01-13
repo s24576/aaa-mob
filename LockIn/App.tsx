@@ -231,13 +231,74 @@ export const Layout = () => {
                       component={CoursesBrowser}
                       options={{ tabBarButton: () => null }}
                     />
+                    <Tab.Screen
+                      name="CourseDetails"
+                      component={CourseDetails}
+                      options={{ tabBarButton: () => null }}
+                    />
                   </Tab.Navigator>
                 )}
               </Stack.Screen>
-              <Stack.Screen name="MatchDetails" component={MatchDetails} />
-              <Stack.Screen name="BuildDetails" component={BuildDetails} />
-              <Stack.Screen name="ChatPage" component={ChatPage} />
-              <Stack.Screen name="CourseDetails" component={CourseDetails} />
+              <Stack.Screen
+                name="MatchDetails"
+                component={MatchDetails}
+                options={({ navigation }) => ({
+                  headerLeft: () => (
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                      style={{ marginLeft: 10 }}
+                    >
+                      <Icon name="arrow-back" size={24} color="black" />
+                    </TouchableOpacity>
+                  ),
+                  headerShown: true,
+                })}
+              />
+              <Stack.Screen
+                name="BuildDetails"
+                component={BuildDetails}
+                options={({ navigation }) => ({
+                  headerLeft: () => (
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                      style={{ marginLeft: 10 }}
+                    >
+                      <Icon name="arrow-back" size={24} color="black" />
+                    </TouchableOpacity>
+                  ),
+                  headerShown: true,
+                })}
+              />
+              <Stack.Screen
+                name="ChatPage"
+                component={ChatPage}
+                options={({ navigation }) => ({
+                  headerLeft: () => (
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                      style={{ marginLeft: 10 }}
+                    >
+                      <Icon name="arrow-back" size={24} color="black" />
+                    </TouchableOpacity>
+                  ),
+                  headerShown: true,
+                })}
+              />
+              <Stack.Screen
+                name="CourseDetails"
+                component={CourseDetails}
+                options={({ navigation }) => ({
+                  headerLeft: () => (
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                      style={{ marginLeft: 10 }}
+                    >
+                      <Icon name="arrow-back" size={24} color="black" />
+                    </TouchableOpacity>
+                  ),
+                  headerShown: true,
+                })}
+              />
             </>
           )}
         </Stack.Navigator>

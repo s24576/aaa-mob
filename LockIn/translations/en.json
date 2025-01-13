@@ -11,5 +11,6 @@
   "emailPlaceholder": "Email",
   "usernamePlaceholder": "Username",
   "passwordPlaceholder": "Password",
-  "confirmPasswordPlaceholder": "Confirm Password"
+  "confirmPasswordPlaceholder": "Confirm Password",
+  "invalidPassword": "Invalid password"
 }

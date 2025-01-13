@@ -23,6 +23,8 @@ const LoginForm = () => {
   const { t } = useTranslation()
   const { setUserData } = useContext(UserContext) as UserContextType
 
+  const isDisabled = !username.trim() || !password.trim()
+
   const handleAutoComplete = (usernameValue: string, passwordValue: string) => {
     setUsername(usernameValue)
     setPassword(passwordValue)
@@ -87,8 +89,9 @@ const LoginForm = () => {
         onPress={() =>
           handleLogin(username, password, setUserData, navigation, setError)
         }
+        disabled={isDisabled}
         style={{
-          backgroundColor: '#F5B800',
+          backgroundColor: isDisabled ? '#D3D3D3' : '#F5B800',
           paddingVertical: 10,
           paddingHorizontal: 30,
           borderRadius: 18,
@@ -98,7 +101,7 @@ const LoginForm = () => {
       >
         <Text
           style={{
-            color: '#131313',
+            color: isDisabled ? '#A9A9A9' : '#131313',
             fontSize: 16,
             fontFamily: 'Chewy-Regular',
           }}
@@ -128,7 +131,7 @@ const LoginForm = () => {
         <Text
           style={{ color: 'red', marginTop: 15, fontFamily: 'Chewy-Regular' }}
         >
-          {error}
+          {t('invalidPassword')}
         </Text>
       ) : null}
 

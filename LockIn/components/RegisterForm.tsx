@@ -22,6 +22,13 @@ const RegisterForm = () => {
 
   const { t } = useTranslation()
 
+  const isDisabled =
+    !email.trim() ||
+    !username.trim() ||
+    !password.trim() ||
+    !confirmPassword.trim() ||
+    password !== confirmPassword
+
   return (
     <ScrollView
       style={{
@@ -109,8 +116,9 @@ const RegisterForm = () => {
         onPress={() =>
           handleRegister(email, username, password, confirmPassword, navigation)
         }
+        disabled={isDisabled}
         style={{
-          backgroundColor: '#F5B800',
+          backgroundColor: isDisabled ? '#D3D3D3' : '#F5B800',
           paddingVertical: 10,
           paddingHorizontal: 30,
           borderRadius: 18,
@@ -120,7 +128,7 @@ const RegisterForm = () => {
       >
         <Text
           style={{
-            color: '#131313',
+            color: isDisabled ? '#A9A9A9' : '#131313',
             fontSize: 16,
             fontFamily: 'Chewy-Regular',
           }}
