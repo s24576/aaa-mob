@@ -6,6 +6,7 @@ export const getCourseById = async (courseId: string) => {
     const response = await api.get(
       `/api/course/getCourseById?courseId=${courseId}`
     )
+    console.log(response.data)
     return response.data
   } catch (error) {
     handleError(error)

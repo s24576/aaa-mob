@@ -16,7 +16,7 @@ import LanguageToggleButton from './components/LanguageToggleButton'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UserContextType } from './types/local/userContext'
-import { Button } from 'react-native'
+import { Button, TouchableOpacity } from 'react-native'
 import RiotProfile from './components/RiotProfilePage'
 import BuildsBrowser from './screens/BuildsBrowser'
 import UserProfile from './screens/UserProfile'
@@ -194,34 +194,74 @@ export const Layout = () => {
                     component={CoursesBrowser}
                     options={{ tabBarButton: () => null }}
                   />
+                  <Tab.Screen
+                    name="CourseDetails"
+                    component={CourseDetails}
+                    options={{ tabBarButton: () => null }}
+                  />
                 </Tab.Navigator>
               )}
             </Stack.Screen>
             <Stack.Screen
               name="MatchDetails"
               component={MatchDetails}
-              // options={{
-              //   tabBarStyle: { display: 'none' },
-              //   unmountOnBlur: true,
-              // }}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Icon name="arrow-back" size={24} color="black" />
+                  </TouchableOpacity>
+                ),
+                headerShown: true,
+              })}
             />
             <Stack.Screen
               name="BuildDetails"
               component={BuildDetails}
-              // options={{
-              //   tabBarStyle: { display: 'none' },
-              //   unmountOnBlur: true,
-              // }}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Icon name="arrow-back" size={24} color="black" />
+                  </TouchableOpacity>
+                ),
+                headerShown: true,
+              })}
             />
             <Stack.Screen
               name="ChatPage"
               component={ChatPage}
-              // options={{
-              //   tabBarStyle: { display: 'none' },
-              //   unmountOnBlur: true,
-              // }}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Icon name="arrow-back" size={24} color="black" />
+                  </TouchableOpacity>
+                ),
+                headerShown: true,
+              })}
             />
-            <Stack.Screen name="CourseDetails" component={CourseDetails} />
+            <Stack.Screen
+              name="CourseDetails"
+              component={CourseDetails}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Icon name="arrow-back" size={24} color="black" />
+                  </TouchableOpacity>
+                ),
+                headerShown: true,
+              })}
+            />
           </Stack.Navigator>
         )}
       </QueryClientProvider>
