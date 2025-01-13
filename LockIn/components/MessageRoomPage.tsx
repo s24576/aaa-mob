@@ -37,7 +37,7 @@ const ChatPage: React.FC = () => {
   const { userData } = useContext(UserContext) as UserContextType
   const [replyingTo, setReplyingTo] = useState<Message | null>(null)
   const [pages, setPages] = useState<number[]>([0])
-  const size = 10
+  const size = 8
   const isFirstLoad = useRef(true)
   const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false)
   const [allMessages, setAllMessages] = useState<Message[]>([])
@@ -76,9 +76,8 @@ const ChatPage: React.FC = () => {
   const sendMessageMutation = useMutation({
     mutationFn: (message: MessageProp) => sendMessage(chatId, message),
     onSuccess: () => {
-      setNewMessage('')
       queryClient.invalidateQueries({ queryKey: ['messages', chatId] })
-      queryClient.invalidateQueries({ queryKey: ['chat', chatId] })
+      setNewMessage('')
     },
   })
 

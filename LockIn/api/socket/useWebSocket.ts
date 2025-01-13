@@ -40,21 +40,19 @@ const useWebSocket = (username: string): UseWebSocketResult => {
           `/user/${username}/delete/friendRequest/from`,
           `/user/${username}/messenger/message`,
           `/user/${username}/member/event`,
-          `/user/${username}/messenger/members`,
+          `/user/${username}/messenger/members`, // Added new subscription
         ]
         subscriptions.forEach((sub) => {
-          stompClient.subscribe(sub, async (message: IMessage) => {
+          stompClient.subscribe(sub, (message: IMessage) => {
             console.log('STOMP Debug: Received data', message)
-            const messageBody = JSON.parse(message.body || '{}')
-            const messageContent = messageBody.message || 'No message content'
             if (sub.includes('messenger/message')) {
-              setMessengerMessage(messageContent)
+              setMessengerMessage(message.body || 'No message content')
             } else if (sub.includes('member/event')) {
-              setMemberEvent(messageContent)
+              setMemberEvent(message.body || 'No event content')
             } else if (sub.includes('messenger/members')) {
-              setMemberAction(messageContent)
+              setMemberAction(message.body || 'No message content')
             } else {
-              setReceivedMessage(messageContent)
+              setReceivedMessage(message.body || 'No message content')
             }
           })
         })

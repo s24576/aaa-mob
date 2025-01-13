@@ -28,7 +28,6 @@ const MessagesPage: React.FC = () => {
   const [selectedFriends, setSelectedFriends] = useState<string[]>([])
   const [chatName, setChatName] = useState('')
   const [page, setPage] = useState(0)
-  const size = 5
 
   const {
     data: chatsData,
@@ -37,7 +36,7 @@ const MessagesPage: React.FC = () => {
     refetch: refetchChats,
   } = useQuery({
     queryKey: ['chats', page],
-    queryFn: () => getChats(page, size),
+    queryFn: () => getChats(page, 5),
   })
 
   const filteredFriends = userData?.friends.map((friend) =>
@@ -55,6 +54,18 @@ const MessagesPage: React.FC = () => {
       refetchChats()
     }
   }, [memberAction, refetchChats])
+
+  useEffect(() => {
+    console.log('userData:', userData)
+  }, [userData])
+
+  useEffect(() => {
+    console.log('Chats Data:', chatsData)
+  }, [chatsData])
+
+  useEffect(() => {
+    console.log('Filtered Friends:', filteredFriends)
+  }, [filteredFriends])
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible)
@@ -89,12 +100,6 @@ const MessagesPage: React.FC = () => {
   const handlePreviousPage = () => {
     if (page > 0) {
       setPage((prevPage) => prevPage - 1)
-    }
-  }
-
-  const loadMoreChats = () => {
-    if (chatsData?.totalPages > page + 1) {
-      setPage((prevPage) => prevPage + 1)
     }
   }
 
@@ -173,8 +178,6 @@ const MessagesPage: React.FC = () => {
         keyExtractor={(item) => item._id}
         renderItem={renderChat}
         ListEmptyComponent={<Text>No chats available</Text>}
-        onEndReached={loadMoreChats}
-        onEndReachedThreshold={0.5}
       />
       <View className="flex-row justify-between mt-2">
         <Button
