@@ -21,7 +21,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 const FriendRequestsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const queryClient = useQueryClient()
-  const { receivedMessage, memberAction, friendRequestEvent } = useSocket()
+  const { receivedMessage, memberAction } = useSocket()
 
   const {
     data: incomingRequestsData,
@@ -44,17 +44,11 @@ const FriendRequestsPage: React.FC = () => {
   })
 
   useEffect(() => {
-    if (receivedMessage || memberAction || friendRequestEvent) {
+    if (receivedMessage || memberAction) {
       refetchIncomingRequests()
       refetchOutgoingRequests()
     }
-  }, [
-    receivedMessage,
-    memberAction,
-    friendRequestEvent,
-    refetchIncomingRequests,
-    refetchOutgoingRequests,
-  ])
+  }, [receivedMessage, memberAction, refetchIncomingRequests, refetchOutgoingRequests])
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
