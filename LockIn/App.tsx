@@ -188,7 +188,7 @@ export const Layout = () => {
                       headerTitleAlign: 'center',
                       headerRight: () => (
                         <>
-                          <LanguageToggleButton />
+                          {/* <LanguageToggleButton /> */}
                           <Button title="Logout" onPress={handleLogout} />
                         </>
                       ),

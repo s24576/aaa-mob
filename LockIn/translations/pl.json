@@ -17,5 +17,6 @@
   "termsAndConditions": "warunki korzystania z serwisu",
   "close": "Zamknij",
   "forgotPassword": "Zapomniałeś hasła?",
-  "resetPassword": "Zresetuj hasło"
+  "resetPassword": "Zresetuj hasło",
+  "languageTest": "Test języka"
 }

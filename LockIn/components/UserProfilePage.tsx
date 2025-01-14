@@ -11,6 +11,8 @@ import { getWatchlistRiotProfiles } from '../api/riot/getWatchlistRiotProfiles'
 import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
 import { getUserData } from '../api/user/getUserData'
 import { ProfileScreenProps } from '../App'
+import LanguageToggleButton from './LanguageToggleButton'
+import { useTranslation } from 'react-i18next'
 
 const UserProfile = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -18,6 +20,7 @@ const UserProfile = () => {
   const [myAccounts, setMyAccounts] = useState<MyAccountItem[]>([])
   const isFocused = useIsFocused()
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
+  const { t } = useTranslation()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -63,7 +66,7 @@ const UserProfile = () => {
   }
 
   if (!userData) {
-    return <Text>Loading...</Text>
+    return <Text className="text-bialas">Loading...</Text>
   }
 
   const { _id, profileIcon, bio, username } = userData
@@ -72,37 +75,45 @@ const UserProfile = () => {
     <View>
       {profileIcon ? (
         // <Image source={{ uri: profileIcon }} />
-        <Text>Profile icon available</Text>
+        <Text className="text-bialas">Profile icon available</Text>
       ) : (
-        <Text>No profile icon available</Text>
+        <Text className="text-bialas">No profile icon available</Text>
       )}
-      <Text>ID: {_id}</Text>
-      <Text>Username: {username}</Text>
-      <Text>Bio: {bio}</Text>
-      <Text>Watchlist:</Text>
-      <FlatList
+      <Text className="text-bialas">ID: {_id}</Text>
+      <Text className="text-bialas">Username: {username}</Text>
+      <Text className="text-bialas">Bio: {bio}</Text>
+      <Text className="text-bialas">Watchlist:</Text>
+      {/* <FlatList
         data={watchList}
         keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
         renderItem={({ item }) => (
-          <Text onPress={() => handleProfilePress(item.server, item.id)}>
+          <Text
+            className="text-bialas"
+            onPress={() => handleProfilePress(item.server, item.id)}
+          >
             {item.name}
           </Text>
         )}
       />
-      <Text>My Accounts:</Text>
+      <Text className="text-bialas">My Accounts:</Text>
       <FlatList
         data={myAccounts}
         keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
         renderItem={({ item }) => (
-          <Text onPress={() => handleProfilePress(item.server, item.id)}>
+          <Text
+            className="text-bialas"
+            onPress={() => handleProfilePress(item.server, item.id)}
+          >
             {item.name}
           </Text>
         )}
-      />
+      /> */}
       <Button
         title="Lista znajomych"
         onPress={() => navigation.navigate('FriendList')}
       />
+      <LanguageToggleButton />
+      <Text>{t('languageTest')}</Text>
     </View>
   )
 }
