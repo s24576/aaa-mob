@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { View, TextInput, FlatList, Text, Button } from 'react-native'
+import {
+  View,
+  TextInput,
+  FlatList,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getToFriendRequests } from '../api/profile/getToFriendRequests'
 import { getFromFriendRequests } from '../api/profile/getFromFriendRequests'
 import { sendFriendRequest } from '../api/profile/sendFriendRequest'
 import { respondFriendRequest } from '../api/profile/respondFriendRequest'
 import { useSocket } from '../context/SocketProvider'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 interface FriendRequest {
   _id: string
@@ -13,6 +23,14 @@ interface FriendRequest {
   to: string | null
   timestamp: number
 }
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#F5B800',
+    color: '#131313',
+    marginVertical: 5,
+  },
+})
 
 const FriendRequestsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -53,39 +71,39 @@ const FriendRequestsPage: React.FC = () => {
   const handleSendRequest = async () => {
     try {
       await sendFriendRequest(searchQuery)
-      alert('Friend request sent!')
+      Alert.alert('Success', 'Friend request sent!', [{ text: 'OK' }])
       refetchOutgoingRequests()
     } catch (error) {
       console.error(error)
-      alert('Failed to send friend request.')
+      Alert.alert('Error', 'Failed to send friend request.', [{ text: 'OK' }])
     }
   }
 
   const handleAcceptRequest = async (id: string) => {
     try {
       await respondFriendRequest({ requestId: id, response: true })
-      alert('Friend request accepted!')
+      Alert.alert('Success', 'Friend request accepted!', [{ text: 'OK' }])
       refetchIncomingRequests()
     } catch (error) {
       console.error(error)
-      alert('Failed to accept friend request.')
+      Alert.alert('Error', 'Failed to accept friend request.', [{ text: 'OK' }])
     }
   }
 
   const handleDeclineRequest = async (id: string) => {
     try {
       await respondFriendRequest({ requestId: id, response: false })
-      alert('Friend request declined!')
+      Alert.alert('Success', 'Friend request declined!', [{ text: 'OK' }])
       refetchIncomingRequests()
     } catch (error) {
       console.error(error)
-      alert('Failed to decline friend request.')
+      Alert.alert('Error', 'Failed to decline friend request.', [{ text: 'OK' }])
     }
   }
 
   if (isIncomingLoading || isOutgoingLoading) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View className="flex-1 justify-center items-center bg-czarnuch">
         <Text>Loading...</Text>
       </View>
     )
@@ -93,48 +111,56 @@ const FriendRequestsPage: React.FC = () => {
 
   if (incomingError || outgoingError) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View className="flex-1 justify-center items-center bg-czarnuch">
         <Text>Error: {(incomingError || outgoingError)?.message}</Text>
       </View>
     )
   }
 
   return (
-    <View className="p-5">
+    <View className="p-5 bg-czarnuch">
       <TextInput
-        className="h-10 border border-gray-400 mb-3 px-2"
+        className="h-10 border border-gray-400 mb-3 px-2 bg-bialas"
         placeholder="Search..."
         value={searchQuery}
         onChangeText={handleSearchChange}
       />
-      <Button title="Send Friend Request" onPress={handleSendRequest} />
-      <Text className="mt-5 mb-2">Incoming Friend Requests</Text>
+      <Button
+        title="Send Friend Request"
+        onPress={handleSendRequest}
+        color="#F5B800"
+      />
+      <Text className="mt-5 mb-2 text-zloty">Incoming Friend Requests</Text>
       <FlatList
         data={incomingRequestsData.content}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View className="mb-2">
-            <Text>
+          <View className="mb-2 border border-zloty p-3 rounded flex-row justify-between items-center">
+            <Text className="text-bialas flex-1">
               {item.from} - {item.to}
             </Text>
-            <Button
-              title="Accept"
+            <TouchableOpacity
+              className="ml-2"
               onPress={() => handleAcceptRequest(item._id)}
-            />
-            <Button
-              title="Decline"
+            >
+              <Icon name="checkmark-circle" size={30} color="#F5B800" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="ml-2"
               onPress={() => handleDeclineRequest(item._id)}
-            />
+            >
+              <Icon name="close-circle" size={30} color="#F5B800" />
+            </TouchableOpacity>
           </View>
         )}
       />
-      <Text className="mt-5 mb-2">Outgoing Friend Requests</Text>
+      <Text className="mt-5 mb-2 text-zloty">Outgoing Friend Requests</Text>
       <FlatList
         data={outgoingRequestsData.content}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View className="mb-2">
-            <Text>
+          <View className="mb-2 border border-zloty p-3 rounded flex-row justify-between items-center">
+            <Text className="text-bialas flex-1">
               {item.from} - {item.to}
             </Text>
           </View>

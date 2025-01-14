@@ -69,3 +69,6 @@ Tłumaczenia
 - websocket msgr na czlonkow: jest ale nic nie robi na razie xd
 
 ## Notes
+
+- wyswietlanie rzeczy z szarą ramką
+- input zloty (na zaproszeniach)

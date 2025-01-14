@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -91,6 +91,8 @@ export default function App() {
 export const Layout = () => {
   const { userData } = useContext(UserContext) as UserContextType
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navTheme = DefaultTheme
+  navTheme.colors.background = '#131313'
 
   useEffect(() => {
     const checkLoginStatus = async () => {
