@@ -93,12 +93,6 @@ const MessagesPage: React.FC = () => {
     }
   }
 
-  const loadMoreChats = () => {
-    if (chatsData?.totalPages > page + 1) {
-      setPage((prevPage) => prevPage + 1)
-    }
-  }
-
   if (isLoading) {
     return (
       <View className="bg-wegielek">
@@ -139,7 +133,7 @@ const MessagesPage: React.FC = () => {
   )
 
   const renderCreateChatModal = () => (
-    <Modal isVisible={isModalVisible}>
+    <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
       <View className="bg-wegielek rounded p-5">
         <Text className="text-lg font-boldd text-zoltek mb-2">
           Create Public Chat

@@ -39,7 +39,6 @@ Kursy
 
 - dodac odpowiedzi do komentarzy
 - zmiana guzika gdy polubione juz jest
-- dodawanie kursów (nw czy to zrobimy)
 - my courses (utworzone przez ciebie, czy kupione?){szef musi poprawic ale huj wie co i czy juz jest}
 
 Ogłoszenia
@@ -49,11 +48,6 @@ Ogłoszenia
 - dodac widok do zaproszen z duo
 
 Messenger
-
-- dodac: klik na uczestnika czatu przenosi na jego profil lockin
-- refreshe wiad nie dzialaja po doladowaniu/wyslaniu
-- ulozenie loading ikonki
-- stylowanie odpowiedzi
 
 Powiadomienia
 

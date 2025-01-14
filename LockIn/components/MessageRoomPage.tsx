@@ -6,8 +6,9 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  ActivityIndicator, // Import ActivityIndicator
+  ActivityIndicator,
 } from 'react-native'
+import { ProfileScreenProps } from '../App'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { getMessages } from '../api/messenger/getMessages'
@@ -23,14 +24,9 @@ import { addChatter } from '../api/messenger/addChatter'
 import { leaveChat } from '../api/messenger/leaveChat'
 import { useSocket } from '../context/SocketProvider'
 
-interface MemberAction {
-  chatId: string
-  action: boolean
-}
-
 const ChatPage: React.FC = () => {
   const route = useRoute()
-  const navigation = useNavigation()
+  const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const { chatId } = route.params as { chatId: string }
   const queryClient = useQueryClient()
   const [newMessage, setNewMessage] = useState('')
@@ -45,6 +41,60 @@ const ChatPage: React.FC = () => {
   const [isLeaveChatModalVisible, setLeaveChatModalVisible] = useState(false)
   const [selectedFriends, setSelectedFriends] = useState<string[]>([])
   const { memberAction } = useSocket()
+  const [isMembersModalVisible, setMembersModalVisible] = useState(false)
+
+  const toggleMembersModal = () => {
+    setMembersModalVisible(!isMembersModalVisible)
+  }
+
+  const handleMemberPress = (username: string) => {
+    navigation.navigate('LockInProfile', { username })
+  }
+
+  const renderMembersModal = () => (
+    <Modal
+      isVisible={isMembersModalVisible}
+      onBackdropPress={toggleMembersModal}
+    >
+      <View className="bg-wegielek rounded p-5">
+        <Text className="text-lg font-bold text-zoltek mb-2">Chat Members</Text>
+        <FlatList
+          data={chatData?.members}
+          keyExtractor={(item) => item.username}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => handleMemberPress(item.username)}
+              className="p-2 mb-2 bg-wegielek w-max border border-zoltek rounded m-1"
+            >
+              <Text className="text-bialas">{item.username}</Text>
+            </TouchableOpacity>
+          )}
+          ListEmptyComponent={
+            <Text className="text-bialas">No members available</Text>
+          }
+          contentContainerStyle={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
+        />
+        <View className="flex-row flex-wrap justify-center mt-4">
+          <TouchableOpacity
+            onPress={toggleAddFriendModal}
+            className="flex-1 m-2 bg-zoltek p-3 rounded-lg items-center"
+          >
+            <Text className="text-wegielek">Add Friend</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={toggleLeaveChatModal}
+            className="flex-1 m-2 bg-zoltek p-3 rounded-lg items-center"
+          >
+            <Text className="text-wegielek">Leave Chat</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  )
 
   const messagesQueries = useQuery({
     queryKey: ['messages', chatId, pages],
@@ -137,9 +187,13 @@ const ChatPage: React.FC = () => {
     )
   }
 
-  const renderMessage = ({ item }: { item: Message }) => (
+  const renderMessage = ({ item, index }: { item: Message; index: number }) => (
     <View
-      style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ccc' }}
+      style={{
+        padding: 16,
+        borderBottomWidth: index === allMessages.length - 1 ? 0 : 1,
+        borderBottomColor: '#ccc',
+      }}
     >
       {item.respondingTo && (
         <Text style={{ fontSize: 12, fontStyle: 'italic', color: 'gray' }}>
@@ -150,12 +204,28 @@ const ChatPage: React.FC = () => {
           }
         </Text>
       )}
-      <Text style={{ fontSize: 14 }}>
-        {item.userId}: {item.message}
-      </Text>
-      <TouchableOpacity onPress={() => setReplyingTo(item)}>
-        <Ionicons name="arrow-undo" size={20} color="black" />
-      </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          className="text-bialas flex-1"
+          style={{
+            color: item.userId === userData?.username ? '#F5B800' : '#FFFFFF',
+          }}
+        >
+          {item.userId}: {item.message}
+        </Text>
+        <TouchableOpacity
+          onPress={() => setReplyingTo(item)}
+          style={{ padding: 10 }}
+        >
+          <Ionicons name="arrow-undo" size={20} color="#F5B800" />
+        </TouchableOpacity>
+      </View>
     </View>
   )
 
@@ -194,40 +264,30 @@ const ChatPage: React.FC = () => {
   }, [memberAction, queryClient, chatId])
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="bg-wegielek h-full p-5">
       {/* Chat header with members list */}
-      <View
-        style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ccc' }}
-      >
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+      <View className="pb-4 border-b border-zoltek">
+        <Text className="text-lg font-bold text-zoltek">
           {chatData?.name || 'Loading...'}
         </Text>
         {chatData && (
-          <Text style={{ fontSize: 14 }}>
-            Members:{' '}
-            {chatData.members.map((member: any) => member.username).join(', ')}
-          </Text>
+          <TouchableOpacity onPress={toggleMembersModal}>
+            <Text className="text-sm text-bialas">
+              Members:{' '}
+              {chatData.members
+                .map((member: any) => member.username)
+                .join(', ')}
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
-      {chatData?.privateChat === false && (
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: 16,
-          }}
-        >
-          <Button title="Add Friend" onPress={toggleAddFriendModal} />
-          <Button title="Leave Chat" onPress={toggleLeaveChatModal} />
-        </View>
-      )}
+      {renderMembersModal()}
       {/* Loading indicator */}
       {messagesQueries.isLoading && (
         <View className="bg-wegielek">
           <ActivityIndicator size="large" color="#F5B800" />
         </View>
       )}
-
       {/* FlatList for messages */}
       <FlatList
         data={allMessages}
@@ -236,69 +296,95 @@ const ChatPage: React.FC = () => {
         inverted
         onEndReached={loadMoreMessages}
       />
-
       {/* Reply and message input section */}
-      <View style={{ padding: 16, borderTopWidth: 1, borderTopColor: '#ccc' }}>
+      <View className="pt-4 border-t border-zoltek">
         {replyingTo && (
-          <View style={{ marginBottom: 10 }}>
-            <Text>Replying to: {replyingTo.message}</Text>
-            <Button title="Cancel Reply" onPress={() => setReplyingTo(null)} />
+          <View className="mb-2 flex-row justify-between items-center">
+            <Text className="text-bialas flex-1">
+              Replying to: {replyingTo.message}
+            </Text>
+            <TouchableOpacity
+              onPress={() => setReplyingTo(null)}
+              className="bg-wegielek border border-zoltek p-2 rounded-lg items-center ml-2"
+            >
+              <Text className="text-zoltek">Cancel Reply</Text>
+            </TouchableOpacity>
           </View>
         )}
-        <TextInput
-          value={newMessage}
-          onChangeText={setNewMessage}
-          placeholder="Type a message"
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            marginBottom: 10,
-          }}
-        />
-        <Button title="Send" onPress={handleSendMessage} />
+        <View className="flex-row items-center">
+          <TextInput
+            value={newMessage}
+            onChangeText={setNewMessage}
+            placeholder="Type a message"
+            className="border border-zoltek p-2 text-bialas rounded flex-1"
+            placeholderTextColor="#F5F5F5"
+          />
+          <TouchableOpacity onPress={handleSendMessage} className="ml-2">
+            <Ionicons
+              name="send"
+              size={24}
+              color={!newMessage.trim() ? '#A9A9A9' : '#F5B800'}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <Modal isVisible={isAddFriendModalVisible}>
-        <View
-          style={{ padding: 16, backgroundColor: 'white', borderRadius: 8 }}
-        >
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16 }}>
+        <View className="bg-wegielek rounded p-5">
+          <Text className="text-lg font-bold text-zoltek mb-2">
             Add Friend to Chat
           </Text>
           <FlatList
             data={filteredFriends}
             keyExtractor={(item) => item}
             renderItem={({ item }) => (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginBottom: 8,
-                }}
-              >
+              <View className="flex-row items-center mb-2">
                 <Checkbox
                   value={selectedFriends.includes(item)}
                   onValueChange={() => handleFriendSelection(item)}
                 />
-                <Text style={{ marginLeft: 8 }}>{item}</Text>
+                <Text className="ml-2 text-bialas">{item}</Text>
               </View>
             )}
-            ListEmptyComponent={<Text>No friends available</Text>}
+            ListEmptyComponent={
+              <Text className="text-bialas">No friends available</Text>
+            }
           />
-          <Button title="Add" onPress={handleAddFriendToChat} />
-          <Button title="Cancel" onPress={toggleAddFriendModal} />
+          <View className="flex-row justify-between mt-4">
+            <TouchableOpacity
+              onPress={handleAddFriendToChat}
+              className="flex-1 mr-2 bg-zoltek p-3 rounded-lg items-center"
+            >
+              <Text className="text-wegielek">Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={toggleAddFriendModal}
+              className="flex-1 ml-2 bg-zoltek p-3 rounded-lg items-center"
+            >
+              <Text className="text-wegielek">Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
       <Modal isVisible={isLeaveChatModalVisible}>
-        <View
-          style={{ padding: 16, backgroundColor: 'white', borderRadius: 8 }}
-        >
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16 }}>
-            Leave Chat
+        <View className="bg-wegielek rounded p-5">
+          <Text className="text-lg font-bold text-zoltek mb-2">Leave Chat</Text>
+          <Text className="text-bialas">
+            Are you sure you want to leave this chat?
           </Text>
-          <Text>Are you sure you want to leave this chat?</Text>
-          <Button title="Leave" onPress={handleLeaveChat} />
-          <Button title="Cancel" onPress={toggleLeaveChatModal} />
+          <View className="flex-row justify-between mt-4">
+            <TouchableOpacity
+              onPress={handleLeaveChat}
+              className="flex-1 mr-2 bg-zoltek p-3 rounded-lg items-center"
+            >
+              <Text className="text-wegielek">Leave</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={toggleLeaveChatModal}
+              className="flex-1 ml-2 bg-zoltek p-3 rounded-lg items-center"
+            >
+              <Text className="text-wegielek">Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
