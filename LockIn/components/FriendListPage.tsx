@@ -1,5 +1,12 @@
 import React, { useContext, useEffect } from 'react'
-import { View, Text, FlatList, Button, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  FlatList,
+  Button,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
 import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query'
 import { UserContext } from '../context/UserContext'
 import { useNavigation } from '@react-navigation/native'
@@ -33,9 +40,12 @@ const FriendListPage = () => {
   }, [receivedMessage, memberAction, refetchUserData])
 
   if (isLoading) {
-    return <Text>Loading...</Text>
+    return (
+      <View className="bg-wegielek">
+        <ActivityIndicator size="large" color="#F5B800" />
+      </View>
+    )
   }
-
   if (error) {
     return <Text>Error: {error.message}</Text>
   }

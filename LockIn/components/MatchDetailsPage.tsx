@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getMatchInfo } from '../api/riot/getMatchInfo'
 import { getVersion } from '../api/ddragon/version'
 import { ProfileScreenProps } from '../App'
+import { ActivityIndicator } from 'react-native'
 
 const MatchDetailsPage: React.FC = () => {
   const route = useRoute()
@@ -63,10 +64,10 @@ const MatchDetailsPage: React.FC = () => {
     </TouchableOpacity>
   )
 
-  if (isLoading || isVersionLoading) {
+  if (isLoading) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-lg">Loading...</Text>
+      <View className="bg-wegielek">
+        <ActivityIndicator size="large" color="#F5B800" />
       </View>
     )
   }

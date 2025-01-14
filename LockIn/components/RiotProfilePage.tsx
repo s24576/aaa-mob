@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Button } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Button,
+  ActivityIndicator,
+} from 'react-native'
 import { Profile } from '../types/riot/profileClass'
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { MatchDetailsScreenProps } from '../App'
@@ -205,7 +212,7 @@ const ProfilePage: React.FC = () => {
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
       <Text className="text-2xl mb-4">Profile Page</Text>
-      {isLoading && <Text>Loading...</Text>}
+      {isLoading && <ActivityIndicator size="large" color="#F5B800" />}
       {error && (
         <View>
           <Text>Error fetching profile: {error.message}</Text>

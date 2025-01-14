@@ -33,8 +33,8 @@ const CoursesBrowserPage = ({ navigation, route }: CoursesBrowserProps) => {
 
   if (isLoading) {
     return (
-      <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View className="bg-wegielek">
+        <ActivityIndicator size="large" color="#F5B800" />
       </View>
     )
   }

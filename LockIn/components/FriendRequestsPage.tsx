@@ -8,7 +8,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ActivityIndicator, // Import ActivityIndicator
 } from 'react-native'
+import { ProfileScreenProps } from '../App'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getToFriendRequests } from '../api/profile/getToFriendRequests'
 import { getFromFriendRequests } from '../api/profile/getFromFriendRequests'
@@ -23,7 +25,7 @@ const FriendRequestsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const queryClient = useQueryClient()
   const { receivedMessage, memberAction } = useSocket()
-  const navigation = useNavigation()
+  const navigation = useNavigation<ProfileScreenProps['navigation']>()
 
   const {
     data: incomingRequestsData,
@@ -116,8 +118,8 @@ const FriendRequestsPage: React.FC = () => {
 
   if (isIncomingLoading || isOutgoingLoading) {
     return (
-      <View className=" justify-center items-center bg-czarnuch">
-        <Text>Loading...</Text>
+      <View className="bg-wegielek">
+        <ActivityIndicator size="large" color="#F5B800" />
       </View>
     )
   }
@@ -132,34 +134,35 @@ const FriendRequestsPage: React.FC = () => {
 
   return (
     <View className="p-5 bg-wegielek items-center">
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        className="absolute top-5 left-5"
-      >
-        <Icon name="arrow-back" size={30} color="#F5B800" />
-      </TouchableOpacity>
-      <TextInput
-        className="h-10 w-11/12 border border-zoltek text-bialas rounded-lg mb-3 px-2 font-chewy bg-wegielek"
-        placeholder="Search..."
-        placeholderTextColor="#F5F5F5"
-        value={searchQuery}
-        onChangeText={handleSearchChange}
-      />
-      <TouchableOpacity
-        onPress={handleSendRequest}
-        disabled={!searchQuery.trim()}
-        className={`py-2 px-6 rounded-lg mb-4 ${
-          !searchQuery.trim() ? 'bg-gray-300' : 'bg-zoltek'
-        }`}
-      >
-        <Text
-          className={`text-lg font-chewy ${
-            !searchQuery.trim() ? 'text-gray-500' : 'text-wegielek'
+      <View className="flex-row justify-center items-center mb-3 w-full">
+        <TouchableOpacity
+          onPress={() => navigation.navigate('FriendList')}
+          className="mr-2"
+        >
+          <Icon name="arrow-back" size={30} color="#F5B800" />
+        </TouchableOpacity>
+        <TextInput
+          className="flex-1 border border-zoltek text-bialas rounded-lg px-2 py-3 font-chewy bg-wegielek"
+          placeholder="Search..."
+          placeholderTextColor="#F5F5F5"
+          value={searchQuery}
+          onChangeText={handleSearchChange}
+        />
+        <TouchableOpacity
+          onPress={handleSendRequest}
+          disabled={!searchQuery.trim()}
+          className={`ml-2 p-3 rounded-lg ${
+            !searchQuery.trim() ? 'bg-gray-300' : 'bg-zoltek'
           }`}
         >
-          Send Friend Request
-        </Text>
-      </TouchableOpacity>
+          <Icon
+            name="send"
+            size={24}
+            color={!searchQuery.trim() ? '#A9A9A9' : '#131313'}
+          />
+        </TouchableOpacity>
+      </View>
+
       <Text className="text-bialas text-lg font-chewy mb-2">
         Incoming Friend Requests
       </Text>
