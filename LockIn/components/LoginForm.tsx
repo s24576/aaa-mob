@@ -6,6 +6,7 @@ import {
   Text,
   ScrollView,
   Button,
+  Modal,
 } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
@@ -14,11 +15,15 @@ import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
 import { useTranslation } from 'react-i18next'
 import { handleLogin } from '../api/user/login'
+import { handleResetPassword } from '../api/user/resetPassword'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('Test1234')
   const [password, setPassword] = useState('Test1234')
   const [error, setError] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
+  const [resetEmail, setResetEmail] = useState('')
+  const [resetError, setResetError] = useState('')
   const navigation = useNavigation<LoginScreenProps['navigation']>()
   const { t } = useTranslation()
   const { setUserData } = useContext(UserContext) as UserContextType
@@ -29,6 +34,15 @@ const LoginForm = () => {
     setUsername(usernameValue)
     setPassword(passwordValue)
     handleLogin(usernameValue, passwordValue, setUserData, navigation, setError)
+  }
+
+  const handleResetPasswordPress = async () => {
+    try {
+      await handleResetPassword(resetEmail, setResetError)
+      setModalVisible(false)
+    } catch (err) {
+      setResetError(err.message)
+    }
   }
 
   useFocusEffect(
@@ -92,6 +106,19 @@ const LoginForm = () => {
           paddingLeft: 10,
         }}
       />
+
+      <Text
+        style={{
+          color: '#F5F5F5',
+          fontSize: 16,
+          fontFamily: 'Chewy-Regular',
+          textDecorationLine: 'underline',
+          marginBottom: 15,
+        }}
+        onPress={() => setModalVisible(true)}
+      >
+        {t('forgotPassword')}
+      </Text>
 
       <TouchableOpacity
         onPress={() =>
@@ -163,6 +190,100 @@ const LoginForm = () => {
         title="test3000"
         onPress={() => handleAutoComplete('test3000', 'test3000')}
       /> */}
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+        >
+          <View
+            style={{
+              width: '80%',
+              backgroundColor: '#131313',
+              padding: 20,
+              borderRadius: 10,
+            }}
+          >
+            <TextInput
+              placeholder={t('emailPlaceholder')}
+              placeholderTextColor="#F5F5F5"
+              value={resetEmail}
+              onChangeText={setResetEmail}
+              style={{
+                borderWidth: 1,
+                borderColor: '#F5B800',
+                color: '#F5F5F5',
+                width: '100%',
+                borderRadius: 12,
+                marginBottom: 10,
+                fontFamily: 'Chewy-Regular',
+                paddingLeft: 10,
+              }}
+            />
+            {resetError ? (
+              <Text
+                style={{
+                  color: 'red',
+                  marginBottom: 10,
+                  fontFamily: 'Chewy-Regular',
+                }}
+              >
+                {resetError}
+              </Text>
+            ) : null}
+            <TouchableOpacity
+              onPress={handleResetPasswordPress}
+              style={{
+                backgroundColor: '#F5B800',
+                paddingVertical: 10,
+                paddingHorizontal: 30,
+                borderRadius: 18,
+                alignItems: 'center',
+                marginBottom: 15,
+              }}
+            >
+              <Text
+                style={{
+                  color: '#131313',
+                  fontSize: 16,
+                  fontFamily: 'Chewy-Regular',
+                }}
+              >
+                {t('resetPassword')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={{
+                backgroundColor: '#F5B800',
+                paddingVertical: 10,
+                paddingHorizontal: 30,
+                borderRadius: 18,
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  color: '#131313',
+                  fontSize: 16,
+                  fontFamily: 'Chewy-Regular',
+                }}
+              >
+                {t('close')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   )
 }

@@ -12,5 +12,10 @@
   "usernamePlaceholder": "Username",
   "passwordPlaceholder": "Password",
   "confirmPasswordPlaceholder": "Confirm Password",
-  "invalidPassword": "Invalid password"
+  "invalidPassword": "Invalid password",
+  "readAndAccept": "I have read and accept the",
+  "termsAndConditions": "Terms and Conditions",
+  "close": "Close",
+  "forgotPassword": "Forgot Password?",
+  "resetPassword": "Reset Password"
 }

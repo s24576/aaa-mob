@@ -12,5 +12,10 @@
   "usernamePlaceholder": "Nazwa użytkownika",
   "passwordPlaceholder": "Hasło",
   "confirmPasswordPlaceholder": "Potwierdź hasło",
-  "invalidPassword": "Niepoprawne hasło"
+  "invalidPassword": "Niepoprawne hasło",
+  "readAndAccept": "Przeczytałem i akceptuję",
+  "termsAndConditions": "warunki korzystania z serwisu",
+  "close": "Zamknij",
+  "forgotPassword": "Zapomniałeś hasła?",
+  "resetPassword": "Zresetuj hasło"
 }

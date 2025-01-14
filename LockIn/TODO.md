@@ -4,9 +4,7 @@
 
 Rejestracja
 
-- jezyk przy rejestracji/logowaniu (? accept language hyba)
-- zapomniales hasla (mailem nowe haslo przychodzi)
-- akceptacja warunkow korz. z serw. (nie ma backu, ale mozna wylaczyc guzik)
+- zapomniales hasla (mailem nowe haslo przychodzi) !Po froncie już powinno działać, czekamy na szefa!
 
 Profile Lockin
 

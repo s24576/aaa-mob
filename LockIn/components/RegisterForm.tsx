@@ -2,11 +2,12 @@ import EvilIcons from '@expo/vector-icons/EvilIcons'
 import {
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   Text,
   ScrollView,
+  Modal,
 } from 'react-native'
+import CheckBox from '@react-native-community/checkbox'
 import React, { useState } from 'react'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { RegisterScreenProps } from '../App'
@@ -19,6 +20,8 @@ const RegisterForm = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
   const navigation = useNavigation<RegisterScreenProps['navigation']>()
 
   const { t } = useTranslation()
@@ -27,7 +30,8 @@ const RegisterForm = () => {
     !email.trim() ||
     !username.trim() ||
     !password.trim() ||
-    !confirmPassword.trim()
+    !confirmPassword.trim() ||
+    !isChecked
 
   const handleRegisterPress = async () => {
     try {
@@ -132,11 +136,56 @@ const RegisterForm = () => {
           color: '#F5F5F5',
           width: '90%',
           borderRadius: 12,
-          marginBottom: 30,
+          marginBottom: 10,
           fontFamily: 'Chewy-Regular',
           paddingLeft: 10,
         }}
       />
+
+      <View
+        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}
+      >
+        <TouchableOpacity
+          onPress={() => setIsChecked(!isChecked)}
+          style={{
+            width: 24,
+            height: 24,
+            borderWidth: 1,
+            borderColor: '#F5B800',
+            backgroundColor: isChecked ? '#F5B800' : 'transparent',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 4,
+          }}
+        >
+          {isChecked && (
+            <Text style={{ color: '#131313', fontSize: 16 }}>✔</Text>
+          )}
+        </TouchableOpacity>
+        <Text
+          style={{
+            color: '#F5F5F5',
+            fontSize: 16,
+            fontFamily: 'Chewy-Regular',
+            marginLeft: 10,
+          }}
+        >
+          {t('readAndAccept')}
+        </Text>
+        <Text
+          style={{
+            color: '#F5B800',
+            fontSize: 16,
+            textDecorationLine: 'underline',
+            fontFamily: 'Chewy-Regular',
+            marginLeft: 5,
+          }}
+          onPress={() => setModalVisible(true)}
+        >
+          {t('termsAndConditions')}
+        </Text>
+      </View>
+
       <TouchableOpacity
         onPress={handleRegisterPress}
         disabled={isDisabled}
@@ -183,6 +232,68 @@ const RegisterForm = () => {
           {error}
         </Text>
       ) : null}
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+        >
+          <View
+            style={{
+              width: '80%',
+              backgroundColor: '#131313',
+              padding: 20,
+              borderRadius: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: 'Chewy-Regular',
+                marginBottom: 20,
+                color: '#F5F5F5',
+              }}
+            >
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </Text>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={{
+                backgroundColor: '#F5B800',
+                paddingVertical: 10,
+                paddingHorizontal: 30,
+                borderRadius: 18,
+                alignItems: 'center',
+                marginBottom: 15,
+              }}
+            >
+              <Text
+                style={{
+                  color: '#131313',
+                  fontSize: 16,
+                  fontFamily: 'Chewy-Regular',
+                }}
+              >
+                {t('close')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   )
 }
