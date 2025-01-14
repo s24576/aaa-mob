@@ -7,8 +7,7 @@ interface UseWebSocketResult {
   connectionStatus: string
   messengerMessage: string
   memberEvent: string
-  memberAction: string
-  friendRequestEvent: string // Added new property
+  memberAction: string // Added new property
 }
 
 const BACKEND_WS_ADDRESS = process.env.BACKEND_ADDRESS + '/ws'
@@ -19,8 +18,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     useState<string>('Connecting...')
   const [messengerMessage, setMessengerMessage] = useState<string>('')
   const [memberEvent, setMemberEvent] = useState<string>('')
-  const [memberAction, setMemberAction] = useState<string>('')
-  const [friendRequestEvent, setFriendRequestEvent] = useState<string>('') // Added new state
+  const [memberAction, setMemberAction] = useState<string>('') // Added new state
   const [client, setClient] = useState<Client | null>(null)
 
   useEffect(() => {
@@ -36,34 +34,27 @@ const useWebSocket = (username: string): UseWebSocketResult => {
         setConnectionStatus('Connected')
         const subscriptions = [
           `/user/${username}/notification`,
-          `/user/${username}/friendRequest/to`,
-          `/user/${username}/friendRequest/from`,
-          `/user/${username}/delete/friendRequest/to`,
-          `/user/${username}/delete/friendRequest/from`,
+          `/user/${username}/friendRequest/to`, //dostales zapro
+          `/user/${username}/friendRequest/from`, //wyslales zapro
+          `/user/${username}/delete/friendRequest/to`, //odrzuciles zapro // zaakceptowales zapro
+          `/user/${username}/delete/friendRequest/from`, //anulowałeś zapro // ackeptowano twoje zapro
           `/user/${username}/messenger/message`,
           `/user/${username}/member/event`,
           `/user/${username}/messenger/members`,
         ]
         subscriptions.forEach((sub) => {
-          stompClient.subscribe(sub, async (message: IMessage) => {
+          stompClient.subscribe(sub, (message: IMessage) => {
             console.log('STOMP Debug: Received data', message)
             const messageBody = JSON.parse(message.body || '{}')
             const messageContent = messageBody.message || 'No message content'
             if (sub.includes('messenger/message')) {
-              setMessengerMessage(messageContent)
+              setMessengerMessage(message.body || 'No message content')
             } else if (sub.includes('member/event')) {
-              setMemberEvent(messageContent)
+              setMemberEvent(message.body || 'No event content')
             } else if (sub.includes('messenger/members')) {
-              setMemberAction(messageContent)
-            } else if (
-              sub.includes('friendRequest/to') ||
-              sub.includes('friendRequest/from') ||
-              sub.includes('delete/friendRequest/to') ||
-              sub.includes('delete/friendRequest/from')
-            ) {
-              setFriendRequestEvent(messageContent)
+              setMemberAction(message.body || 'No message content')
             } else {
-              setReceivedMessage(messageContent)
+              setReceivedMessage(message.body || 'No message content')
             }
           })
         })
@@ -93,8 +84,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     connectionStatus,
     messengerMessage,
     memberEvent,
-    memberAction,
-    friendRequestEvent, // Added new return value
+    memberAction, // Added new return value
   }
 }
 

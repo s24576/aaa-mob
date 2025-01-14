@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 const FriendListPage = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
-  const { receivedMessage, memberAction, friendRequestEvent } = useSocket()
+  const { receivedMessage } = useSocket()
   const queryClient = useQueryClient()
 
   const {
@@ -27,10 +27,10 @@ const FriendListPage = () => {
   })
 
   useEffect(() => {
-    if (receivedMessage || memberAction || friendRequestEvent) {
+    if (receivedMessage) {
       refetchUserData()
     }
-  }, [receivedMessage, memberAction, friendRequestEvent, refetchUserData])
+  }, [receivedMessage, refetchUserData])
 
   if (isLoading) {
     return <Text>Loading...</Text>
