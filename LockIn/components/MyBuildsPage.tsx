@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react'
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { getMyBuilds } from '../api/build/getMyBuilds'
 import { getVersion } from '../api/ddragon/version'
@@ -60,8 +67,8 @@ const BuildsBrowserPage: React.FC = () => {
 
   if (isLoading || isVersionLoading || isFetching) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text>Loading...</Text>
+      <View className="bg-wegielek">
+        <ActivityIndicator size="large" color="#F5B800" />
       </View>
     )
   }

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Button,
   TextInput,
+  ActivityIndicator,
 } from 'react-native'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigation } from '@react-navigation/native'
@@ -18,17 +19,17 @@ import { UserContextType } from '../types/local/userContext'
 import Modal from 'react-native-modal'
 import Checkbox from 'expo-checkbox'
 import { Chat } from '../types/messenger'
+import { Ionicons } from '@expo/vector-icons'
 
 const MessagesPage: React.FC = () => {
   const navigation = useNavigation<ChatPageScreenProps['navigation']>()
-  const queryClient = useQueryClient()
   const { receivedMessage, messengerMessage, memberAction } = useSocket()
   const { userData } = useContext(UserContext) as UserContextType
   const [isModalVisible, setModalVisible] = useState(false)
   const [selectedFriends, setSelectedFriends] = useState<string[]>([])
   const [chatName, setChatName] = useState('')
   const [page, setPage] = useState(0)
-  const size = 5
+  const size = 4
 
   const {
     data: chatsData,
@@ -100,16 +101,16 @@ const MessagesPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text>Loading...</Text>
+      <View className="bg-wegielek">
+        <ActivityIndicator size="large" color="#F5B800" />
       </View>
     )
   }
 
   if (error) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text>Error: {error.message}</Text>
+      <View className=" justify-center items-center bg-wegielek">
+        <Text className="text-bialas">Error: {error.message}</Text>
       </View>
     )
   }
@@ -119,14 +120,17 @@ const MessagesPage: React.FC = () => {
   }
 
   const renderChat = ({ item }: { item: Chat }) => (
-    <TouchableOpacity onPress={() => handleChatPress(item._id)}>
-      <View className="p-4 border-b border-gray-300">
-        <Text className="text-lg font-bold">{item.name}</Text>
-        <Text className="text-sm">
+    <TouchableOpacity
+      onPress={() => handleChatPress(item._id)}
+      className="bg-wegielek p-2 pt-1 mb-4 border-2 border-solid border-zoltek rounded-lg"
+    >
+      <View>
+        <Text className="text-lg font-bold text-zoltek">{item.name}</Text>
+        <Text className="text-sm text-bialas">
           Members: {item.members.map((member) => member.username).join(', ')}
         </Text>
         {item.lastMessage && (
-          <Text className="text-sm">
+          <Text className="text-sm text-bialas">
             Last message: {item.lastMessage.message}
           </Text>
         )}
@@ -136,13 +140,16 @@ const MessagesPage: React.FC = () => {
 
   const renderCreateChatModal = () => (
     <Modal isVisible={isModalVisible}>
-      <View className="p-5 bg-white rounded">
-        <Text className="text-lg font-bold mb-4">Create Public Chat</Text>
+      <View className="bg-wegielek rounded p-5">
+        <Text className="text-lg font-boldd text-zoltek mb-2">
+          Create Public Chat
+        </Text>
         <TextInput
           placeholder="Chat Name"
           value={chatName}
           onChangeText={setChatName}
-          className="border p-2 mb-4"
+          className="border border-zoltek p-2 mb-4 text-bialas rounded"
+          placeholderTextColor="#F5F5F5"
         />
         <FlatList
           data={filteredFriends}
@@ -153,36 +160,60 @@ const MessagesPage: React.FC = () => {
                 value={selectedFriends.includes(item)}
                 onValueChange={() => handleFriendSelection(item)}
               />
-              <Text className="ml-2">{item}</Text>
+              <Text className="ml-2 text-bialas">{item}</Text>
             </View>
           )}
-          ListEmptyComponent={<Text>No friends available</Text>}
+          ListEmptyComponent={
+            <Text className="text-bialas">No friends available</Text>
+          }
         />
-        <Button title="Create" onPress={handleCreateChat} />
-        <Button title="Cancel" onPress={toggleModal} />
+        <View className="flex-row justify-between mt-4">
+          <TouchableOpacity
+            onPress={handleCreateChat}
+            className="flex-1 mr-2 bg-zoltek p-3 rounded-lg items-center"
+          >
+            <Text className="text-wegielek">Create</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={toggleModal}
+            className="flex-1 ml-2 bg-zoltek p-3 rounded-lg items-center"
+          >
+            <Text className="text-wegielek">Cancel</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   )
 
   return (
-    <View className="">
-      <Button title="Create Public Chat" onPress={toggleModal} />
+    <View className="bg-wegielek h-full p-5">
+      <View className="pb-4">
+        <TouchableOpacity
+          onPress={toggleModal}
+          className="bg-zoltek p-2 w-2/3 rounded-lg items-center self-center"
+        >
+          <Text className="text-wegielek text-lg font-bold">
+            Create Public Chat
+          </Text>
+        </TouchableOpacity>
+      </View>
       {renderCreateChatModal()}
       <FlatList
         data={chatsData?.content}
         keyExtractor={(item) => item._id}
         renderItem={renderChat}
-        ListEmptyComponent={<Text>No chats available</Text>}
-        onEndReached={loadMoreChats}
-        onEndReachedThreshold={0.5}
+        ListEmptyComponent={
+          <Text className="text-bialas">No chats available</Text>
+        }
       />
-      <View className="flex-row justify-between mt-2">
-        <Button
-          title="Previous Page"
-          onPress={handlePreviousPage}
-          disabled={page === 0}
-        />
-        <Button title="Next Page" onPress={handleNextPage} />
+      <View className="flex-row justify-between items-center mt-2 absolute bottom-3 left-5 right-5">
+        <TouchableOpacity onPress={handlePreviousPage} disabled={page === 0}>
+          <Ionicons name="arrow-back" size={30} color="#F5B800" />
+        </TouchableOpacity>
+        <Text className="text-bialas">{page + 1}</Text>
+        <TouchableOpacity onPress={handleNextPage}>
+          <Ionicons name="arrow-forward" size={30} color="#F5B800" />
+        </TouchableOpacity>
       </View>
     </View>
   )

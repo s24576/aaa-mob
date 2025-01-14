@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, FlatList, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSocket } from '../context/SocketProvider'
 import { getNotifications } from '../api/profile/getNotifications'
@@ -36,7 +42,11 @@ const NotificationComponent: React.FC = () => {
   }
 
   if (isLoading) {
-    return <Text>Loading...</Text>
+    return (
+      <View className="bg-wegielek">
+        <ActivityIndicator size="large" color="#F5B800" />
+      </View>
+    )
   }
 
   if (error) {
