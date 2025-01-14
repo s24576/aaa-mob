@@ -23,7 +23,7 @@ import UserProfile from './screens/UserProfile'
 import Messages from './screens/Messages'
 import Notifications from './screens/Notifications'
 import AccountsSearch from './screens/AccountsSearch'
-import { SocketProvider } from './context/SocketProvider'
+import { SocketProvider, useSocket } from './context/SocketProvider'
 import FriendList from './screens/FriendList'
 import LockInProfile from './screens/LockInProfile'
 import FriendRequests from './screens/FriendRequests'
@@ -90,7 +90,9 @@ export default function App() {
 
 export const Layout = () => {
   const { userData } = useContext(UserContext) as UserContextType
+  const { receivedMessage } = useSocket()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [newNotifications, setNewNotifications] = useState(0)
   const navTheme = DefaultTheme
   navTheme.colors.background = '#131313'
 
@@ -102,9 +104,19 @@ export const Layout = () => {
     checkLoginStatus()
   }, [userData])
 
+  useEffect(() => {
+    if (receivedMessage) {
+      setNewNotifications((prev) => prev + 1)
+    }
+  }, [receivedMessage])
+
   const handleLogout = async () => {
     await AsyncStorage.removeItem('token')
     setIsLoggedIn(false)
+  }
+
+  const handleNotificationsViewed = () => {
+    setNewNotifications(0)
   }
 
   return (
@@ -189,6 +201,13 @@ export const Layout = () => {
                     <Tab.Screen
                       name="Notifications"
                       component={Notifications}
+                      options={{
+                        tabBarBadge:
+                          newNotifications > 0 ? String(newNotifications) : undefined,
+                      }}
+                      listeners={{
+                        tabPress: handleNotificationsViewed,
+                      }}
                     />
                     <Tab.Screen
                       name="RiotProfile"
