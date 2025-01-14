@@ -19,13 +19,8 @@ Profile Lockin
 
 Lista znajomych
 
-- auto refresh listy znaj on websocket (nie bylo na to websocketa, mozliwe ze trzeba dodac)
-- anulowanie wyslanego zaproszenia
-
 Zaproszenia do znajomych
 
-- input jak na logine
-- wyswietlanie tylko nicku nie zalogowanego usera
 - strzalka na powrot do listy znaj
 
 Buildy

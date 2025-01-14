@@ -203,7 +203,9 @@ export const Layout = () => {
                       component={Notifications}
                       options={{
                         tabBarBadge:
-                          newNotifications > 0 ? String(newNotifications) : undefined,
+                          newNotifications > 0
+                            ? String(newNotifications)
+                            : undefined,
                       }}
                       listeners={{
                         tabPress: handleNotificationsViewed,

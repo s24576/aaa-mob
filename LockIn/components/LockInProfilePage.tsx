@@ -32,7 +32,7 @@ const LockInProfilePage: React.FC = () => {
   const handleOnPress = (friendUsername: string) => {
     navigation.navigate('LockInProfile', { username: friendUsername })
   }
-
+  console.log(profile)
   const handleSendFriendRequest = async () => {
     try {
       const targetUsername = username || profile?._id
@@ -49,17 +49,19 @@ const LockInProfilePage: React.FC = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 20 }}>
-      <Text className="text-2xl mb-4">LockIn Profile Page</Text>
-      {isLoading && <Text>Loading...</Text>}
+    <ScrollView contentContainerStyle={{ padding: 20 }} className="bg-wegielek">
+      <Text className="text-bialas text-2xl mb-4">LockIn Profile Page</Text>
+      {isLoading && <Text className="text-bialas">Loading...</Text>}
       {error && (
         <View>
-          <Text>Error fetching profile: {error.message}</Text>
+          <Text className="text-bialas">
+            Error fetching profile: {error.message}
+          </Text>
           <Button title="Go Back" onPress={() => navigation.goBack()} />
         </View>
       )}
       {profile && (
-        <View>
+        <View className="items-center">
           {profile.image && profile.image.contentType && profile.image.data ? (
             <Image
               source={{
@@ -78,20 +80,37 @@ const LockInProfilePage: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <Text>No Image</Text>
+              <Text className="text-bialas">No Image</Text>
             </View>
           )}
           <Button title="Add Friend" onPress={handleSendFriendRequest} />
-          <Text>Username: {profile.username}</Text>
-          <Text>Email: {profile.email}</Text>
-          <Text>Bio: {profile.bio}</Text>
-          <Text>Friends:</Text>
-          {profile.friends.map((friend: { _id: string; username: string }) => (
+          <Text className="text-bialas mt-2">
+            Username: {profile.username || profile._id}
+          </Text>
+          <Text className="text-bialas mt-2">
+            Bio: {profile.bio || 'No bio available'}
+          </Text>
+          <Text className="text-bialas mt-2">Friends:</Text>
+          {profile.friends.map((friend) => (
             <Text
-              onPress={() => handleOnPress(friend.username)}
-              key={friend._id}
+              className="text-zoltek mt-1"
+              onPress={() =>
+                handleOnPress(
+                  profile._id === friend.username
+                    ? friend.username2
+                    : friend.username
+                )
+              }
+              key={
+                friend._id +
+                (profile._id === friend.username
+                  ? friend.username2
+                  : friend.username)
+              }
             >
-              {friend.username}
+              {profile._id === friend.username
+                ? friend.username2
+                : friend.username}
             </Text>
           ))}
         </View>
