@@ -6,7 +6,7 @@ Rejestracja
 
 - zapomniales hasla (mailem nowe haslo przychodzi) !Po froncie już powinno działać, czekamy na szefa!
 
-Profile Lockin
+\*Profile Lockin
 
 - zmien haslo
 - zmien email
@@ -21,9 +21,7 @@ Lista znajomych
 
 Zaproszenia do znajomych
 
-- strzalka na powrot do listy znaj
-
-Buildy
+\*Buildy
 
 - dodac summonery
 - dodac date utworzenia
@@ -31,17 +29,17 @@ Buildy
 - usuwanie buildow z zapisanych i "moich"
 - zmiana guzika gdy polubione juz jest
 
-Reporty
+\*Reporty
 
 - dodac reportowanie kont lockin (na profilu + kom [ew. chat])
 
-Kursy
+\*Kursy
 
 - dodac odpowiedzi do komentarzy
 - zmiana guzika gdy polubione juz jest
 - my courses (utworzone przez ciebie, czy kupione?){szef musi poprawic ale huj wie co i czy juz jest}
 
-Ogłoszenia
+\*Ogłoszenia
 
 - guzik do wysylania zaproszenia do znajomych, accept dodaje do znajomych lockin (wyswietlasz tez chyba nazwe konta riotowego z ogloszenia)
 - websocket na to wyzej
@@ -49,13 +47,13 @@ Ogłoszenia
 
 Messenger
 
-Powiadomienia
+Powiadomienia [czekamy na back]
 
 - deleteNotification:
 - on click z przeniesieniem do zaproszeń
 - X do kasacji masowej
 
-Tłumaczenia
+\*Tłumaczenia
 
 - zaczać pisanie słownika i stosowanie go
 
