@@ -134,6 +134,8 @@ export const Layout = () => {
               <Stack.Screen name="Main" options={{ headerShown: false }}>
                 {() => (
                   <Tab.Navigator
+                    initialRouteName="Home"
+                    backBehavior="history"
                     screenOptions={({ route }) => ({
                       tabBarIcon: ({ color, size }) => {
                         let iconName
@@ -222,6 +224,11 @@ export const Layout = () => {
                       options={{ tabBarButton: () => null }}
                     />
                     <Tab.Screen
+                      name="ChatPage"
+                      component={ChatPage}
+                      options={{ tabBarButton: () => null }}
+                    />
+                    <Tab.Screen
                       name="Announcements"
                       component={Announcements}
                       options={{ tabBarButton: () => null }}
@@ -239,66 +246,6 @@ export const Layout = () => {
                   </Tab.Navigator>
                 )}
               </Stack.Screen>
-              <Stack.Screen
-                name="MatchDetails"
-                component={MatchDetails}
-                options={({ navigation }) => ({
-                  headerLeft: () => (
-                    <TouchableOpacity
-                      onPress={() => navigation.goBack()}
-                      style={{ marginLeft: 10 }}
-                    >
-                      <Icon name="arrow-back" size={24} color="black" />
-                    </TouchableOpacity>
-                  ),
-                  headerShown: true,
-                })}
-              />
-              <Stack.Screen
-                name="BuildDetails"
-                component={BuildDetails}
-                options={({ navigation }) => ({
-                  headerLeft: () => (
-                    <TouchableOpacity
-                      onPress={() => navigation.goBack()}
-                      style={{ marginLeft: 10 }}
-                    >
-                      <Icon name="arrow-back" size={24} color="black" />
-                    </TouchableOpacity>
-                  ),
-                  headerShown: true,
-                })}
-              />
-              <Stack.Screen
-                name="ChatPage"
-                component={ChatPage}
-                options={({ navigation }) => ({
-                  headerLeft: () => (
-                    <TouchableOpacity
-                      onPress={() => navigation.goBack()}
-                      style={{ marginLeft: 10 }}
-                    >
-                      <Icon name="arrow-back" size={24} color="black" />
-                    </TouchableOpacity>
-                  ),
-                  headerShown: true,
-                })}
-              />
-              <Stack.Screen
-                name="CourseDetails"
-                component={CourseDetails}
-                options={({ navigation }) => ({
-                  headerLeft: () => (
-                    <TouchableOpacity
-                      onPress={() => navigation.goBack()}
-                      style={{ marginLeft: 10 }}
-                    >
-                      <Icon name="arrow-back" size={24} color="black" />
-                    </TouchableOpacity>
-                  ),
-                  headerShown: true,
-                })}
-              />
             </>
           )}
         </Stack.Navigator>

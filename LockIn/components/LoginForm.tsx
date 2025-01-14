@@ -141,9 +141,13 @@ const LoginForm = () => {
         </Text>
       ) : null}
 
-      {/* <Button
+      <Button
         title="Test1234"
         onPress={() => handleAutoComplete('Test1234', 'Test1234')}
+      />
+      <Button
+        title="test500"
+        onPress={() => handleAutoComplete('test500', 'test500')}
       />
       <Button
         title="test1000"
@@ -156,7 +160,7 @@ const LoginForm = () => {
       <Button
         title="test3000"
         onPress={() => handleAutoComplete('test3000', 'test3000')}
-      /> */}
+      />
     </ScrollView>
   )
 }

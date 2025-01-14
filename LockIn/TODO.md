@@ -2,35 +2,70 @@
 
 ## Features
 
-- Komentarze i reakcje do buildów
-- moje/zapisane buildy
-- Filtrowanie buildów po championie i twórcy (czekamy na back)
-- Sortowanie buildów po dacie utworzenia (czekamy na back)
+Rejestracja
 
-- Kursy:
-dodawanie kom do kursu
-poprawa oplacony/nie
-text na nieoplacony
-laready liked/disliked
+- jezyk przy rejestracji/logowaniu (? accept language hyba)
+- zapomniales hasla (mailem nowe haslo przychodzi)
+- akceptacja warunkow korz. z serw. (nie ma backu, ale mozna wylaczyc guzik)
 
-- Ogłoszenia
+Profile Lockin
 
-- Powiadomienia
+- zmien haslo
+- zmien email
+- ustaw profilowe
+- ustaw bio
+- ustaw username (default to id chyba ale moze tego nie trzeba ALE wydaje mi sie ze trzeba dodac)
+- match history z wszsytkich claimed accounts sortowane po timestampie
+- potwierdzanie konta (kod z maila [+ resend?])
+- Jak zaproszenie jest juz wyslane to inny guzik (ekran konta LockIn)
+
+Lista znajomych
+
+- auto refresh listy znaj on websocket (nie bylo na to websocketa, mozliwe ze trzeba dodac)
+- anulowanie wyslanego zaproszenia
+
+Buildy
+
+- dodac summonery
+- dodac date utworzenia
+- filtrowanie po pozycji
+- usuwanie buildow z zapisanych i "moich"
+- zmiana guzika gdy polubione juz jest
+
+Reporty
+
+- dodac reportowanie kont lockin (na profilu + kom [ew. chat])
+
+Kursy
+
+- dodac odpowiedzi do komentarzy
+- zmiana guzika gdy polubione juz jest
+- dodawanie kursów (nw czy to zrobimy)
+- my courses (utworzone przez ciebie, czy kupione?){szef musi poprawic ale huj wie co i czy juz jest}
+
+Ogłoszenia
+
+- guzik do wysylania zaproszenia do znajomych, accept dodaje do znajomych lockin (wyswietlasz tez chyba nazwe konta riotowego z ogloszenia)
+- websocket na to wyzej
+- dodac widok do zaproszen z duo
+
+Messenger
+
+- dodac: klik na uczestnika czatu przenosi na jego profil lockin
+- refreshe wiad nie dzialaja po doladowaniu/wyslaniu
+- ulozenie loading ikonki
+- stylowanie odpowiedzi
+
+Tłumaczenia
+
+- zaczać pisanie słownika i stosowanie go
 
 ## Enhancements
-
-- MSGR: ulozenie loading ikonki + stylowanie odpowiedzi + infinite scroll na msg roomy
-
-- Przetestować i ewentualnie poprawić działanie tłumaczeń
-- Cofanie z listy wyslanych zapro (cofanie na poprzedni ekran)
-- Jak zaproszenie jest juz wyslane to inny guzik (ekran konta LockIn)
 
 ## Bugs
 
 (NOBRIDGE) WARN i18next: init: i18next is already initialized. You should call init just once!
 
-- MSGR: jak odpowiadasz na wiadomosc ktora jest niezaladowana to jest "Opdpowiada na: "
 - websocket msgr na czlonkow: jest ale nic nie robi na razie xd
-- usuwanie z listy znajomych (działa, ale nie ma na to websocketa)
 
 ## Notes
