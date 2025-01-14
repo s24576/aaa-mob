@@ -82,3 +82,17 @@ Tłumaczenia
 
 - wyswietlanie rzeczy z szarą ramką
 - input zloty (na zaproszeniach)
+
+1. anulowane zapro
+
+- req
+- lista
+
+2. zaakceptowane zapro
+
+- req nie odswieza sie
+- lista nie odswieza sie
+
+3. nowe zapro
+
+- req

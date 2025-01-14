@@ -45,13 +45,13 @@ const NotificationComponent: React.FC = () => {
 
   return (
     <View className="p-5">
-      <Text className="text-lg text-zloty mb-3">Notifications:</Text>
+      <Text className="text-lg text-zoltek mb-3">Notifications:</Text>
       <FlatList
         data={notifications?.content}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            className="border border-zloty p-3 mb-2 rounded"
+            className="border border-zoltek p-3 mb-2 rounded"
             onPress={() => handleNotificationClick(item.value)}
           >
             <Text className="text-bialas">{item.value}</Text>

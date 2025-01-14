@@ -95,6 +95,7 @@ export const Layout = () => {
   const [newNotifications, setNewNotifications] = useState(0)
   const navTheme = DefaultTheme
   navTheme.colors.background = '#131313'
+  console.log('userData', userData)
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -203,7 +204,9 @@ export const Layout = () => {
                       component={Notifications}
                       options={{
                         tabBarBadge:
-                          newNotifications > 0 ? String(newNotifications) : undefined,
+                          newNotifications > 0
+                            ? String(newNotifications)
+                            : undefined,
                       }}
                       listeners={{
                         tabPress: handleNotificationsViewed,

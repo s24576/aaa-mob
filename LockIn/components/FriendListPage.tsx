@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { View, Text, FlatList, Button } from 'react-native'
+import { View, Text, FlatList, Button, TouchableOpacity } from 'react-native'
 import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query'
 import { UserContext } from '../context/UserContext'
 import { useNavigation } from '@react-navigation/native'
@@ -8,11 +8,12 @@ import { getUserData } from '../api/user/getUserData'
 import { deleteFriend } from '../api/profile/deleteFriend'
 import { ProfileScreenProps } from '../App'
 import { useSocket } from '../context/SocketProvider'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 const FriendListPage = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
-  const { receivedMessage } = useSocket()
+  const { receivedMessage, memberAction, friendRequestEvent } = useSocket()
   const queryClient = useQueryClient()
 
   const {
@@ -26,12 +27,10 @@ const FriendListPage = () => {
   })
 
   useEffect(() => {
-    if (receivedMessage) {
+    if (receivedMessage || memberAction || friendRequestEvent) {
       refetchUserData()
     }
-  }, [receivedMessage, refetchUserData])
-
-  const usernameABC = userData?.username || ''
+  }, [receivedMessage, memberAction, friendRequestEvent, refetchUserData])
 
   if (isLoading) {
     return <Text>Loading...</Text>
@@ -47,7 +46,7 @@ const FriendListPage = () => {
     username2: string
   }) => {
     const usernameToSend: string =
-      usernameABC === item.username ? item.username2 : item.username
+      userData._id === item.username ? item.username2 : item.username
     navigation.navigate('LockInProfile', { username: usernameToSend })
   }
 
@@ -61,21 +60,35 @@ const FriendListPage = () => {
   }
 
   return (
-    <View className="p-5">
-      <Button
-        title="Zaproszenia do znajomych"
+    <View className=" p-5 bg-wegielek items-center">
+      <TouchableOpacity
         onPress={() => navigation.navigate('FriendRequests')}
-      />
-      <Text className="mt-5 mb-2">Lista znajomych:</Text>
+        className="bg-zoltek py-2 px-6 rounded-lg mb-4"
+      >
+        <Text className="text-wegielek text-lg font-chewy">
+          Zaproszenia do znajomych
+        </Text>
+      </TouchableOpacity>
+      <Text className="text-bialas text-lg font-chewy mb-2">
+        Lista znajomych:
+      </Text>
       <FlatList
         data={userDataQuery?.friends}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View>
-            <Text onPress={() => handleFriendRequest(item)}>
-              {item.username} ({item.username2})
+          <View className="mb-2 border border-bialas p-3 rounded-lg flex-row justify-between items-center">
+            <Text
+              className="text-bialas pr-2 font-chewy"
+              onPress={() => handleFriendRequest(item)}
+            >
+              {userData._id === item.username ? item.username2 : item.username}
             </Text>
-            <Button title="Usuń" onPress={() => handleDeleteFriend(item._id)} />
+            <TouchableOpacity
+              onPress={() => handleDeleteFriend(item._id)}
+              className="bg-zoltek p-2 rounded-lg"
+            >
+              <Icon name="trash-bin" size={30} color="#131313" />
+            </TouchableOpacity>
           </View>
         )}
       />

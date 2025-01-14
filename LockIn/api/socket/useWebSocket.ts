@@ -7,7 +7,8 @@ interface UseWebSocketResult {
   connectionStatus: string
   messengerMessage: string
   memberEvent: string
-  memberAction: string // Added new property
+  memberAction: string
+  friendRequestEvent: string // Added new property
 }
 
 const BACKEND_WS_ADDRESS = process.env.BACKEND_ADDRESS + '/ws'
@@ -18,7 +19,8 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     useState<string>('Connecting...')
   const [messengerMessage, setMessengerMessage] = useState<string>('')
   const [memberEvent, setMemberEvent] = useState<string>('')
-  const [memberAction, setMemberAction] = useState<string>('') // Added new state
+  const [memberAction, setMemberAction] = useState<string>('')
+  const [friendRequestEvent, setFriendRequestEvent] = useState<string>('') // Added new state
   const [client, setClient] = useState<Client | null>(null)
 
   useEffect(() => {
@@ -53,6 +55,13 @@ const useWebSocket = (username: string): UseWebSocketResult => {
               setMemberEvent(messageContent)
             } else if (sub.includes('messenger/members')) {
               setMemberAction(messageContent)
+            } else if (
+              sub.includes('friendRequest/to') ||
+              sub.includes('friendRequest/from') ||
+              sub.includes('delete/friendRequest/to') ||
+              sub.includes('delete/friendRequest/from')
+            ) {
+              setFriendRequestEvent(messageContent)
             } else {
               setReceivedMessage(messageContent)
             }
@@ -84,7 +93,8 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     connectionStatus,
     messengerMessage,
     memberEvent,
-    memberAction, // Added new return value
+    memberAction,
+    friendRequestEvent, // Added new return value
   }
 }
 
