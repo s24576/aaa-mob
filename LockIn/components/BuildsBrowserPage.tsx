@@ -190,60 +190,60 @@ const BuildsBrowserPage: React.FC = () => {
   }
 
   return (
-    <ScrollView>
-      <View className="items-center">
-        <Menu
-          visible={menuVisible}
-          onDismiss={() => setMenuVisible(false)}
-          anchor={<Button onPress={toggleMenu}>Select Champion</Button>}
-        >
-          {champions &&
-            Object.keys(champions)
-              .sort()
-              .map((champion) => (
-                <Menu.Item
-                  key={champion}
-                  title={
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
-                      <Image
-                        source={{
-                          uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion}.png`,
-                        }}
-                        style={{ width: 20, height: 20, marginRight: 10 }}
-                      />
-                      <Text>{champions[champion]}</Text>
-                    </View>
-                  }
-                  onPress={() => handleChampionSelect(champion)}
-                />
-              ))}
-        </Menu>
-      </View>
-      <View className="p-4">
-        <TextInput
-          label="Author Name"
-          value={authorName}
-          onChangeText={setAuthorName}
-        />
-        <Button onPress={handleFilterPress}>Filter</Button>
-      </View>
-      {selectedChampion && (
-        <View className="p-4">
-          <Text>Selected Champion: {champions[selectedChampion]}</Text>
-          <Button onPress={handleClearFilters}>Clear Filters</Button>
-        </View>
-      )}
-      {buildsData && (
-        <FlatList
-          className="mb-24"
-          data={buildsData.content}
-          keyExtractor={(item) => item._id}
-          renderItem={renderBuild}
-        />
-      )}
-    </ScrollView>
+    <FlatList
+      data={buildsData.content}
+      keyExtractor={(item) => item._id}
+      renderItem={renderBuild}
+      ListHeaderComponent={
+        <>
+          <View className="items-center">
+            <Menu
+              visible={menuVisible}
+              onDismiss={() => setMenuVisible(false)}
+              anchor={<Button onPress={toggleMenu}>Select Champion</Button>}
+            >
+              {champions &&
+                Object.keys(champions)
+                  .sort()
+                  .map((champion) => (
+                    <Menu.Item
+                      key={champion}
+                      title={
+                        <View
+                          style={{ flexDirection: 'row', alignItems: 'center' }}
+                        >
+                          <Image
+                            source={{
+                              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion}.png`,
+                            }}
+                            style={{ width: 20, height: 20, marginRight: 10 }}
+                          />
+                          <Text>{champions[champion]}</Text>
+                        </View>
+                      }
+                      onPress={() => handleChampionSelect(champion)}
+                    />
+                  ))}
+            </Menu>
+          </View>
+          <View className="p-4">
+            <TextInput
+              label="Author Name"
+              value={authorName}
+              onChangeText={setAuthorName}
+            />
+            <Button onPress={handleFilterPress}>Filter</Button>
+          </View>
+          {selectedChampion && (
+            <View className="p-4">
+              <Text>Selected Champion: {champions[selectedChampion]}</Text>
+              <Button onPress={handleClearFilters}>Clear Filters</Button>
+            </View>
+          )}
+        </>
+      }
+      ListFooterComponent={<View className="mb-24" />}
+    />
   )
 }
 
