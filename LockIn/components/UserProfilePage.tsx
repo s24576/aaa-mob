@@ -13,6 +13,7 @@ import { getUserData } from '../api/user/getUserData'
 import { ProfileScreenProps } from '../App'
 import LanguageToggleButton from './LanguageToggleButton'
 import { useTranslation } from 'react-i18next'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const UserProfile = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -65,6 +66,11 @@ const UserProfile = () => {
     navigation.navigate('RiotProfile', { server, puuid })
   }
 
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('token')
+    setUserData(null)
+  }
+
   if (!userData) {
     return <Text className="text-bialas">Loading...</Text>
   }
@@ -113,7 +119,8 @@ const UserProfile = () => {
         onPress={() => navigation.navigate('FriendList')}
       />
       <LanguageToggleButton />
-      <Text>{t('languageTest')}</Text>
+      <Text className="text-bialas">{t('languageTest')}</Text>
+      <Button title="Logout" onPress={handleLogout} />
     </View>
   )
 }

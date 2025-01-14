@@ -184,12 +184,13 @@ export const Layout = () => {
                       headerTitleStyle: {
                         color: '#F5B800',
                         fontFamily: 'Bangers-Regular',
+                        fontSize: 32,
                       },
                       headerTitleAlign: 'center',
                       headerRight: () => (
                         <>
                           {/* <LanguageToggleButton /> */}
-                          <Button title="Logout" onPress={handleLogout} />
+                          {/* <Button title="Logout" onPress={handleLogout} /> */}
                         </>
                       ),
                     })}
