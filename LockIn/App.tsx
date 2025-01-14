@@ -168,7 +168,7 @@ export const Layout = () => {
                       },
                       headerStyle: { backgroundColor: '#131313' },
                       headerTintColor: '#fff',
-                      headerTitle: 'LOCK.IN',
+                      headerTitle: ' LOCK.IN ',
                       headerTitleStyle: {
                         color: '#F5B800',
                         fontFamily: 'Bangers-Regular',

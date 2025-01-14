@@ -72,6 +72,7 @@ const LoginForm = () => {
           borderRadius: 12,
           marginBottom: 10,
           fontFamily: 'Chewy-Regular',
+          paddingLeft: 10,
         }}
       />
       <TextInput
@@ -88,6 +89,7 @@ const LoginForm = () => {
           borderRadius: 12,
           marginBottom: 30,
           fontFamily: 'Chewy-Regular',
+          paddingLeft: 10,
         }}
       />
 
@@ -141,7 +143,7 @@ const LoginForm = () => {
         </Text>
       ) : null}
 
-      <Button
+      {/* <Button
         title="Test1234"
         onPress={() => handleAutoComplete('Test1234', 'Test1234')}
       />
@@ -160,7 +162,7 @@ const LoginForm = () => {
       <Button
         title="test3000"
         onPress={() => handleAutoComplete('test3000', 'test3000')}
-      />
+      /> */}
     </ScrollView>
   )
 }

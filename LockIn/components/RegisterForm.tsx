@@ -84,6 +84,7 @@ const RegisterForm = () => {
           borderRadius: 12,
           marginBottom: 10,
           fontFamily: 'Chewy-Regular',
+          paddingLeft: 10,
         }}
       />
       <TextInput
@@ -99,6 +100,7 @@ const RegisterForm = () => {
           borderRadius: 12,
           marginBottom: 10,
           fontFamily: 'Chewy-Regular',
+          paddingLeft: 10,
         }}
       />
       <TextInput
@@ -115,6 +117,7 @@ const RegisterForm = () => {
           borderRadius: 12,
           marginBottom: 10,
           fontFamily: 'Chewy-Regular',
+          paddingLeft: 10,
         }}
       />
       <TextInput
@@ -131,6 +134,7 @@ const RegisterForm = () => {
           borderRadius: 12,
           marginBottom: 30,
           fontFamily: 'Chewy-Regular',
+          paddingLeft: 10,
         }}
       />
       <TouchableOpacity
