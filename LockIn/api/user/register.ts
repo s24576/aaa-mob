@@ -1,6 +1,7 @@
 import api from '../axios/useAxios'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import axios from 'axios'
+import i18n from 'i18next'
 
 const BACKEND_ADDRESS = process.env.BACKEND_ADDRESS
 
@@ -21,7 +22,7 @@ export const handleRegister = async (
     await api.post(
       `${BACKEND_ADDRESS}/user/register`,
       { email, username, password },
-      { headers: { 'Accept-Language': 'en' } }
+      { headers: { 'Accept-Language': i18n.language } }
     )
 
     navigation.navigate('Login')
