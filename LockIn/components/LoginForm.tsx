@@ -251,7 +251,7 @@ const LoginForm = () => {
                 marginBottom: 15,
               }}
             >
-              <Text
+              {/* <Text
                 style={{
                   color: '#131313',
                   fontSize: 16,
@@ -259,7 +259,7 @@ const LoginForm = () => {
                 }}
               >
                 {t('resetPassword')}
-              </Text>
+              </Text> */}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
