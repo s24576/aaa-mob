@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react'
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react'
 import useWebSocket from '../api/socket/useWebSocket'
 import { UserContext } from './UserContext'
 import { UserContextType } from '../types/local/userContext'
@@ -8,7 +8,9 @@ interface SocketContextType {
   connectionStatus: string
   messengerMessage: string
   memberEvent: string
-  memberAction: string // Added new property
+  memberAction: string
+  notificationCount: number
+  setNotificationCount: React.Dispatch<React.SetStateAction<number>> // Added new property
 }
 
 interface SocketProviderProps {
@@ -27,6 +29,13 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     memberEvent,
     memberAction,
   } = useWebSocket(username)
+  const [notificationCount, setNotificationCount] = useState(0)
+
+  useEffect(() => {
+    if (receivedMessage.includes('friendRequest') || memberAction.includes('friendRequest')) {
+      setNotificationCount((prev) => prev + 1)
+    }
+  }, [receivedMessage, memberAction])
 
   return (
     <SocketContext.Provider
@@ -35,7 +44,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         connectionStatus,
         messengerMessage,
         memberEvent,
-        memberAction, // Added new property
+        memberAction,
+        notificationCount,
+        setNotificationCount, // Added new property
       }}
     >
       {children}

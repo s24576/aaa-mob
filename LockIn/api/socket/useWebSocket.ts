@@ -45,16 +45,25 @@ const useWebSocket = (username: string): UseWebSocketResult => {
         subscriptions.forEach((sub) => {
           stompClient.subscribe(sub, (message: IMessage) => {
             console.log('STOMP Debug: Received data', message)
-            const messageBody = JSON.parse(message.body || '{}')
-            const messageContent = messageBody.message || 'No message content'
-            if (sub.includes('messenger/message')) {
-              setMessengerMessage(message.body || 'No message content')
-            } else if (sub.includes('member/event')) {
-              setMemberEvent(message.body || 'No event content')
-            } else if (sub.includes('messenger/members')) {
-              setMemberAction(message.body || 'No message content')
-            } else {
-              setReceivedMessage(message.body || 'No message content')
+            const messageBody = message.binaryBody
+              ? new TextDecoder().decode(message.binaryBody)
+              : message.body
+            try {
+              const parsedMessage = JSON.parse(messageBody || '{}')
+              const messageContent =
+                parsedMessage.message || messageBody || 'No message content'
+              if (sub.includes('messenger/message')) {
+                setMessengerMessage(messageContent)
+              } else if (sub.includes('member/event')) {
+                setMemberEvent(messageContent)
+              } else if (sub.includes('messenger/members')) {
+                setMemberAction(messageContent)
+              } else {
+                setReceivedMessage(messageContent)
+              }
+            } catch (error) {
+              console.error('Error parsing message:', error)
+              setReceivedMessage(messageBody || 'No message content')
             }
           })
         })

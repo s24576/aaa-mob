@@ -170,7 +170,7 @@ const LoginForm = () => {
         </Text>
       ) : null}
 
-      {/* <Button
+      <Button
         title="Test1234"
         onPress={() => handleAutoComplete('Test1234', 'Test1234')}
       />
@@ -189,7 +189,7 @@ const LoginForm = () => {
       <Button
         title="test3000"
         onPress={() => handleAutoComplete('test3000', 'test3000')}
-      /> */}
+      />
 
       <Modal
         visible={modalVisible}
