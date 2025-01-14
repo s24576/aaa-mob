@@ -18,7 +18,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     useState<string>('Connecting...')
   const [messengerMessage, setMessengerMessage] = useState<string>('')
   const [memberEvent, setMemberEvent] = useState<string>('')
-  const [memberAction, setMemberAction] = useState<string>('') // Added new state
+  const [memberAction, setMemberAction] = useState<string>('')
   const [client, setClient] = useState<Client | null>(null)
 
   useEffect(() => {
@@ -26,11 +26,8 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     const socket = new SockJS(BACKEND_WS_ADDRESS)
     const stompClient = new Client({
       webSocketFactory: () => socket,
-      debug: function (str: string) {
-        // console.log('STOMP Debug: ', str)
-      },
+      debug: function (str: string) {},
       onConnect: () => {
-        // console.log('Connected')
         setConnectionStatus('Connected')
         const subscriptions = [
           `/user/${username}/notification`,
@@ -49,17 +46,29 @@ const useWebSocket = (username: string): UseWebSocketResult => {
               ? new TextDecoder().decode(message.binaryBody)
               : message.body
             try {
-              const parsedMessage = JSON.parse(messageBody || '{}')
-              const messageContent =
-                parsedMessage.message || messageBody || 'No message content'
-              if (sub.includes('messenger/message')) {
-                setMessengerMessage(messageContent)
-              } else if (sub.includes('member/event')) {
-                setMemberEvent(messageContent)
-              } else if (sub.includes('messenger/members')) {
-                setMemberAction(messageContent)
+              if (message.headers['content-type'] === 'application/json') {
+                const parsedMessage = JSON.parse(messageBody || '{}')
+                const messageContent =
+                  parsedMessage.message || messageBody || 'No message content'
+                if (sub.includes('messenger/message')) {
+                  setMessengerMessage(messageContent)
+                } else if (sub.includes('member/event')) {
+                  setMemberEvent(messageContent)
+                } else if (sub.includes('messenger/members')) {
+                  setMemberAction(messageContent)
+                } else {
+                  setReceivedMessage(messageContent)
+                }
               } else {
-                setReceivedMessage(messageContent)
+                if (sub.includes('messenger/message')) {
+                  setMessengerMessage(messageBody)
+                } else if (sub.includes('member/event')) {
+                  setMemberEvent(messageBody)
+                } else if (sub.includes('messenger/members')) {
+                  setMemberAction(messageBody)
+                } else {
+                  setReceivedMessage(messageBody)
+                }
               }
             } catch (error) {
               console.error('Error parsing message:', error)
@@ -80,7 +89,6 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     stompClient.activate()
     setClient(stompClient)
 
-    // Cleanup connection when component is unmounted
     return () => {
       if (client) {
         client.deactivate()
@@ -93,7 +101,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     connectionStatus,
     messengerMessage,
     memberEvent,
-    memberAction, // Added new return value
+    memberAction,
   }
 }
 

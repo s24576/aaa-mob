@@ -17,11 +17,13 @@ import { respondFriendRequest } from '../api/profile/respondFriendRequest'
 import { cancelFriendRequest } from '../api/profile/cancelFriendRequest'
 import { useSocket } from '../context/SocketProvider'
 import Icon from 'react-native-vector-icons/Ionicons'
+import { useNavigation } from '@react-navigation/native'
 
 const FriendRequestsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const queryClient = useQueryClient()
   const { receivedMessage, memberAction } = useSocket()
+  const navigation = useNavigation()
 
   const {
     data: incomingRequestsData,
@@ -48,13 +50,19 @@ const FriendRequestsPage: React.FC = () => {
       refetchIncomingRequests()
       refetchOutgoingRequests()
     }
-  }, [receivedMessage, memberAction, refetchIncomingRequests, refetchOutgoingRequests])
+  }, [
+    receivedMessage,
+    memberAction,
+    refetchIncomingRequests,
+    refetchOutgoingRequests,
+  ])
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
   }
 
   const handleSendRequest = async () => {
+    if (!searchQuery.trim()) return
     try {
       await sendFriendRequest(searchQuery)
       Alert.alert('Success', 'Friend request sent!', [{ text: 'OK' }])
@@ -102,6 +110,10 @@ const FriendRequestsPage: React.FC = () => {
     }
   }
 
+  const navigateToProfile = (userId: string) => {
+    navigation.navigate('LockInProfile', { username: userId })
+  }
+
   if (isIncomingLoading || isOutgoingLoading) {
     return (
       <View className=" justify-center items-center bg-czarnuch">
@@ -120,6 +132,12 @@ const FriendRequestsPage: React.FC = () => {
 
   return (
     <View className="p-5 bg-wegielek items-center">
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        className="absolute top-5 left-5"
+      >
+        <Icon name="arrow-back" size={30} color="#F5B800" />
+      </TouchableOpacity>
       <TextInput
         className="h-10 w-11/12 border border-zoltek text-bialas rounded-lg mb-3 px-2 font-chewy bg-wegielek"
         placeholder="Search..."
@@ -129,9 +147,16 @@ const FriendRequestsPage: React.FC = () => {
       />
       <TouchableOpacity
         onPress={handleSendRequest}
-        className="bg-zoltek py-2 px-6 rounded-lg mb-4"
+        disabled={!searchQuery.trim()}
+        className={`py-2 px-6 rounded-lg mb-4 ${
+          !searchQuery.trim() ? 'bg-gray-300' : 'bg-zoltek'
+        }`}
       >
-        <Text className="text-wegielek text-lg font-chewy">
+        <Text
+          className={`text-lg font-chewy ${
+            !searchQuery.trim() ? 'text-gray-500' : 'text-wegielek'
+          }`}
+        >
           Send Friend Request
         </Text>
       </TouchableOpacity>
@@ -143,7 +168,12 @@ const FriendRequestsPage: React.FC = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View className="m-1 border border-bialas p-3 rounded-lg flex-row justify-between items-center">
-            <Text className="text-bialas pr-2 font-chewy">{item.from}</Text>
+            <Text
+              className="text-bialas pr-2 font-chewy"
+              onPress={() => navigateToProfile(item.from)}
+            >
+              {item.from}
+            </Text>
             <TouchableOpacity onPress={() => handleAcceptRequest(item._id)}>
               <Icon name="checkmark-circle" size={30} color="#F5B800" />
             </TouchableOpacity>
@@ -161,7 +191,12 @@ const FriendRequestsPage: React.FC = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View className="m-1 border border-bialas p-3 rounded-lg flex-row justify-between items-center">
-            <Text className="text-bialas pr-2 font-chewy">{item.to}</Text>
+            <Text
+              className="text-bialas pr-2 font-chewy"
+              onPress={() => navigateToProfile(item.to)}
+            >
+              {item.to}
+            </Text>
             <TouchableOpacity onPress={() => handleCancelRequest(item._id)}>
               <Icon name="close-circle" size={30} color="#F5B800" />
             </TouchableOpacity>
