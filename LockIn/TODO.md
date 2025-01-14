@@ -24,6 +24,12 @@ Lista znajomych
 - auto refresh listy znaj on websocket (nie bylo na to websocketa, mozliwe ze trzeba dodac)
 - anulowanie wyslanego zaproszenia
 
+Zaproszenia do znajomych
+
+- input jak na logine
+- wyswietlanie tylko nicku nie zalogowanego usera
+- strzalka na powrot do listy znaj
+
 Buildy
 
 - dodac summonery
@@ -55,6 +61,12 @@ Messenger
 - refreshe wiad nie dzialaja po doladowaniu/wyslaniu
 - ulozenie loading ikonki
 - stylowanie odpowiedzi
+
+Powiadomienia
+
+- deleteNotification:
+- on click z przeniesieniem do zaproszeń
+- X do kasacji masowej
 
 Tłumaczenia
 
