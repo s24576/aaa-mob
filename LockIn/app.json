@@ -19,8 +19,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "newArchEnabled": true,
-      "package": "com.boguss8.LockIn"
+      "newArchEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,7 +31,6 @@
       "eas": {
         "projectId": "0c5e76ad-8ab9-4d90-babf-fa9dd9aa2756"
       }
-    },
-    "owner": "boguss8"
+    }
   }
 }

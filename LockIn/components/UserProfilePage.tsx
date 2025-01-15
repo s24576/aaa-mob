@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, Image, FlatList, Button } from 'react-native'
+import { View, Text, Image, FlatList, Button, TextInput } from 'react-native'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { UserContext } from '../context/UserContext'
 import {
@@ -14,11 +14,13 @@ import { ProfileScreenProps } from '../App'
 import LanguageToggleButton from './LanguageToggleButton'
 import { useTranslation } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { addBio } from '../api/profile/addBio'
 
 const UserProfile = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const [watchList, setWatchList] = useState<WatchListItem[]>([])
   const [myAccounts, setMyAccounts] = useState<MyAccountItem[]>([])
+  const [newBio, setNewBio] = useState('')
   const isFocused = useIsFocused()
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const { t } = useTranslation()
@@ -71,6 +73,16 @@ const UserProfile = () => {
     setUserData(null)
   }
 
+  const handleBioChange = async () => {
+    try {
+      await addBio(newBio)
+      setUserData({ ...userData, bio: newBio })
+      setNewBio('')
+    } catch (error) {
+      console.error('Error updating bio:', error)
+    }
+  }
+
   if (!userData) {
     return <Text className="text-bialas">Loading...</Text>
   }
@@ -88,6 +100,14 @@ const UserProfile = () => {
       <Text className="text-bialas">ID: {_id}</Text>
       <Text className="text-bialas">Username: {username}</Text>
       <Text className="text-bialas">Bio: {bio}</Text>
+      <TextInput
+        className="text-bialas"
+        value={newBio}
+        onChangeText={setNewBio}
+        placeholder="Enter new bio"
+        placeholderTextColor="#F5F5F5"
+      />
+      <Button title="Update Bio" onPress={handleBioChange} />
       <Text className="text-bialas">Watchlist:</Text>
       {/* <FlatList
         data={watchList}

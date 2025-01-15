@@ -11,7 +11,6 @@ Rejestracja
 - zmien haslo
 - zmien email
 - ustaw profilowe
-- ustaw bio
 - ustaw username (default to id chyba ale moze tego nie trzeba ALE wydaje mi sie ze trzeba dodac)
 - match history z wszsytkich claimed accounts sortowane po timestampie
 - potwierdzanie konta (kod z maila [+ resend?])
