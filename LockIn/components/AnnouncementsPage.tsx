@@ -6,11 +6,12 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
-  ScrollView,
   Image,
   TouchableWithoutFeedback,
   BackHandler,
+  ActivityIndicator,
 } from 'react-native'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getDuos } from '../api/duo/getDuos'
 import { createDuo } from '../api/duo/createDuo'
 import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
@@ -36,18 +37,19 @@ const CustomButton = ({
   title,
   onPress,
   style,
+  textStyle,
 }: {
   title: string
   onPress: () => void
   style?: any
+  textStyle?: any
 }) => (
   <TouchableOpacity onPress={onPress} style={style}>
-    <Text className="text-wegielek text-lg font-chewy">{title}</Text>
+    <Text style={textStyle}>{title}</Text>
   </TouchableOpacity>
 )
 
 const AnnouncementsPage = () => {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([])
   const [modalVisible, setModalVisible] = useState(false)
   const [filtersVisible, setFiltersVisible] = useState(false)
   const [pickerModal, setPickerModal] = useState<{
@@ -92,19 +94,18 @@ const AnnouncementsPage = () => {
     languages: [],
   })
 
-  useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        const data = await getDuos({}, {})
-        console.log('Announcements:', data)
-        setAnnouncements(data.content)
-      } catch (error) {
-        console.error('Error fetching announcements:', error)
-      }
-    }
+  const queryClient = useQueryClient()
 
-    fetchAnnouncements()
-  }, [])
+  const {
+    data: announcements,
+    isLoading,
+    error,
+    refetch: refetchAnnouncements,
+  } = useQuery({
+    queryKey: ['announcements', filters],
+    queryFn: () =>
+      getDuos(filters, { size: 5, sort: 'timestamp', direction: 'DESC' }),
+  })
 
   useEffect(() => {
     const fetchRiotProfiles = async () => {
@@ -167,8 +168,16 @@ const AnnouncementsPage = () => {
       const response = await createDuo(newDuo)
       console.log('Duo created successfully:', response)
       setModalVisible(false)
-      const data = await getDuos({}, {})
-      setAnnouncements(data.content)
+      setNewDuo({
+        puuid: '',
+        positions: [],
+        lookedPositions: [],
+        minRank: '',
+        maxRank: '',
+        languages: [],
+        championIds: [],
+      })
+      refetchAnnouncements()
     } catch (error) {
       console.error('Error creating duo:', error)
     }
@@ -199,6 +208,7 @@ const AnnouncementsPage = () => {
       champions: [],
       languages: [],
     })
+    refetchAnnouncements()
   }
 
   const renderAnnouncement = ({ item }: { item: Announcement }) => (
@@ -222,475 +232,590 @@ const AnnouncementsPage = () => {
     </View>
   )
 
+  if (isLoading) {
+    return (
+      <View className="bg-wegielek">
+        <ActivityIndicator size="large" color="#F5B800" />
+      </View>
+    )
+  }
+
+  if (error) {
+    return <Text className="text-bialas">Error: {error.message}</Text>
+  }
+
   return (
     <View className="p-5">
-      <ScrollView>
-        <CustomButton
-          title="Add announcement"
-          onPress={() => setModalVisible(true)}
-          style={styles.customButton}
-        />
-        <CustomButton
-          title={filtersVisible ? 'Hide Filters' : 'Filters'}
-          onPress={() => setFiltersVisible(!filtersVisible)}
-          style={styles.customButton2}
-        />
-        {filtersVisible && (
-          <View>
-            <View>
-              <View className="flex-row items-center justify-center">
-                <View className="flex-1 items-end pr-2">
+      <FlatList
+        data={announcements?.content}
+        keyExtractor={(item) => item._id}
+        renderItem={renderAnnouncement}
+        ListEmptyComponent={
+          <Text className="text-bialas">No posts found.</Text>
+        }
+        ListHeaderComponent={
+          <>
+            <CustomButton
+              title="Create a Duo Post"
+              onPress={() => setModalVisible(true)}
+              style={styles.customButton}
+              textStyle={styles.customButtonText}
+            />
+            <CustomButton
+              title={filtersVisible ? 'Hide Filters' : 'Filters'}
+              onPress={() => setFiltersVisible(!filtersVisible)}
+              style={styles.customButton2}
+              textStyle={styles.customButton2Text}
+            />
+            {filtersVisible && (
+              <View>
+                <View>
+                  <View className="flex-row items-center justify-center">
+                    <View className="flex-1 items-end pr-2">
+                      <CustomButton
+                        title={filters.minRank || 'Min Rank'}
+                        onPress={() =>
+                          openPickerModal(
+                            'Min rank',
+                            [
+                              'Challenger',
+                              'Grandmaster',
+                              'Master',
+                              'Diamond',
+                              'Emerald',
+                              'Platinum',
+                              'Gold',
+                              'Silver',
+                              'Bronze',
+                              'Iron',
+                            ],
+                            (values) =>
+                              setFilters({ ...filters, minRank: values[0] })
+                          )
+                        }
+                        style={styles.customButton}
+                        textStyle={styles.customButtonText}
+                      />
+                    </View>
+                    <Text className="text-bialas text-center pt-2">-</Text>
+                    <View className="flex-1 items-start pl-2">
+                      <CustomButton
+                        title={filters.maxRank || 'Max Rank'}
+                        onPress={() =>
+                          openPickerModal(
+                            'Max rank',
+                            [
+                              'Challenger',
+                              'Grandmaster',
+                              'Master',
+                              'Diamond',
+                              'Emerald',
+                              'Platinum',
+                              'Gold',
+                              'Silver',
+                              'Bronze',
+                              'Iron',
+                            ],
+                            (values) =>
+                              setFilters({ ...filters, maxRank: values[0] })
+                          )
+                        }
+                        style={styles.customButton}
+                        textStyle={styles.customButtonText}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <View>
                   <CustomButton
-                    title={filters.minRank || 'Min Rank'}
+                    title={
+                      filters.positions.length
+                        ? filters.positions.join(', ')
+                        : 'Select Positions'
+                    }
                     onPress={() =>
                       openPickerModal(
-                        'Min rank',
-                        [
-                          'Challenger',
-                          'Grandmaster',
-                          'Master',
-                          'Diamond',
-                          'Emerald',
-                          'Platinum',
-                          'Gold',
-                          'Silver',
-                          'Bronze',
-                          'Iron',
-                        ],
+                        'Positions',
+                        ['Top', 'Jungle', 'Mid', 'Bot', 'Support', 'Fill'],
                         (values) =>
-                          setFilters({ ...filters, minRank: values[0] })
+                          setFilters({ ...filters, positions: values }),
+                        true,
+                        filters.positions
                       )
                     }
-                    style={[
-                      styles.customButton,
-                      { paddingHorizontal: 10, minWidth: 120, width: '100%' },
-                    ]}
+                    style={styles.customButton}
+                    textStyle={styles.customButtonText}
                   />
                 </View>
-                <Text className="text-bialas text-center pt-2">-</Text>
-                <View className="flex-1 items-start pl-2">
+                <View>
                   <CustomButton
-                    title={filters.maxRank || 'Max Rank'}
+                    title={
+                      filters.languages.length
+                        ? filters.languages.join(', ')
+                        : 'Select Languages'
+                    }
                     onPress={() =>
                       openPickerModal(
-                        'Max rank',
+                        'Languages',
                         [
-                          'Challenger',
-                          'Grandmaster',
-                          'Master',
-                          'Diamond',
-                          'Emerald',
-                          'Platinum',
-                          'Gold',
-                          'Silver',
-                          'Bronze',
-                          'Iron',
+                          'English',
+                          'German',
+                          'French',
+                          'Spanish',
+                          'Polish',
+                          'Chinese',
+                          'Japanese',
+                          'Korean',
+                          'Other',
                         ],
                         (values) =>
-                          setFilters({ ...filters, maxRank: values[0] })
+                          setFilters({ ...filters, languages: values }),
+                        true,
+                        filters.languages
                       )
                     }
-                    style={[
-                      styles.customButton,
-                      { paddingHorizontal: 10, width: '100%' },
-                    ]}
+                    style={styles.customButton}
+                    textStyle={styles.customButtonText}
+                  />
+                </View>
+                <View>
+                  <CustomButton
+                    title={
+                      filters.champions.length
+                        ? filters.champions
+                            .map((champ) => champions[champ])
+                            .sort()
+                            .join(', ')
+                        : 'Select Champions'
+                    }
+                    onPress={() =>
+                      openPickerModal(
+                        'Select Champions',
+                        Object.keys(champions)
+                          .map((key) => champions[key])
+                          .sort(),
+                        (selectedNames) => {
+                          const selectedIds = selectedNames.map(
+                            (name) =>
+                              Object.keys(champions).find(
+                                (key) => champions[key] === name
+                              ) || name
+                          )
+                          setFilters({ ...filters, champions: selectedIds })
+                        },
+                        true,
+                        filters.champions.map((id) => champions[id]).sort()
+                      )
+                    }
+                    style={styles.customButton}
+                    textStyle={styles.customButtonText}
+                  />
+                </View>
+
+                <View>
+                  <CustomButton
+                    title="Reset Filters"
+                    onPress={resetFilters}
+                    style={styles.customButton2}
+                    textStyle={styles.customButton2Text}
                   />
                 </View>
               </View>
-            </View>
-            <View>
-              <CustomButton
-                title={
-                  filters.positions.length
-                    ? filters.positions.join(', ')
-                    : 'Select Positions'
-                }
-                onPress={() =>
-                  openPickerModal(
-                    'Positions',
-                    ['Top', 'Jungle', 'Mid', 'Bot', 'Support', 'Fill'],
-                    (values) => setFilters({ ...filters, positions: values }),
-                    true,
-                    filters.positions
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <CustomButton
-                title={
-                  filters.languages.length
-                    ? filters.languages.join(', ')
-                    : 'Select Languages'
-                }
-                onPress={() =>
-                  openPickerModal(
-                    'Languages',
-                    [
-                      'English',
-                      'German',
-                      'French',
-                      'Spanish',
-                      'Polish',
-                      'Chinese',
-                      'Japanese',
-                      'Korean',
-                      'Other',
-                    ],
-                    (values) => setFilters({ ...filters, languages: values }),
-                    true,
-                    filters.languages
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <CustomButton
-                title={
-                  filters.champions.length
-                    ? filters.champions
-                        .map((champ) => champions[champ])
-                        .sort()
-                        .join(', ')
-                    : 'Select Champions'
-                }
-                onPress={() =>
-                  openPickerModal(
-                    'Select Champions',
-                    Object.keys(champions)
-                      .sort()
-                      .map((key) => champions[key]),
-                    (selectedNames) => {
-                      const selectedIds = selectedNames.map(
-                        (name) =>
-                          Object.keys(champions).find(
-                            (key) => champions[key] === name
-                          ) || ''
-                      )
-                      setFilters({ ...filters, champions: selectedIds })
-                    },
-                    true,
-                    filters.champions.map((id) => champions[id])
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-
-            <View>
-              <CustomButton
-                title="Apply Filters"
-                onPress={async () => {
-                  try {
-                    const data = await getDuos(filters, {
-                      size: 5,
-                      sort: 'timestamp',
-                      direction: 'DESC',
-                    })
-                    setAnnouncements(data.content)
-                  } catch (error) {
-                    console.error(
-                      'Error fetching filtered announcements:',
-                      error
-                    )
-                  }
-                }}
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <CustomButton
-                title="Reset Filters"
-                onPress={resetFilters}
-                style={[styles.customButton2]}
-              />
-            </View>
-          </View>
-        )}
-        <FlatList
-          data={announcements}
-          keyExtractor={(item) => item._id}
-          renderItem={renderAnnouncement}
-          ListEmptyComponent={<Text>No announcements found.</Text>}
-        />
-        {/* modal na dodawanie ogłoszenia */}
-        <Modal visible={modalVisible} animationType="slide">
-          <View>
-            <Text className="my-2">Add New Duo</Text>
-            <View>
-              <Text>Select Riot Account</Text>
-              <CustomButton
-                title={
-                  selectedProfile ? selectedProfile.gameName : 'Select Account'
-                }
-                onPress={() =>
-                  openPickerModal(
-                    'Select Riot Account',
-                    riotProfiles.map((profile) => profile.gameName),
-                    (values) => {
-                      const profile = riotProfiles.find(
-                        (profile) => profile.gameName === values[0]
-                      )
-                      if (profile) {
-                        setSelectedProfile(profile)
-                        setNewDuo({
-                          ...newDuo,
-                          puuid: `${profile.server}_${profile.puuid}`,
-                        })
-                      }
-                    }
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <Text>Your position</Text>
-              <CustomButton
-                title={newDuo.positions.join(', ')}
-                onPress={() =>
-                  openPickerModal(
-                    'Your position',
-                    ['Top', 'Jungle', 'Mid', 'Bot', 'Support', 'Fill'],
-                    (values) => setNewDuo({ ...newDuo, positions: values }),
-                    true,
-                    newDuo.positions
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <Text>Searched position</Text>
-              <CustomButton
-                title={newDuo.lookedPositions.join(', ')}
-                onPress={() =>
-                  openPickerModal(
-                    'Searched position',
-                    ['Top', 'Jungle', 'Mid', 'Bot', 'Support', 'Fill'],
-                    (values) =>
-                      setNewDuo({ ...newDuo, lookedPositions: values }),
-                    true,
-                    newDuo.lookedPositions
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <Text>Min rank</Text>
-              <CustomButton
-                title={newDuo.minRank}
-                onPress={() =>
-                  openPickerModal(
-                    'Min rank',
-                    [
-                      'Challenger',
-                      'Grandmaster',
-                      'Master',
-                      'Diamond',
-                      'Emerald',
-                      'Platinum',
-                      'Gold',
-                      'Silver',
-                      'Bronze',
-                      'Iron',
-                    ],
-                    (values) => setNewDuo({ ...newDuo, minRank: values[0] })
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <Text>Max rank</Text>
-              <CustomButton
-                title={newDuo.maxRank}
-                onPress={() =>
-                  openPickerModal(
-                    'Max rank',
-                    [
-                      'Challenger',
-                      'Grandmaster',
-                      'Master',
-                      'Diamond',
-                      'Emerald',
-                      'Platinum',
-                      'Gold',
-                      'Silver',
-                      'Bronze',
-                      'Iron',
-                    ],
-                    (values) => setNewDuo({ ...newDuo, maxRank: values[0] })
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <Text>Languages</Text>
-              <CustomButton
-                title={newDuo.languages.join(', ')}
-                onPress={() =>
-                  openPickerModal(
-                    'Languages',
-                    [
-                      'English',
-                      'German',
-                      'French',
-                      'Spanish',
-                      'Polish',
-                      'Chinese',
-                      'Japanese',
-                      'Korean',
-                      'Other',
-                    ],
-                    (values) => setNewDuo({ ...newDuo, languages: values }),
-                    true,
-                    newDuo.languages
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <CustomButton
-                title={
-                  newDuo.championIds.length
-                    ? newDuo.championIds
-                        .map((champ) => champions[champ])
-                        .join(', ')
-                    : 'Select Champions'
-                }
-                onPress={() =>
-                  openPickerModal(
-                    'Select Champions',
-                    Object.keys(champions)
-                      .sort()
-                      .map((key) => champions[key]),
-                    (selectedNames) => {
-                      const selectedIds = selectedNames.map(
-                        (name) =>
-                          Object.keys(champions).find(
-                            (key) => champions[key] === name
-                          ) || ''
-                      )
-                      setNewDuo({ ...newDuo, championIds: selectedIds })
-                    },
-                    true,
-                    newDuo.championIds.map((id) => champions[id])
-                  )
-                }
-                style={styles.customButton}
-              />
-            </View>
-
-            <View className="mb-2">
-              <CustomButton
-                title="Create Duo"
-                onPress={handleCreateDuo}
-                style={styles.customButton}
-              />
-            </View>
-            <View>
-              <CustomButton
-                title="Cancel"
-                onPress={() => setModalVisible(false)}
-                style={styles.customButton}
-              />
-            </View>
-          </View>
-        </Modal>
-        {/* modal na wybieranie championów */}
-        <Modal
-          visible={pickerModal.visible}
-          animationType="fade"
-          transparent
-          onRequestClose={() =>
-            setPickerModal({ ...pickerModal, visible: false })
-          }
-        >
-          <TouchableWithoutFeedback
-            onPress={() => setPickerModal({ ...pickerModal, visible: false })}
-          >
-            <View style={styles.modalContainer}>
-              <TouchableWithoutFeedback>
-                <View style={styles.modalContent}>
-                  <Text>{pickerModal.type}</Text>
-                  <ScrollView style={{ maxHeight: '70%' }}>
-                    {pickerModal.options.map((option) => (
-                      <TouchableOpacity
-                        key={option}
-                        onPress={() => {
-                          if (pickerModal.multiSelect) {
-                            const selectedValues =
-                              pickerModal.selectedValues.includes(option)
-                                ? pickerModal.selectedValues.filter(
-                                    (val) => val !== option
-                                  )
-                                : [...pickerModal.selectedValues, option]
-                            setPickerModal({ ...pickerModal, selectedValues })
-                          } else {
-                            pickerModal.onSelect([option])
-                            setPickerModal({ ...pickerModal, visible: false })
-                          }
-                        }}
-                      >
-                        <View
-                          style={{ flexDirection: 'row', alignItems: 'center' }}
-                        >
-                          {pickerModal.type === 'Select Champions' ? (
-                            <Image
-                              source={{
-                                uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${Object.keys(
-                                  champions
-                                ).find(
-                                  (key) => champions[key] === option
-                                )}.png`,
-                              }}
-                              style={{ width: 20, height: 20, marginRight: 10 }}
+            )}
+          </>
+        }
+      />
+      {/* modal na dodawanie ogłoszenia */}
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => {
+          setModalVisible(false)
+          setNewDuo({
+            puuid: '',
+            positions: [],
+            lookedPositions: [],
+            minRank: '',
+            maxRank: '',
+            languages: [],
+            championIds: [],
+          })
+        }}
+      >
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <FlatList
+                  data={[
+                    { key: 'Select Riot Account' },
+                    { key: 'Your position' },
+                    { key: 'Searched position' },
+                    { key: 'Min rank' },
+                    { key: 'Max rank' },
+                    { key: 'Languages' },
+                    { key: 'Select Champions' },
+                    { key: 'Create Duo' },
+                    { key: 'Cancel' },
+                  ]}
+                  renderItem={({ item }) => {
+                    switch (item.key) {
+                      case 'Select Riot Account':
+                        return (
+                          <View>
+                            <Text
+                              className="text-center"
+                              style={styles.customButtonText}
+                            >
+                              Create a Duo Post
+                            </Text>
+                            <CustomButton
+                              title={
+                                selectedProfile
+                                  ? selectedProfile.gameName
+                                  : 'Select Account'
+                              }
+                              onPress={() =>
+                                openPickerModal(
+                                  'Select Riot Account',
+                                  riotProfiles.map(
+                                    (profile) => profile.gameName
+                                  ),
+                                  (values) => {
+                                    const profile = riotProfiles.find(
+                                      (profile) =>
+                                        profile.gameName === values[0]
+                                    )
+                                    if (profile) {
+                                      setSelectedProfile(profile)
+                                      setNewDuo({
+                                        ...newDuo,
+                                        puuid: `${profile.server}_${profile.puuid}`,
+                                      })
+                                    }
+                                  }
+                                )
+                              }
+                              style={styles.customButton}
+                              textStyle={styles.customButtonText}
                             />
-                          ) : null}
-                          <Text
-                            style={[
-                              styles.option,
-                              pickerModal.selectedValues.includes(option) &&
-                                styles.selectedOption,
-                            ]}
-                          >
-                            {option}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                  <View style={styles.buttonContainer}>
-                    {pickerModal.multiSelect && (
-                      <CustomButton
-                        title="Done"
-                        onPress={() => {
-                          pickerModal.onSelect(pickerModal.selectedValues)
-                          setPickerModal({ ...pickerModal, visible: false })
-                        }}
-                        style={styles.customButton}
-                      />
-                    )}
-                    <CustomButton
-                      title="Back"
-                      onPress={() =>
-                        setPickerModal({ ...pickerModal, visible: false })
-                      }
-                      style={styles.customButton}
-                    />
-                  </View>
+                          </View>
+                        )
+                      case 'Your position':
+                        return (
+                          <View>
+                            <CustomButton
+                              title={
+                                newDuo.positions.join(', ') || 'Your position'
+                              }
+                              onPress={() =>
+                                openPickerModal(
+                                  'Your position',
+                                  [
+                                    'Top',
+                                    'Jungle',
+                                    'Mid',
+                                    'Bot',
+                                    'Support',
+                                    'Fill',
+                                  ],
+                                  (values) =>
+                                    setNewDuo({ ...newDuo, positions: values }),
+                                  true,
+                                  newDuo.positions
+                                )
+                              }
+                              style={styles.customButton}
+                              textStyle={styles.customButtonText}
+                            />
+                          </View>
+                        )
+                      case 'Searched position':
+                        return (
+                          <View>
+                            <CustomButton
+                              title={
+                                newDuo.lookedPositions.join(', ') ||
+                                'Searched position'
+                              }
+                              onPress={() =>
+                                openPickerModal(
+                                  'Searched position',
+                                  [
+                                    'Top',
+                                    'Jungle',
+                                    'Mid',
+                                    'Bot',
+                                    'Support',
+                                    'Fill',
+                                  ],
+                                  (values) =>
+                                    setNewDuo({
+                                      ...newDuo,
+                                      lookedPositions: values,
+                                    }),
+                                  true,
+                                  newDuo.lookedPositions
+                                )
+                              }
+                              style={styles.customButton}
+                              textStyle={styles.customButtonText}
+                            />
+                          </View>
+                        )
+                      case 'Min rank':
+                        return (
+                          <View>
+                            <CustomButton
+                              title={newDuo.minRank || 'Min Rank'}
+                              onPress={() =>
+                                openPickerModal(
+                                  'Min rank',
+                                  [
+                                    'Challenger',
+                                    'Grandmaster',
+                                    'Master',
+                                    'Diamond',
+                                    'Emerald',
+                                    'Platinum',
+                                    'Gold',
+                                    'Silver',
+                                    'Bronze',
+                                    'Iron',
+                                  ],
+                                  (values) =>
+                                    setNewDuo({ ...newDuo, minRank: values[0] })
+                                )
+                              }
+                              style={styles.customButton}
+                              textStyle={styles.customButtonText}
+                            />
+                          </View>
+                        )
+                      case 'Max rank':
+                        return (
+                          <View>
+                            <CustomButton
+                              title={newDuo.maxRank || 'Max Rank'}
+                              onPress={() =>
+                                openPickerModal(
+                                  'Max rank',
+                                  [
+                                    'Challenger',
+                                    'Grandmaster',
+                                    'Master',
+                                    'Diamond',
+                                    'Emerald',
+                                    'Platinum',
+                                    'Gold',
+                                    'Silver',
+                                    'Bronze',
+                                    'Iron',
+                                  ],
+                                  (values) =>
+                                    setNewDuo({ ...newDuo, maxRank: values[0] })
+                                )
+                              }
+                              style={styles.customButton}
+                              textStyle={styles.customButtonText}
+                            />
+                          </View>
+                        )
+                      case 'Languages':
+                        return (
+                          <View>
+                            <CustomButton
+                              title={newDuo.languages.join(', ') || 'Languages'}
+                              onPress={() =>
+                                openPickerModal(
+                                  'Languages',
+                                  [
+                                    'English',
+                                    'German',
+                                    'French',
+                                    'Spanish',
+                                    'Polish',
+                                    'Chinese',
+                                    'Japanese',
+                                    'Korean',
+                                    'Other',
+                                  ],
+                                  (values) =>
+                                    setNewDuo({ ...newDuo, languages: values }),
+                                  true,
+                                  newDuo.languages
+                                )
+                              }
+                              style={styles.customButton}
+                              textStyle={styles.customButtonText}
+                            />
+                          </View>
+                        )
+                      case 'Select Champions':
+                        return (
+                          <View>
+                            <CustomButton
+                              title={
+                                newDuo.championIds.length
+                                  ? newDuo.championIds
+                                      .map((champ) => champions[champ])
+                                      .join(', ')
+                                  : 'Select Champions'
+                              }
+                              onPress={() =>
+                                openPickerModal(
+                                  'Select Champions',
+                                  Object.keys(champions)
+                                    .sort()
+                                    .map((key) => champions[key]),
+                                  (selectedNames) => {
+                                    const selectedIds = selectedNames.map(
+                                      (name) =>
+                                        Object.keys(champions).find(
+                                          (key) => champions[key] === name
+                                        ) || ''
+                                    )
+                                    setNewDuo({
+                                      ...newDuo,
+                                      championIds: selectedIds,
+                                    })
+                                  },
+                                  true,
+                                  newDuo.championIds.map((id) => champions[id])
+                                )
+                              }
+                              style={styles.customButton}
+                              textStyle={styles.customButtonText}
+                            />
+                          </View>
+                        )
+
+                      default:
+                        return null
+                    }
+                  }}
+                />
+                <View>
+                  <CustomButton
+                    title="Create Duo"
+                    onPress={handleCreateDuo}
+                    style={styles.customButton2}
+                    textStyle={styles.customButton2Text}
+                  />
                 </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
-      </ScrollView>
+                <View>
+                  <CustomButton
+                    title="Cancel"
+                    onPress={() => {
+                      setModalVisible(false)
+                      setNewDuo({
+                        puuid: '',
+                        positions: [],
+                        lookedPositions: [],
+                        minRank: '',
+                        maxRank: '',
+                        languages: [],
+                        championIds: [],
+                      })
+                    }}
+                    style={styles.customButton}
+                    textStyle={styles.customButtonText}
+                  />
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+      {/* modal na wybieranie championów */}
+      <Modal
+        visible={pickerModal.visible}
+        animationType="fade"
+        transparent
+        onRequestClose={() =>
+          setPickerModal({ ...pickerModal, visible: false })
+        }
+      >
+        <TouchableWithoutFeedback
+          onPress={() => setPickerModal({ ...pickerModal, visible: false })}
+        >
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <Text className="text-bialas">{pickerModal.type}</Text>
+                <FlatList
+                  data={pickerModal.options}
+                  keyExtractor={(item) => item}
+                  renderItem={({ item: option }) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (pickerModal.multiSelect) {
+                          const selectedValues =
+                            pickerModal.selectedValues.includes(option)
+                              ? pickerModal.selectedValues.filter(
+                                  (val) => val !== option
+                                )
+                              : [...pickerModal.selectedValues, option]
+                          setPickerModal({ ...pickerModal, selectedValues })
+                        } else {
+                          pickerModal.onSelect([option])
+                          setPickerModal({ ...pickerModal, visible: false })
+                        }
+                      }}
+                    >
+                      <View
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                      >
+                        {pickerModal.type === 'Select Champions' ? (
+                          <Image
+                            source={{
+                              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${Object.keys(
+                                champions
+                              ).find((key) => champions[key] === option)}.png`,
+                            }}
+                            style={{ width: 20, height: 20, marginRight: 10 }}
+                          />
+                        ) : null}
+                        <Text
+                          style={[
+                            styles.option,
+                            pickerModal.selectedValues.includes(option) &&
+                              styles.selectedOption,
+                          ]}
+                        >
+                          {option}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                />
+                <View style={styles.buttonContainer}>
+                  {pickerModal.multiSelect && (
+                    <CustomButton
+                      title="Done"
+                      onPress={() => {
+                        pickerModal.onSelect(pickerModal.selectedValues)
+                        setPickerModal({ ...pickerModal, visible: false })
+                      }}
+                      style={styles.customButton}
+                      textStyle={styles.customButtonText}
+                    />
+                  )}
+                  <CustomButton
+                    title="Back"
+                    onPress={() =>
+                      setPickerModal({ ...pickerModal, visible: false })
+                    }
+                    style={styles.customButton}
+                    textStyle={styles.customButtonText}
+                  />
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   )
 }
@@ -704,7 +829,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: '#131313',
     padding: 15,
     borderRadius: 10,
     width: '80%',
@@ -715,26 +840,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    color: '#F5F5F5',
   },
   selectedOption: {
-    backgroundColor: '#ddd',
+    color: '#F5B800',
   },
   customButton: {
-    backgroundColor: '#F5B800',
+    backgroundColor: '#13131313',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    marginTop: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
     alignItems: 'center',
+  },
+  customButtonText: {
+    color: '#F5F5F5',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   customButton2: {
     backgroundColor: '#F5B800',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 10,
+    margin: 5,
     alignItems: 'center',
+  },
+  customButton2Text: {
+    color: '#131313',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   buttonContainer: {
     marginTop: 10,
