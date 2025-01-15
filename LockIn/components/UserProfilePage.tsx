@@ -30,6 +30,7 @@ import { manageWatchlist } from '../api/profile/manageWatchlist'
 import { manageMyAccount } from '../api/profile/manageMyAccount'
 import * as ImagePicker from 'expo-image-picker'
 import { addProfilePicture } from '../api/profile/addProfilePicture'
+import EvilIcons from '@expo/vector-icons/EvilIcons'
 
 const UserProfile = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -197,9 +198,13 @@ const UserProfile = () => {
           style={{ width: 100, height: 100, borderRadius: 50 }}
         />
       ) : (
-        <Text className="text-bialas">No profile icon available</Text>
+        <EvilIcons
+          name="user"
+          size={100}
+          color="#F5F5F5"
+          style={{ width: 100, height: 100, borderRadius: 50 }}
+        />
       )}
-      <Text className="text-bialas">ID: {_id}</Text>
       <Text className="text-bialas">Username: {username}</Text>
       <Text className="text-bialas">Bio: {bio}</Text>
       <TextInput
@@ -233,7 +238,7 @@ const UserProfile = () => {
               className="text-bialas"
               onPress={() => handleProfilePress(item.server, item.id)}
             >
-              {item.name}
+              {item.name && item.name.trim() ? item.name : 'PLACEHOLDER'}
             </Text>
             <TouchableOpacity
               onPress={() => handleRemoveFromWatchlist(item.server, item.id)}
@@ -253,7 +258,7 @@ const UserProfile = () => {
               className="text-bialas"
               onPress={() => handleProfilePress(item.server, item.id)}
             >
-              {item.name}
+              {item.name && item.name.trim() ? item.name : 'PLACEHOLDER'}
             </Text>
             <TouchableOpacity
               onPress={() => handleRemoveMyAccount(item.server, item.id)}
