@@ -8,6 +8,7 @@ import {
   TextInput,
   Modal,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { UserContext } from '../context/UserContext'
@@ -49,6 +50,18 @@ const UserProfile = () => {
   const [error, setError] = useState<string>('')
   const [reload, setReload] = useState(false)
 
+  const rankImages: { [key: string]: any } = {
+    IRON: require('../assets/ranks/IRON.png'),
+    BRONZE: require('../assets/ranks/BRONZE.png'),
+    SILVER: require('../assets/ranks/SILVER.png'),
+    GOLD: require('../assets/ranks/GOLD.png'),
+    PLATINUM: require('../assets/ranks/PLATINUM.png'),
+    DIAMOND: require('../assets/ranks/DIAMOND.png'),
+    MASTER: require('../assets/ranks/MASTER.png'),
+    GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
+    CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
+  }
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -70,6 +83,9 @@ const UserProfile = () => {
               id: profile.puuid,
               name: profile.gameName,
               server: profile.server,
+              icon: profile.profileIconId,
+              tag: profile.tagLine,
+              tier: profile.tier,
             }))
           )
           const myAccountsData = await getMyRiotProfiles()
@@ -78,6 +94,9 @@ const UserProfile = () => {
               id: account.puuid,
               name: account.gameName,
               server: account.server,
+              icon: account.profileIconId,
+              tag: account.tagLine,
+              tier: account.tier,
             }))
           )
         } catch (error) {
@@ -189,24 +208,42 @@ const UserProfile = () => {
   const { _id, profileIcon, bio, username, image } = userData
 
   return (
-    <View className="p-5 bg-wegielek items-center">
+    <ScrollView
+      style={{ padding: 5, backgroundColor: '#wegielek' }}
+      contentContainerStyle={{ alignItems: 'center' }}
+    >
       {userData.image && userData.image.contentType && userData.image.data ? (
         <Image
           source={{
             uri: `data:${userData.image.contentType};base64,${userData.image.data}`,
           }}
-          style={{ width: 100, height: 100, borderRadius: 50 }}
+          style={{ width: 160, height: 160, borderRadius: 80 }}
         />
       ) : (
         <EvilIcons
           name="user"
-          size={100}
+          size={160}
           color="#F5F5F5"
-          style={{ width: 100, height: 100, borderRadius: 50 }}
+          style={{ width: 160, height: 160, borderRadius: 80 }}
         />
       )}
-      <Text className="text-bialas">Username: {username}</Text>
-      <Text className="text-bialas">Bio: {bio}</Text>
+      <Text
+        style={{
+          color: '#F5F5F5',
+          fontFamily: 'Chewy-Regular',
+          fontSize: 24,
+        }}
+      >
+        {username}
+      </Text>
+      <Text
+        style={{
+          color: '#F5F5F5',
+          fontFamily: 'Chewy-Regular',
+        }}
+      >
+        {bio}
+      </Text>
       <TextInput
         className="text-bialas"
         value={newBio}
@@ -228,43 +265,80 @@ const UserProfile = () => {
         title="Upload Profile Picture"
         onPress={handleProfilePictureUpload}
       />
-      <Text className="text-bialas">Watchlist:</Text>
+      <Text
+        style={{
+          color: '#F5F5F5',
+          fontFamily: 'Chewy-Regular',
+        }}
+      >
+        Watchlist:
+      </Text>
       <FlatList
         data={watchList}
         keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
         renderItem={({ item }) => (
           <View className="flex-row justify-between items-center">
+            <Image
+              source={{
+                uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
+              }}
+              style={{ width: 50, height: 50, borderRadius: 25 }}
+            />
             <Text
               className="text-bialas"
               onPress={() => handleProfilePress(item.server, item.id)}
             >
-              {item.name && item.name.trim() ? item.name : 'PLACEHOLDER'}
+              {item.name && item.name.trim()
+                ? `${item.name} ${item.tag}`
+                : 'PLACEHOLDER'}
             </Text>
+            <Image
+              source={rankImages[item.tier] || rankImages['IRON']}
+              style={{ width: 50, height: 50 }}
+            />
+            <Text className="text-bialas">{item.server}</Text>
             <TouchableOpacity
               onPress={() => handleRemoveFromWatchlist(item.server, item.id)}
-            >
-              <Text className="text-red-500">X</Text>
-            </TouchableOpacity>
+            ></TouchableOpacity>
           </View>
         )}
       />
-      <Text className="text-bialas">My Accounts:</Text>
+
+      <Text
+        style={{
+          color: '#F5F5F5',
+          fontFamily: 'Chewy-Regular',
+        }}
+      >
+        My Accounts:
+      </Text>
       <FlatList
         data={myAccounts}
         keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
         renderItem={({ item }) => (
           <View className="flex-row justify-between items-center">
+            <Image
+              source={{
+                uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
+              }}
+              style={{ width: 50, height: 50, borderRadius: 25 }}
+            />
             <Text
               className="text-bialas"
               onPress={() => handleProfilePress(item.server, item.id)}
             >
-              {item.name && item.name.trim() ? item.name : 'PLACEHOLDER'}
+              {item.name && item.name.trim()
+                ? `${item.name} #${item.tag}`
+                : 'PLACEHOLDER'}
             </Text>
+            <Image
+              source={rankImages[item.tier] || rankImages['IRON']}
+              style={{ width: 50, height: 50 }}
+            />
+            <Text className="text-bialas">{item.server}</Text>
             <TouchableOpacity
               onPress={() => handleRemoveMyAccount(item.server, item.id)}
-            >
-              <Text className="text-red-500">X</Text>
-            </TouchableOpacity>
+            ></TouchableOpacity>
           </View>
         )}
       />
@@ -486,7 +560,7 @@ const UserProfile = () => {
       <LanguageToggleButton />
       <Text className="text-bialas">{t('languageTest')}</Text>
       <Button title="Logout" onPress={handleLogout} />
-    </View>
+    </ScrollView>
   )
 }
 

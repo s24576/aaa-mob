@@ -50,10 +50,16 @@ export interface WatchListItem {
   id: string
   name: string
   server: string
+  icon: string
+  tag: string
+  tier: string
 }
 
 export interface MyAccountItem {
   id: string
   name: string
   server: string
+  icon: string
+  tag: string
+  tier: string
 }
