@@ -28,6 +28,8 @@ import { handleChangePassword } from '../api/user/changePassword'
 import { handleChangeEmail } from '../api/user/changeEmail'
 import { manageWatchlist } from '../api/profile/manageWatchlist'
 import { manageMyAccount } from '../api/profile/manageMyAccount'
+import * as ImagePicker from 'expo-image-picker'
+import { addProfilePicture } from '../api/profile/addProfilePicture'
 
 const UserProfile = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -44,6 +46,7 @@ const UserProfile = () => {
   const [input3, setInput3] = useState('')
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string>('')
+  const [reload, setReload] = useState(false)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -82,7 +85,7 @@ const UserProfile = () => {
       }
       fetchData()
     }
-  }, [isFocused])
+  }, [isFocused, reload])
 
   const handleProfilePress = (server: string, puuid: string) => {
     navigation.navigate('RiotProfile', { server, puuid })
@@ -90,7 +93,7 @@ const UserProfile = () => {
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('token')
-    setUserData(null)
+    setUserData(null as any)
   }
 
   const handleBioChange = async () => {
@@ -145,6 +148,39 @@ const UserProfile = () => {
     }
   }
 
+  const handleProfilePictureUpload = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync()
+
+    if (permissionResult.granted === false) {
+      alert('Permission to access camera roll is required!')
+      return
+    }
+
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      base64: true,
+    })
+
+    if (!pickerResult.canceled) {
+      const imageUri = pickerResult.assets[0].uri
+      const image = {
+        uri: imageUri,
+        type: 'image/jpeg',
+        name: 'profile.jpg',
+      }
+
+      try {
+        const response = await addProfilePicture(image)
+        setUserData({ ...userData, image: response.image })
+        setReload(!reload)
+      } catch (error) {
+        console.error('Error uploading profile picture:', error)
+      }
+    }
+  }
+
   if (!userData) {
     return <Text className="text-bialas">Loading...</Text>
   }
@@ -153,10 +189,10 @@ const UserProfile = () => {
 
   return (
     <View className="p-5 bg-wegielek items-center">
-      {image && image.contentType && image.data ? (
+      {userData.image && userData.image.contentType && userData.image.data ? (
         <Image
           source={{
-            uri: `data:${image.contentType};base64,${image.data}`,
+            uri: `data:${userData.image.contentType};base64,${userData.image.data}`,
           }}
           style={{ width: 100, height: 100, borderRadius: 50 }}
         />
@@ -183,6 +219,10 @@ const UserProfile = () => {
         }}
       />
       <Button title="Update Bio" onPress={handleBioChange} />
+      <Button
+        title="Upload Profile Picture"
+        onPress={handleProfilePictureUpload}
+      />
       <Text className="text-bialas">Watchlist:</Text>
       <FlatList
         data={watchList}

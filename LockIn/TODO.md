@@ -8,8 +8,7 @@ Rejestracja
 
 \*Profile Lockin
 
-- ustaw profilowe
-- match history z wszsytkich claimed accounts sortowane po timestampie
+- match history z wszsytkich claimed accounts sortowane po timestampie !Tego raczej nie robmy!
 - Jak zaproszenie jest juz wyslane to inny guzik (ekran konta LockIn)
 - potwierdzanie konta (kod z maila [+ resend?]) !Trzeba zdecydować, czy chcemy robić rzeczy związane z mailami!
 
