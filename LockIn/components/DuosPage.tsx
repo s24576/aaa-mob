@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   BackHandler,
   ActivityIndicator,
+  TextInput,
 } from 'react-native'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getDuos } from '../api/duo/getDuos'
@@ -20,6 +21,7 @@ import { getVersion } from '../api/ddragon/version'
 import { useNavigation } from '@react-navigation/native'
 import { DuoScreenProps } from '../App'
 import { useSocket } from '../context/SocketProvider'
+import { answerDuo } from '../api/duo/answerDuo'
 
 interface Announcement {
   _id: string
@@ -55,6 +57,9 @@ const CustomButton = ({
 const DuosPage = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [filtersVisible, setFiltersVisible] = useState(false)
+  const [applyModalVisible, setApplyModalVisible] = useState(false)
+  const [selectedDuoId, setSelectedDuoId] = useState<string | null>(null)
+  const [applyMessage, setApplyMessage] = useState<string>('')
   const [pickerModal, setPickerModal] = useState<{
     visible: boolean
     type: string
@@ -234,6 +239,30 @@ const DuosPage = () => {
     navigation.navigate('Duo', { duoId, locale: 'en' })
   }
 
+  const handleApplyForDuo = async () => {
+    if (!selectedProfile || !selectedDuoId) {
+      console.error('No Riot profile selected or duo ID missing')
+      return
+    }
+
+    const answer = {
+      puuid: selectedProfile.puuid,
+      author: selectedProfile.gameName,
+      message: applyMessage,
+    }
+
+    try {
+      const response = await answerDuo(answer, selectedDuoId)
+      console.log('Applied for duo successfully:', response)
+      setApplyModalVisible(false)
+      setApplyMessage('')
+      refetchAnnouncements()
+    } catch (error) {
+      console.error('Error applying for duo:', error)
+      console.log(answerDuo, answer)
+    }
+  }
+
   const renderAnnouncement = ({ item }: { item: Announcement }) => (
     <TouchableOpacity onPress={() => handleDuoPress(item._id)}>
       <View className="mb-2 border border-bialas p-3 rounded-lg">
@@ -253,6 +282,15 @@ const DuosPage = () => {
         <Text className="text-bialas font-chewy">
           Champion IDs: {item.championIds.join(', ')}
         </Text>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedDuoId(item._id)
+            setApplyModalVisible(true)
+          }}
+          style={styles.applyButton}
+        >
+          <Text style={styles.applyButtonText}>Apply for Duo</Text>
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   )
@@ -841,6 +879,77 @@ const DuosPage = () => {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
+      {/* modal na aplikowanie do duo */}
+      <Modal
+        visible={applyModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => {
+          setApplyModalVisible(false)
+          setApplyMessage('')
+        }}
+      >
+        <TouchableWithoutFeedback onPress={() => setApplyModalVisible(false)}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <Text className="text-center" style={styles.customButtonText}>
+                  Apply for Duo
+                </Text>
+                <CustomButton
+                  title={
+                    selectedProfile
+                      ? selectedProfile.gameName
+                      : 'Select Account'
+                  }
+                  onPress={() =>
+                    openPickerModal(
+                      'Select Riot Account',
+                      riotProfiles.map((profile) => profile.gameName),
+                      (values) => {
+                        const profile = riotProfiles.find(
+                          (profile) => profile.gameName === values[0]
+                        )
+                        if (profile) {
+                          setSelectedProfile(profile)
+                        }
+                      }
+                    )
+                  }
+                  style={styles.customButton}
+                  textStyle={styles.customButtonText}
+                />
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Enter your message"
+                  placeholderTextColor="#888"
+                  value={applyMessage}
+                  onChangeText={setApplyMessage}
+                />
+                <View>
+                  <CustomButton
+                    title="Apply"
+                    onPress={handleApplyForDuo}
+                    style={styles.customButton2}
+                    textStyle={styles.customButton2Text}
+                  />
+                </View>
+                <View>
+                  <CustomButton
+                    title="Cancel"
+                    onPress={() => {
+                      setApplyModalVisible(false)
+                      setApplyMessage('')
+                    }}
+                    style={styles.customButton}
+                    textStyle={styles.customButtonText}
+                  />
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   )
 }
@@ -901,6 +1010,28 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
     marginBottom: 0,
+  },
+  applyButton: {
+    backgroundColor: '#F5B800',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  applyButtonText: {
+    color: '#131313',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  textInput: {
+    backgroundColor: '#1E1E1E',
+    color: '#F5F5F5',
+    padding: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    marginVertical: 10,
   },
 })
 

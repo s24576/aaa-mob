@@ -36,8 +36,8 @@ Zaproszenia do znajomych
 
 \*Ogłoszenia
 
-- guzik do wysylania zaproszenia do znajomych, accept dodaje do znajomych lockin (wyswietlasz tez chyba nazwe konta riotowego z ogloszenia)
-- websocket na to wyzej
+- tworzenie > response > response^2 > if true > automatyczne dodanie do znaj
+- websocket na response
 - dodac widok do zaproszen z duo
 
 Messenger

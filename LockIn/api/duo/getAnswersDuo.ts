@@ -7,15 +7,12 @@ interface Pageable {
   direction?: 'ASC' | 'DESC'
 }
 
-export const getAnswersDuo = async (
-  duoId: string,
-  pageable: Pageable,
-  locale: string
-) => {
+export const getAnswersDuo = async (pageable: Pageable) => {
   try {
     const response = await api.get('api/duo/getAnswersDuo', {
-      params: { duoId: String(duoId), ...pageable, locale: String(locale) },
+      params: { ...pageable },
     })
+    console.log('Response from getAnswersDuo:', response.data)
     return response.data
   } catch (error) {
     handleError(error)
