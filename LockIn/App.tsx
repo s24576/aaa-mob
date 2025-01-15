@@ -30,11 +30,12 @@ import FriendRequests from './screens/FriendRequests'
 import BuildDetails from './screens/BuildDetails'
 import ChatPage from './components/MessageRoomPage'
 import { Provider as PaperProvider } from 'react-native-paper'
-import Announcements from './screens/Announcements'
+import Announcements from './screens/Duos'
 import CoursesBrowser from './screens/CoursesBrowser'
 import CourseDetails from './screens/CourseDetails'
 import { useFonts } from 'expo-font'
 import Settings from './screens/Settings'
+import Duo from './screens/Duo'
 
 initI18n()
 
@@ -60,6 +61,7 @@ type RootStackParamList = {
   CoursesBrowser: undefined
   CourseDetails: { courseId: string }
   Settings: undefined
+  Duo: undefined
 }
 
 export { RootStackParamList }
@@ -273,6 +275,11 @@ export const Layout = () => {
                       component={CourseDetails}
                       options={{ tabBarButton: () => null }}
                     />
+                    <Tab.Screen
+                      name="Duo"
+                      component={Duo}
+                      options={{ tabBarButton: () => null }}
+                    />
                   </Tab.Navigator>
                 )}
               </Stack.Screen>
@@ -317,3 +324,5 @@ export type CourseDetailsScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'CourseDetails'
 >
+
+export type DuoScreenProps = NativeStackScreenProps<RootStackParamList, 'Duo'>

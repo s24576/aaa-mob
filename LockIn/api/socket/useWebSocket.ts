@@ -8,6 +8,8 @@ interface UseWebSocketResult {
   messengerMessage: string
   memberEvent: string
   memberAction: string // Added new property
+  duoAnswer: string
+  duoNotification: string
 }
 
 const BACKEND_WS_ADDRESS = process.env.BACKEND_ADDRESS + '/ws'
@@ -19,6 +21,8 @@ const useWebSocket = (username: string): UseWebSocketResult => {
   const [messengerMessage, setMessengerMessage] = useState<string>('')
   const [memberEvent, setMemberEvent] = useState<string>('')
   const [memberAction, setMemberAction] = useState<string>('')
+  const [duoAnswer, setDuoAnswer] = useState<string>('')
+  const [duoNotification, setDuoNotification] = useState<string>('')
   const [client, setClient] = useState<Client | null>(null)
 
   useEffect(() => {
@@ -38,7 +42,10 @@ const useWebSocket = (username: string): UseWebSocketResult => {
           `/user/${username}/messenger/message`,
           `/user/${username}/member/event`,
           `/user/${username}/messenger/members`,
+          `/user/${username}/team/duo/answer`,
+          `/user/${username}/notification`,
         ]
+        console.log('STOMP Debug: Subscribing to', subscriptions)
         subscriptions.forEach((sub) => {
           stompClient.subscribe(sub, (message: IMessage) => {
             console.log('STOMP Debug: Received data', message)
@@ -56,6 +63,10 @@ const useWebSocket = (username: string): UseWebSocketResult => {
                   setMemberEvent(messageContent)
                 } else if (sub.includes('messenger/members')) {
                   setMemberAction(messageContent)
+                } else if (sub.includes('team/duo/answer')) {
+                  setDuoAnswer(messageContent)
+                } else if (sub.includes('notification')) {
+                  setDuoNotification(messageContent)
                 } else {
                   setReceivedMessage(messageContent)
                 }
@@ -66,6 +77,10 @@ const useWebSocket = (username: string): UseWebSocketResult => {
                   setMemberEvent(messageBody)
                 } else if (sub.includes('messenger/members')) {
                   setMemberAction(messageBody)
+                } else if (sub.includes('team/duo/answer')) {
+                  setDuoAnswer(messageBody)
+                } else if (sub.includes('notification')) {
+                  setDuoNotification(messageBody)
                 } else {
                   setReceivedMessage(messageBody)
                 }
@@ -102,6 +117,8 @@ const useWebSocket = (username: string): UseWebSocketResult => {
     messengerMessage,
     memberEvent,
     memberAction,
+    duoAnswer,
+    duoNotification,
   }
 }
 

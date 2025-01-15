@@ -17,6 +17,9 @@ import { createDuo } from '../api/duo/createDuo'
 import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
 import { getChampionNames } from '../api/ddragon/getChampionNames'
 import { getVersion } from '../api/ddragon/version'
+import { useNavigation } from '@react-navigation/native'
+import { DuoScreenProps } from '../App'
+import { useSocket } from '../context/SocketProvider'
 
 interface Announcement {
   _id: string
@@ -49,7 +52,7 @@ const CustomButton = ({
   </TouchableOpacity>
 )
 
-const AnnouncementsPage = () => {
+const DuosPage = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [filtersVisible, setFiltersVisible] = useState(false)
   const [pickerModal, setPickerModal] = useState<{
@@ -94,7 +97,7 @@ const AnnouncementsPage = () => {
     languages: [],
   })
 
-  const queryClient = useQueryClient()
+  const navigation = useNavigation<DuoScreenProps['navigation']>()
 
   const {
     data: announcements,
@@ -106,6 +109,22 @@ const AnnouncementsPage = () => {
     queryFn: () =>
       getDuos(filters, { size: 5, sort: 'timestamp', direction: 'DESC' }),
   })
+
+  const { duoAnswer, duoNotification } = useSocket()
+
+  useEffect(() => {
+    if (duoAnswer) {
+      console.log('New duo answer:', duoAnswer)
+      // Handle new duo answer
+    }
+  }, [duoAnswer])
+
+  useEffect(() => {
+    if (duoNotification) {
+      console.log('New duo notification:', duoNotification)
+      // Handle new duo notification
+    }
+  }, [duoNotification])
 
   useEffect(() => {
     const fetchRiotProfiles = async () => {
@@ -211,25 +230,31 @@ const AnnouncementsPage = () => {
     refetchAnnouncements()
   }
 
+  const handleDuoPress = (duoId: string) => {
+    navigation.navigate('Duo', { duoId, locale: 'en' })
+  }
+
   const renderAnnouncement = ({ item }: { item: Announcement }) => (
-    <View className="mb-2 border border-bialas p-3 rounded-lg">
-      <Text className="text-bialas font-chewy">Author: {item.author}</Text>
-      <Text className="text-bialas font-chewy">Server: {item.server}</Text>
-      <Text className="text-bialas font-chewy">PUUID: {item.puuid}</Text>
-      <Text className="text-bialas font-chewy">
-        Ranks: {item.minRank} - {item.maxRank}
-      </Text>
-      <Text className="text-bialas font-chewy">
-        Positions: {item.positions.join(', ')}
-      </Text>
-      <Text className="text-bialas font-chewy">
-        Looked Positions:{' '}
-        {item.lookedPositions ? item.lookedPositions.join(', ') : 'None'}
-      </Text>
-      <Text className="text-bialas font-chewy">
-        Champion IDs: {item.championIds.join(', ')}
-      </Text>
-    </View>
+    <TouchableOpacity onPress={() => handleDuoPress(item._id)}>
+      <View className="mb-2 border border-bialas p-3 rounded-lg">
+        <Text className="text-bialas font-chewy">Author: {item.author}</Text>
+        <Text className="text-bialas font-chewy">Server: {item.server}</Text>
+        <Text className="text-bialas font-chewy">PUUID: {item.puuid}</Text>
+        <Text className="text-bialas font-chewy">
+          Ranks: {item.minRank} - {item.maxRank}
+        </Text>
+        <Text className="text-bialas font-chewy">
+          Positions: {item.positions.join(', ')}
+        </Text>
+        <Text className="text-bialas font-chewy">
+          Looked Positions:{' '}
+          {item.lookedPositions ? item.lookedPositions.join(', ') : 'None'}
+        </Text>
+        <Text className="text-bialas font-chewy">
+          Champion IDs: {item.championIds.join(', ')}
+        </Text>
+      </View>
+    </TouchableOpacity>
   )
 
   if (isLoading) {
@@ -879,4 +904,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default AnnouncementsPage
+export default DuosPage

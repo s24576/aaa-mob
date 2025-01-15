@@ -17,6 +17,8 @@ interface SocketContextType {
   memberAction: string
   notificationCount: number
   setNotificationCount: React.Dispatch<React.SetStateAction<number>>
+  duoAnswer: string
+  duoNotification: string
 }
 
 interface SocketProviderProps {
@@ -34,6 +36,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     messengerMessage,
     memberEvent,
     memberAction,
+    duoAnswer,
+    duoNotification,
   } = useWebSocket(username)
   const [notificationCount, setNotificationCount] = useState(0)
 
@@ -56,6 +60,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         memberAction,
         notificationCount,
         setNotificationCount,
+        duoAnswer,
+        duoNotification,
       }}
     >
       {children}

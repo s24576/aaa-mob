@@ -4,13 +4,13 @@ import { handleError } from '../error/handleError'
 export const respondAnswerDuo = async (
   answerId: string,
   action: boolean,
-  locale: string
+  duoId: string
 ) => {
   try {
     const response = await api.post('api/duo/respondAnswerDuo', {
-      answerId,
-      action,
-      locale,
+      answerId: String(answerId),
+      action: Boolean(action),
+      duoId: String(duoId),
     })
     return response.data
   } catch (error) {
