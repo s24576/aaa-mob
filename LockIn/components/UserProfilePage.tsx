@@ -119,13 +119,17 @@ const UserProfile = () => {
     return <Text className="text-bialas">Loading...</Text>
   }
 
-  const { _id, profileIcon, bio, username } = userData
+  const { _id, profileIcon, bio, username, image } = userData
 
   return (
     <View>
-      {profileIcon ? (
-        // <Image source={{ uri: profileIcon }} />
-        <Text className="text-bialas">Profile icon available</Text>
+      {image && image.contentType && image.data ? (
+        <Image
+          source={{
+            uri: `data:${image.contentType};base64,${image.data}`,
+          }}
+          style={{ width: 100, height: 100, borderRadius: 50 }}
+        />
       ) : (
         <Text className="text-bialas">No profile icon available</Text>
       )}
