@@ -176,7 +176,7 @@ const LoginForm = () => {
       />
       <Button
         title="test500"
-        onPress={() => handleAutoComplete('test500', 'test500')}
+        onPress={() => handleAutoComplete('test500', 'Test1!')}
       />
       <Button
         title="test1000"

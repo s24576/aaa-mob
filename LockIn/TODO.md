@@ -4,17 +4,14 @@
 
 Rejestracja
 
-- zapomniales hasla (mailem nowe haslo przychodzi) !Po froncie już powinno działać, czekamy na szefa!
+- zapomniales hasla (mailem nowe haslo przychodzi) !Trzeba zdecydować, czy chcemy robić rzeczy związane z mailami!
 
 \*Profile Lockin
 
-- zmien haslo
-- zmien email
 - ustaw profilowe
-- ustaw username (default to id chyba ale moze tego nie trzeba ALE wydaje mi sie ze trzeba dodac)
 - match history z wszsytkich claimed accounts sortowane po timestampie
-- potwierdzanie konta (kod z maila [+ resend?])
 - Jak zaproszenie jest juz wyslane to inny guzik (ekran konta LockIn)
+- potwierdzanie konta (kod z maila [+ resend?]) !Trzeba zdecydować, czy chcemy robić rzeczy związane z mailami!
 
 Lista znajomych
 
