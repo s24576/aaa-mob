@@ -14,8 +14,18 @@ const LockInAccountSearch: React.FC = () => {
   return (
     <View className="flex-1 p-5">
       <TextInput
-        className="h-10 border border-gray-400 mb-3 px-2"
+        style={{
+          borderWidth: 1,
+          borderColor: '#F5B800',
+          color: '#F5F5F5',
+          width: '100%',
+          borderRadius: 12,
+          marginBottom: 10,
+          paddingLeft: 10,
+          fontFamily: 'Chewy-Regular',
+        }}
         placeholder="Username"
+        placeholderTextColor="#F5F5F5"
         value={username}
         onChangeText={setUsername}
       />

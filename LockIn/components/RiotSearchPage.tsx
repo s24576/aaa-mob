@@ -16,20 +16,50 @@ const RiotSearchPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
+        style={{
+          borderWidth: 1,
+          borderColor: '#F5B800',
+          color: '#F5F5F5',
+          width: '100%',
+          borderRadius: 12,
+          marginBottom: 10,
+          paddingLeft: 10,
+          fontFamily: 'Chewy-Regular',
+        }}
         placeholder="Server"
+        placeholderTextColor="#F5F5F5"
         value={server}
         onChangeText={setServer}
       />
       <TextInput
-        style={styles.input}
+        style={{
+          borderWidth: 1,
+          borderColor: '#F5B800',
+          color: '#F5F5F5',
+          width: '100%',
+          borderRadius: 12,
+          marginBottom: 10,
+          paddingLeft: 10,
+          fontFamily: 'Chewy-Regular',
+        }}
         placeholder="Tag"
+        placeholderTextColor="#F5F5F5"
         value={tag}
         onChangeText={setTag}
       />
       <TextInput
-        style={styles.input}
+        style={{
+          borderWidth: 1,
+          borderColor: '#F5B800',
+          color: '#F5F5F5',
+          width: '100%',
+          borderRadius: 12,
+          marginBottom: 10,
+          paddingLeft: 10,
+          fontFamily: 'Chewy-Regular',
+        }}
         placeholder="Name"
+        placeholderTextColor="#F5F5F5"
         value={name}
         onChangeText={setName}
       />

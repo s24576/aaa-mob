@@ -305,12 +305,14 @@ const UserProfile = () => {
         keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
         renderItem={({ item }) => (
           <View className="flex-row justify-between items-center">
-            <Image
-              source={{
-                uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
-              }}
-              style={{ width: 50, height: 50, borderRadius: 25 }}
-            />
+            {item.name && item.name.trim() && (
+              <Image
+                source={{
+                  uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
+                }}
+                style={{ width: 50, height: 50, borderRadius: 25 }}
+              />
+            )}
             <Text
               className="text-bialas"
               onPress={() => handleProfilePress(item.server, item.id)}

@@ -67,7 +67,11 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   const handleAddToWatchList = async () => {
     try {
       await manageWatchlist(profile.server + '_' + profile.puuid)
-      alert(isWatching ? 'Removed from watchlist successfully' : 'Added to watchlist successfully')
+      alert(
+        isWatching
+          ? 'Removed from watchlist successfully'
+          : 'Added to watchlist successfully'
+      )
       setIsWatching(!isWatching)
     } catch (error) {
       alert('Failed to update watchlist')
@@ -77,7 +81,11 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   const handleClaimAccount = async () => {
     try {
       await manageMyAccount(profile.server + '_' + profile.puuid)
-      alert(isClaimed ? 'Account unclaimed successfully' : 'Account claimed successfully')
+      alert(
+        isClaimed
+          ? 'Account unclaimed successfully'
+          : 'Account claimed successfully'
+      )
       setIsClaimed(!isClaimed)
     } catch (error) {
       alert('Failed to update account claim status')
@@ -86,34 +94,64 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 
   return (
     <View className="mt-5">
-      <Text className="text-lg mb-2">Profile Information</Text>
+      <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+        Profile Information
+      </Text>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text className="flex-1 text-left">PUUID</Text>
-        <Text className="flex-1 text-left">{profile.puuid}</Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          PUUID
+        </Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          {profile.puuid}
+        </Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text className="flex-1 text-left">Game Name</Text>
-        <Text className="flex-1 text-left">{profile.gameName}</Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          Game Name
+        </Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          {profile.gameName}
+        </Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text className="flex-1 text-left">Tag Line</Text>
-        <Text className="flex-1 text-left">{profile.tagLine}</Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          Tag Line
+        </Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          {profile.tagLine}
+        </Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text className="flex-1 text-left">Server</Text>
-        <Text className="flex-1 text-left">{profile.server}</Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          Server
+        </Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          {profile.server}
+        </Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text className="flex-1 text-left">Summoner Level</Text>
-        <Text className="flex-1 text-left">{profile.summonerLevel}</Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          Summoner Level
+        </Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          {profile.summonerLevel}
+        </Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text className="flex-1 text-left">Ranked Tier</Text>
-        <Text className="flex-1 text-left">{profile.rankedTier}</Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          Ranked Tier
+        </Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          {profile.rankedTier}
+        </Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text className="flex-1 text-left">Ranked Rank</Text>
-        <Text className="flex-1 text-left">{profile.rankedRank}</Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          Ranked Rank
+        </Text>
+        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          {profile.rankedRank}
+        </Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
         <Button
@@ -139,40 +177,56 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
           disabled={isLoading}
         />
       </View>
-      <Text className="text-lg mb-2 mt-4">Ranks</Text>
+      <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+        Ranks
+      </Text>
       {profile.ranks.map((rank, index) => (
         <View
           key={index}
           className="flex-row justify-between py-2 border-b border-gray-300"
         >
-          <Text className="flex-1 text-left">{rank.queueType}</Text>
-          <Text className="flex-1 text-left">
+          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+            {rank.queueType}
+          </Text>
+          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
             {rank.tier} {rank.rank}
           </Text>
         </View>
       ))}
-      <Text className="text-lg mb-2 mt-4">Mastery</Text>
+      <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+        Mastery
+      </Text>
       {profile.mastery.map((mastery, index) => (
         <View
           key={index}
           className="flex-row justify-between py-2 border-b border-gray-300"
         >
-          <Text className="flex-1 text-left">{mastery.championName}</Text>
-          <Text className="flex-1 text-left">{mastery.championPoints}</Text>
+          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+            {mastery.championName}
+          </Text>
+          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+            {mastery.championPoints}
+          </Text>
         </View>
       ))}
-      <Text className="text-lg mb-2 mt-4">Matches</Text>
+      <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+        Matches
+      </Text>
       {profile.matches.map((match) => (
         <View
           key={match.matchId}
           className="flex-row justify-between py-2 border-b border-gray-300"
         >
-          <Text className="flex-1 text-left">{match.championName}</Text>
-          <Text className="flex-1 text-left">
+          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+            {match.championName}
+          </Text>
+          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
             {match.kills}/{match.deaths}/{match.assists}
           </Text>
           <TouchableOpacity onPress={() => handleMatchPress(match.matchId)}>
-            <Text className="font-bold">{match.matchId}</Text>
+            <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+              {match.matchId}
+            </Text>
           </TouchableOpacity>
         </View>
       ))}
@@ -197,7 +251,6 @@ const ProfilePage: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
-      <Text className="text-2xl mb-4">Profile Page</Text>
       {isLoading && <ActivityIndicator size="large" color="#F5B800" />}
       {error && (
         <View>
