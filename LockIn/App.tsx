@@ -34,6 +34,7 @@ import Announcements from './screens/Announcements'
 import CoursesBrowser from './screens/CoursesBrowser'
 import CourseDetails from './screens/CourseDetails'
 import { useFonts } from 'expo-font'
+import Settings from './screens/Settings'
 
 initI18n()
 
@@ -58,6 +59,7 @@ type RootStackParamList = {
   Announcements: undefined
   CoursesBrowser: undefined
   CourseDetails: { courseId: string }
+  Settings: undefined
 }
 
 export { RootStackParamList }
@@ -170,6 +172,9 @@ export const Layout = () => {
                           case 'Notifications':
                             iconName = 'notifications'
                             break
+                          case 'Settings':
+                            iconName = 'settings'
+                            break
                           default:
                             iconName = 'ellipse'
                         }
@@ -212,6 +217,7 @@ export const Layout = () => {
                         tabPress: handleNotificationsViewed,
                       }}
                     />
+                    <Tab.Screen name="Settings" component={Settings} />
                     <Tab.Screen
                       name="RiotProfile"
                       component={RiotProfile}
