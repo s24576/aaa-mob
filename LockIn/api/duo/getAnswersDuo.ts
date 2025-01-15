@@ -14,7 +14,7 @@ export const getAnswersDuo = async (
 ) => {
   try {
     const response = await api.get('api/duo/getAnswersDuo', {
-      params: { duoId, ...pageable, locale },
+      params: { duoId: String(duoId), ...pageable, locale: String(locale) },
     })
     return response.data
   } catch (error) {
