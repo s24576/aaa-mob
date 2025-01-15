@@ -12,12 +12,10 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { MatchDetailsScreenProps } from '../App'
 import { findPlayer } from '../api/riot/findPlayer'
 import { useQuery } from '@tanstack/react-query'
-import { addToWatchList } from '../api/profile/addWatchList'
-import { removeFromWatchList } from '../api/profile/removeWatchList'
-import { addMyAccount } from '../api/profile/addMyAccount'
-import { removeMyAccount } from '../api/profile/removeMyAccount'
 import { getWatchlistRiotProfiles } from '../api/riot/getWatchlistRiotProfiles'
 import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
+import { manageWatchlist } from '../api/profile/manageWatchlist'
+import { manageMyAccount } from '../api/profile/manageMyAccount'
 
 type RiotProfileRouteProp = RouteProp<
   {
@@ -68,15 +66,9 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 
   const handleAddToWatchList = async () => {
     try {
-      if (isWatching) {
-        await removeFromWatchList(profile.server + '_' + profile.puuid)
-        alert('Removed from watchlist successfully')
-        setIsWatching(false)
-      } else {
-        await addToWatchList(profile.server + '_' + profile.puuid)
-        alert('Added to watchlist successfully')
-        setIsWatching(true)
-      }
+      await manageWatchlist(profile.server + '_' + profile.puuid)
+      alert(isWatching ? 'Removed from watchlist successfully' : 'Added to watchlist successfully')
+      setIsWatching(!isWatching)
     } catch (error) {
       alert('Failed to update watchlist')
     }
@@ -84,15 +76,9 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
 
   const handleClaimAccount = async () => {
     try {
-      if (isClaimed) {
-        await removeMyAccount(profile.server + '_' + profile.puuid)
-        alert('Account unclaimed successfully')
-        setIsClaimed(false)
-      } else {
-        await addMyAccount(profile.server + '_' + profile.puuid)
-        alert('Account claimed successfully')
-        setIsClaimed(true)
-      }
+      await manageMyAccount(profile.server + '_' + profile.puuid)
+      alert(isClaimed ? 'Account unclaimed successfully' : 'Account claimed successfully')
+      setIsClaimed(!isClaimed)
     } catch (error) {
       alert('Failed to update account claim status')
     }

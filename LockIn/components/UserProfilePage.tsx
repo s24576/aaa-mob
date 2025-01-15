@@ -26,6 +26,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { addBio } from '../api/profile/addBio'
 import { handleChangePassword } from '../api/user/changePassword'
 import { handleChangeEmail } from '../api/user/changeEmail'
+import { manageWatchlist } from '../api/profile/manageWatchlist'
+import { manageMyAccount } from '../api/profile/manageMyAccount'
 
 const UserProfile = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -115,6 +117,34 @@ const UserProfile = () => {
     }
   }
 
+  const handleRemoveFromWatchlist = async (server: string, puuid: string) => {
+    const confirm = window.confirm(
+      'Are you sure you want to remove this account from the watchlist?'
+    )
+    if (confirm) {
+      try {
+        await manageWatchlist(server + '_' + puuid)
+        setWatchList(watchList.filter((item) => item.id !== puuid))
+      } catch (error) {
+        console.error('Error removing from watchlist:', error)
+      }
+    }
+  }
+
+  const handleRemoveMyAccount = async (server: string, puuid: string) => {
+    const confirm = window.confirm(
+      'Are you sure you want to remove this account from your accounts?'
+    )
+    if (confirm) {
+      try {
+        await manageMyAccount(server + '_' + puuid)
+        setMyAccounts(myAccounts.filter((item) => item.id !== puuid))
+      } catch (error) {
+        console.error('Error removing from my accounts:', error)
+      }
+    }
+  }
+
   if (!userData) {
     return <Text className="text-bialas">Loading...</Text>
   }
@@ -122,7 +152,7 @@ const UserProfile = () => {
   const { _id, profileIcon, bio, username, image } = userData
 
   return (
-    <View>
+    <View className="p-5 bg-wegielek items-center">
       {image && image.contentType && image.data ? (
         <Image
           source={{
@@ -142,19 +172,35 @@ const UserProfile = () => {
         onChangeText={setNewBio}
         placeholder="Enter new bio"
         placeholderTextColor="#F5F5F5"
+        style={{
+          borderWidth: 1,
+          borderColor: '#F5B800',
+          color: '#F5F5F5',
+          width: '100%',
+          borderRadius: 12,
+          marginBottom: 10,
+          paddingLeft: 10,
+        }}
       />
       <Button title="Update Bio" onPress={handleBioChange} />
       <Text className="text-bialas">Watchlist:</Text>
-      {/* <FlatList
+      <FlatList
         data={watchList}
         keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
         renderItem={({ item }) => (
-          <Text
-            className="text-bialas"
-            onPress={() => handleProfilePress(item.server, item.id)}
-          >
-            {item.name}
-          </Text>
+          <View className="flex-row justify-between items-center">
+            <Text
+              className="text-bialas"
+              onPress={() => handleProfilePress(item.server, item.id)}
+            >
+              {item.name}
+            </Text>
+            <TouchableOpacity
+              onPress={() => handleRemoveFromWatchlist(item.server, item.id)}
+            >
+              <Text className="text-red-500">X</Text>
+            </TouchableOpacity>
+          </View>
         )}
       />
       <Text className="text-bialas">My Accounts:</Text>
@@ -162,14 +208,21 @@ const UserProfile = () => {
         data={myAccounts}
         keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
         renderItem={({ item }) => (
-          <Text
-            className="text-bialas"
-            onPress={() => handleProfilePress(item.server, item.id)}
-          >
-            {item.name}
-          </Text>
+          <View className="flex-row justify-between items-center">
+            <Text
+              className="text-bialas"
+              onPress={() => handleProfilePress(item.server, item.id)}
+            >
+              {item.name}
+            </Text>
+            <TouchableOpacity
+              onPress={() => handleRemoveMyAccount(item.server, item.id)}
+            >
+              <Text className="text-red-500">X</Text>
+            </TouchableOpacity>
+          </View>
         )}
-      /> */}
+      />
       <Button title="Change password" onPress={() => setModalVisible(true)} />
       <Modal
         visible={modalVisible}
