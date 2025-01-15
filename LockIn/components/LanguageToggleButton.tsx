@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button } from 'react-native'
+import { TouchableOpacity, Image } from 'react-native'
 import { setLanguage } from '../translations/i18n'
 import i18n from 'i18next'
 
@@ -17,7 +17,16 @@ const LanguageToggleButton = () => {
   }, [])
 
   return (
-    <Button onPress={toggleLanguage} title={language === 'pl' ? 'EN' : 'PL'} />
+    <TouchableOpacity onPress={toggleLanguage}>
+      <Image
+        source={
+          language === 'pl'
+            ? require('../assets/flags/pl.png')
+            : require('../assets/flags/en.png')
+        }
+        style={{ width: 48, height: 48, borderRadius: 144 }}
+      />
+    </TouchableOpacity>
   )
 }
 

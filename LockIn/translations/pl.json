@@ -18,5 +18,13 @@
   "close": "Zamknij",
   "forgotPassword": "Zapomniałeś hasła?",
   "resetPassword": "Zresetuj hasło",
-  "languageTest": "Test języka"
+  "languageTest": "Test języka",
+  "changePassword": "Zmień hasło",
+  "oldPassword": "Stare hasło",
+  "newPassword": "Nowe hasło",
+  "confirmNewPassword": "Potwierdź nowe hasło",
+  "change": "Zmień",
+  "changeEmail": "Zmień email",
+  "newEmail": "Nowy email",
+  "password": "Hasło"
 }

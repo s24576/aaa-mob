@@ -18,5 +18,13 @@
   "close": "Close",
   "forgotPassword": "Forgot Password?",
   "resetPassword": "Reset Password",
-  "languageTest": "Language Test"
+  "languageTest": "Language Test",
+  "changePassword": "Change Password",
+  "oldPassword": "Old Password",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+  "change": "Change",
+  "changeEmail": "Change email",
+  "newEmail": "New Email",
+  "password": "Password"
 }

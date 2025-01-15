@@ -260,25 +260,31 @@ const UserProfile = () => {
         keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
         renderItem={({ item }) => (
           <View className="flex-row justify-between items-center">
-            <Image
-              source={{
-                uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
-              }}
-              style={{ width: 50, height: 50, borderRadius: 25 }}
-            />
+            {item.name && item.name.trim() && (
+              <Image
+                source={{
+                  uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
+                }}
+                style={{ width: 50, height: 50, borderRadius: 25 }}
+              />
+            )}
             <Text
               className="text-bialas"
               onPress={() => handleProfilePress(item.server, item.id)}
             >
               {item.name && item.name.trim()
                 ? `${item.name} ${item.tag}`
-                : 'PLACEHOLDER'}
+                : 'John Doe'}
             </Text>
-            <Image
-              source={rankImages[item.tier] || rankImages['IRON']}
-              style={{ width: 50, height: 50 }}
-            />
-            <Text className="text-bialas">{item.server}</Text>
+            {item.name && item.name.trim() && (
+              <Image
+                source={rankImages[item.tier] || rankImages['IRON']}
+                style={{ width: 50, height: 50 }}
+              />
+            )}
+            <Text className="text-bialas">
+              {item.name && item.name.trim() ? `${item.server}` : ''}
+            </Text>
             <TouchableOpacity
               onPress={() => handleRemoveFromWatchlist(item.server, item.id)}
             ></TouchableOpacity>
@@ -311,13 +317,17 @@ const UserProfile = () => {
             >
               {item.name && item.name.trim()
                 ? `${item.name} #${item.tag}`
-                : 'PLACEHOLDER'}
+                : 'John Doe'}
             </Text>
-            <Image
-              source={rankImages[item.tier] || rankImages['IRON']}
-              style={{ width: 50, height: 50 }}
-            />
-            <Text className="text-bialas">{item.server}</Text>
+            {item.name && item.name.trim() && (
+              <Image
+                source={rankImages[item.tier] || rankImages['IRON']}
+                style={{ width: 50, height: 50 }}
+              />
+            )}
+            <Text className="text-bialas">
+              {item.name && item.name.trim() ? `${item.server}` : ''}
+            </Text>
             <TouchableOpacity
               onPress={() => handleRemoveMyAccount(item.server, item.id)}
             ></TouchableOpacity>

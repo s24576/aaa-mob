@@ -1,12 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Text,
-  View,
-  Modal,
-  TextInput,
-  Button,
-  TouchableOpacity,
-} from 'react-native'
+import { Text, View, Modal, TextInput, TouchableOpacity } from 'react-native'
 import { handleChangePassword } from '../api/user/changePassword'
 import { handleChangeEmail } from '../api/user/changeEmail'
 import { useTranslation } from 'react-i18next'
@@ -26,6 +19,9 @@ const SettingsPage = () => {
     await handleChangePassword(input1, input2, input3, setError)
     if (!error) {
       setModalVisible(false)
+      setInput1('')
+      setInput2('')
+      setInput3('')
     }
   }
 
@@ -33,17 +29,44 @@ const SettingsPage = () => {
     await handleChangeEmail(email, input1, setError)
     if (!error) {
       setEmailModalVisible(false)
+      setEmail('')
+      setInput1('')
     }
   }
 
   return (
-    <View>
-      <Button title="Change password" onPress={() => setModalVisible(true)} />
+    <View className="justify-center items-center">
+      <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        style={{
+          backgroundColor: '#F5B800',
+          paddingVertical: 10,
+          paddingHorizontal: 30,
+          borderRadius: 18,
+          alignItems: 'center',
+          marginBottom: 15,
+        }}
+      >
+        <Text
+          style={{
+            color: '#131313',
+            fontSize: 16,
+            fontFamily: 'Chewy-Regular',
+          }}
+        >
+          {t('changePassword')}
+        </Text>
+      </TouchableOpacity>
       <Modal
         visible={modalVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => {
+          setModalVisible(false)
+          setInput1('')
+          setInput2('')
+          setInput3('')
+        }}
       >
         <View
           style={{
@@ -61,14 +84,15 @@ const SettingsPage = () => {
               borderRadius: 10,
             }}
           >
-            <Text className="text-lg font-boldd text-zoltek mb-2">
-              Change password
+            <Text className="text-lg font-bold text-zoltek mb-2 text-center">
+              {t('changePassword')}
             </Text>
             <TextInput
-              placeholder="Old password"
+              placeholder={t('oldPassword')}
               placeholderTextColor="#F5F5F5"
               value={input1}
               onChangeText={setInput1}
+              secureTextEntry
               style={{
                 borderWidth: 1,
                 borderColor: '#F5B800',
@@ -77,13 +101,15 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
+                fontFamily: 'Chewy-Regular',
               }}
             />
             <TextInput
-              placeholder="New password"
+              placeholder={t('newPassword')}
               placeholderTextColor="#F5F5F5"
               value={input2}
               onChangeText={setInput2}
+              secureTextEntry
               style={{
                 borderWidth: 1,
                 borderColor: '#F5B800',
@@ -92,13 +118,15 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
+                fontFamily: 'Chewy-Regular',
               }}
             />
             <TextInput
-              placeholder="Confirm password"
+              placeholder={t('confirmNewPassword')}
               placeholderTextColor="#F5F5F5"
               value={input3}
               onChangeText={setInput3}
+              secureTextEntry
               style={{
                 borderWidth: 1,
                 borderColor: '#F5B800',
@@ -107,30 +135,39 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
+                fontFamily: 'Chewy-Regular',
               }}
             />
             <TouchableOpacity
               onPress={handleSubmitPasswordChange}
               style={{
-                backgroundColor: '#F5B800',
+                backgroundColor:
+                  input1 && input2 && input3 ? '#F5B800' : '#B0B0B0',
                 paddingVertical: 10,
                 paddingHorizontal: 30,
                 borderRadius: 18,
                 alignItems: 'center',
                 marginBottom: 15,
               }}
+              disabled={!input1 || !input2 || !input3}
             >
               <Text
                 style={{
                   color: '#131313',
                   fontSize: 16,
+                  fontFamily: 'Chewy-Regular',
                 }}
               >
-                WYŚLIJ
+                {t('change')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setModalVisible(false)}
+              onPress={() => {
+                setModalVisible(false)
+                setInput1('')
+                setInput2('')
+                setInput3('')
+              }}
               style={{
                 backgroundColor: '#F5B800',
                 paddingVertical: 10,
@@ -143,20 +180,45 @@ const SettingsPage = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
+                  fontFamily: 'Chewy-Regular',
                 }}
               >
-                ZAMKNIJ
+                {t('close')}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      <Button title="Change email" onPress={() => setEmailModalVisible(true)} />
+      <TouchableOpacity
+        onPress={() => setEmailModalVisible(true)}
+        style={{
+          backgroundColor: '#F5B800',
+          paddingVertical: 10,
+          paddingHorizontal: 30,
+          borderRadius: 18,
+          alignItems: 'center',
+          marginBottom: 15,
+        }}
+      >
+        <Text
+          style={{
+            color: '#131313',
+            fontSize: 16,
+            fontFamily: 'Chewy-Regular',
+          }}
+        >
+          {t('changeEmail')}
+        </Text>
+      </TouchableOpacity>
       <Modal
         visible={emailModalVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setEmailModalVisible(false)}
+        onRequestClose={() => {
+          setEmailModalVisible(false)
+          setEmail('')
+          setInput1('')
+        }}
       >
         <View
           style={{
@@ -174,11 +236,11 @@ const SettingsPage = () => {
               borderRadius: 10,
             }}
           >
-            <Text className="text-lg font-boldd text-zoltek mb-2">
-              Change email
+            <Text className="text-lg font-bold text-zoltek mb-2 text-center">
+              {t('changeEmail')}
             </Text>
             <TextInput
-              placeholder="New email"
+              placeholder={t('newEmail')}
               placeholderTextColor="#F5F5F5"
               value={email}
               onChangeText={setEmail}
@@ -190,13 +252,15 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
+                fontFamily: 'Chewy-Regular',
               }}
             />
             <TextInput
-              placeholder="Password"
+              placeholder={t('password')}
               placeholderTextColor="#F5F5F5"
               value={input1}
               onChangeText={setInput1}
+              secureTextEntry
               style={{
                 borderWidth: 1,
                 borderColor: '#F5B800',
@@ -205,30 +269,37 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
+                fontFamily: 'Chewy-Regular',
               }}
             />
             <TouchableOpacity
               onPress={handleSubmitEmailChange}
               style={{
-                backgroundColor: '#F5B800',
+                backgroundColor: email && input1 ? '#F5B800' : '#B0B0B0',
                 paddingVertical: 10,
                 paddingHorizontal: 30,
                 borderRadius: 18,
                 alignItems: 'center',
                 marginBottom: 15,
               }}
+              disabled={!email || !input1}
             >
               <Text
                 style={{
                   color: '#131313',
                   fontSize: 16,
+                  fontFamily: 'Chewy-Regular',
                 }}
               >
-                WYŚLIJ
+                {t('change')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setEmailModalVisible(false)}
+              onPress={() => {
+                setEmailModalVisible(false)
+                setEmail('')
+                setInput1('')
+              }}
               style={{
                 backgroundColor: '#F5B800',
                 paddingVertical: 10,
@@ -241,16 +312,18 @@ const SettingsPage = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
+                  fontFamily: 'Chewy-Regular',
                 }}
               >
-                ZAMKNIJ
+                {t('close')}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      <Text className="text-bialas">{t('languageTest')}</Text>
-      <LanguageToggleButton />
+      <View className="justify-center items-center">
+        <LanguageToggleButton />
+      </View>
     </View>
   )
 }
