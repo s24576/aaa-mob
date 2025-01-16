@@ -67,8 +67,8 @@ const BuildsBrowserPage: React.FC = () => {
 
   if (isLoading || isVersionLoading || isFetching) {
     return (
-      <View className="bg-wegielek">
-        <ActivityIndicator size="large" color="#F5B800" />
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-bialas font-chewy">Loading...</Text>
       </View>
     )
   }
@@ -76,7 +76,9 @@ const BuildsBrowserPage: React.FC = () => {
   if (error || versionError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Error: {(error || versionError)?.message}</Text>
+        <Text className="text-bialas font-chewy">
+          Error: {(error || versionError)?.message}
+        </Text>
       </View>
     )
   }
@@ -88,8 +90,8 @@ const BuildsBrowserPage: React.FC = () => {
   const renderBuild = ({ item }: { item: Build }) => (
     <TouchableOpacity onPress={() => handleBuildPress(item._id)}>
       <View className="p-4 border-b border-gray-300">
-        <Text className="text-lg font-bold">{item.title}</Text>
-        <Text className="text-sm mb-2">{item.description}</Text>
+        <Text className="text-bialas font-chewy">{item.title}</Text>
+        <Text className="text-bialas font-chewy">{item.description}</Text>
         <Image
           source={{
             uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championId}.png`,
@@ -117,21 +119,28 @@ const BuildsBrowserPage: React.FC = () => {
         {item.runes && (
           <View className="mt-2">
             <View className="mt-1">
-              <Text>Główna runa (Dark Harvest/Electrocute itd):</Text>
-
+              <Text className="text-bialas font-chewy">
+                Główna runa (Dark Harvest/Electrocute itd):
+              </Text>
               {item.runes.runes1.length > 0 && (
-                <Text className="text-sm">{item.runes.runes1[0]}</Text>
+                <Text className="text-bialas font-chewy">
+                  {item.runes.runes1[0]}
+                </Text>
               )}
-              <Text>
+              <Text className="text-bialas font-chewy">
                 Drugie drzewko (Inspiracja/Dominacja itd):{' '}
                 {item.runes.keyStone2Id}
               </Text>
             </View>
           </View>
         )}
-        <Text>By: {item.username}</Text>
-        <Text>Upvotes: {item.likesCount}</Text>
-        <Text>Downvotes: {item.dislikesCount}</Text>
+        <Text className="text-bialas font-chewy">By: {item.username}</Text>
+        <Text className="text-bialas font-chewy">
+          Upvotes: {item.likesCount}
+        </Text>
+        <Text className="text-bialas font-chewy">
+          Downvotes: {item.dislikesCount}
+        </Text>
       </View>
     </TouchableOpacity>
   )
