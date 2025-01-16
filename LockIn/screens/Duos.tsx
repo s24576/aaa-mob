@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import React from 'react'
 import DuosPage from '../components/DuosPage'
 
-const Announcements = () => {
+const Duos = () => {
   return (
     <View>
       <DuosPage />
@@ -10,4 +10,4 @@ const Announcements = () => {
   )
 }
 
-export default Announcements
+export default Duos

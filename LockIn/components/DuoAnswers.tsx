@@ -71,6 +71,7 @@ const DuoAnswerPage = () => {
     SILVER: require('../assets/ranks/SILVER.png'),
     GOLD: require('../assets/ranks/GOLD.png'),
     PLATINUM: require('../assets/ranks/PLATINUM.png'),
+    EMERALD: require('../assets/ranks/EMERALD.png'),
     DIAMOND: require('../assets/ranks/DIAMOND.png'),
     MASTER: require('../assets/ranks/MASTER.png'),
     GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
@@ -96,7 +97,7 @@ const DuoAnswerPage = () => {
     <View className="bg-wegielek h-full p-5">
       <View className="flex-row justify-left items-center mb-3 w-full">
         <TouchableOpacity
-          onPress={() => navigation.navigate('FriendList')}
+          onPress={() => navigation.navigate('Duos')}
           className="mr-2"
         >
           <Icon name="arrow-back" size={30} color="#F5B800" />

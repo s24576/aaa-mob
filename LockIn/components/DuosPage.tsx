@@ -23,7 +23,7 @@ import { DuoScreenProps } from '../App'
 import { useSocket } from '../context/SocketProvider'
 import { answerDuo } from '../api/duo/answerDuo'
 
-interface Announcement {
+interface Duo {
   _id: string
   author: string
   positions: string[]
@@ -106,12 +106,12 @@ const DuosPage = () => {
   const navigation = useNavigation<DuoScreenProps['navigation']>()
 
   const {
-    data: announcements,
+    data: Duos,
     isLoading,
     error,
-    refetch: refetchAnnouncements,
+    refetch: refetchDuos,
   } = useQuery({
-    queryKey: ['announcements', filters],
+    queryKey: ['Duos', filters],
     queryFn: () =>
       getDuos(filters, { size: 5, sort: 'timestamp', direction: 'DESC' }),
   })
@@ -202,7 +202,7 @@ const DuosPage = () => {
         languages: [],
         championIds: [],
       })
-      refetchAnnouncements()
+      refetchDuos()
     } catch (error) {
       console.error('Error creating duo:', error)
     }
@@ -233,11 +233,11 @@ const DuosPage = () => {
       champions: [],
       languages: [],
     })
-    refetchAnnouncements()
+    refetchDuos()
   }
 
   const handleDuoAnwserPress = () => {
-    navigation.navigate('Duo')
+    navigation.navigate('DuoAnswers')
   }
 
   const handleApplyForDuo = async () => {
@@ -255,7 +255,7 @@ const DuosPage = () => {
       console.log('Applied for duo successfully:', response)
       setApplyModalVisible(false)
       setApplyMessage('')
-      refetchAnnouncements()
+      refetchDuos()
     } catch (error) {
       console.error('Error applying for duo:', error)
       console.log(answerDuo, answer)
@@ -268,13 +268,14 @@ const DuosPage = () => {
     SILVER: require('../assets/ranks/SILVER.png'),
     GOLD: require('../assets/ranks/GOLD.png'),
     PLATINUM: require('../assets/ranks/PLATINUM.png'),
+    EMERALD: require('../assets/ranks/EMERALD.png'),
     DIAMOND: require('../assets/ranks/DIAMOND.png'),
     MASTER: require('../assets/ranks/MASTER.png'),
     GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
     CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
   }
 
-  const renderAnnouncement = ({ item }: { item: Announcement }) => (
+  const renderDuo = ({ item }: { item: Duo }) => (
     <View className="mb-2 border border-bialas p-3 rounded-lg">
       <Text className="text-bialas font-chewy">Author: {item.author}</Text>
       <Image
@@ -336,9 +337,9 @@ const DuosPage = () => {
   return (
     <View className="px-5 pt-2">
       <FlatList
-        data={announcements?.content}
+        data={Duos?.content}
         keyExtractor={(item) => item._id}
-        renderItem={renderAnnouncement}
+        renderItem={renderDuo}
         ListEmptyComponent={
           <Text className="text-bialas">No posts found.</Text>
         }
@@ -991,6 +992,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#131313',
     padding: 15,
     borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
     width: '80%',
     maxHeight: '80%',
   },

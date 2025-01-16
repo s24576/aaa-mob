@@ -30,12 +30,12 @@ import FriendRequests from './screens/FriendRequests'
 import BuildDetails from './screens/BuildDetails'
 import ChatPage from './components/MessageRoomPage'
 import { Provider as PaperProvider } from 'react-native-paper'
-import Announcements from './screens/Duos'
+import Duos from './screens/Duos'
 import CoursesBrowser from './screens/CoursesBrowser'
 import CourseDetails from './screens/CourseDetails'
 import { useFonts } from 'expo-font'
 import Settings from './screens/Settings'
-import Duo from './screens/DuoAnswer'
+import DuoAnswers from './screens/DuoAnswer'
 
 initI18n()
 
@@ -57,11 +57,11 @@ type RootStackParamList = {
   FriendRequests: undefined
   BuildDetails: { buildId: string }
   ChatPage: { chatId: string }
-  Announcements: undefined
+  Duos: undefined
   CoursesBrowser: undefined
   CourseDetails: { courseId: string }
   Settings: undefined
-  Duo: undefined
+  DuoAnswers: undefined
 }
 
 export { RootStackParamList }
@@ -256,8 +256,8 @@ export const Layout = () => {
                       options={{ tabBarButton: () => null }}
                     />
                     <Tab.Screen
-                      name="Announcements"
-                      component={Announcements}
+                      name="Duos"
+                      component={Duos}
                       options={{ tabBarButton: () => null }}
                     />
                     <Tab.Screen
@@ -271,8 +271,8 @@ export const Layout = () => {
                       options={{ tabBarButton: () => null }}
                     />
                     <Tab.Screen
-                      name="Duo"
-                      component={Duo}
+                      name="DuoAnswers"
+                      component={DuoAnswers}
                       options={{ tabBarButton: () => null }}
                     />
                   </Tab.Navigator>
@@ -320,4 +320,7 @@ export type CourseDetailsScreenProps = NativeStackScreenProps<
   'CourseDetails'
 >
 
-export type DuoScreenProps = NativeStackScreenProps<RootStackParamList, 'Duo'>
+export type DuoScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'DuoAnswers'
+>

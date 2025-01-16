@@ -41,11 +41,8 @@ Zaproszenia do znajomych
 - dodac widok do zaproszen z duo
 
 scrollowanie + page
--strzalka cofka
 -wyglac srodka posta
-ikonki na range
 placeholder braku rangi
-ramka na modale
 
 Messenger
 
