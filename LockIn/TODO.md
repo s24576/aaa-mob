@@ -20,7 +20,6 @@ Zaproszenia do znajomych
 
 - dodac summonery
 - dodac date utworzenia
-- usuwanie buildow z zapisanych i "moich"
 - zmiana guzika gdy polubione juz jest
 
 \*Reporty

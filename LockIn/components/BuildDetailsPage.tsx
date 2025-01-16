@@ -63,10 +63,11 @@ const BuildDetailsPage: React.FC = () => {
         console.error('Error fetching user data:', error)
       }
     }
+    fetchUserData()
   }, [])
 
   useEffect(() => {
-    if (comments?.content) {
+    if (comments?.content?.length) {
       comments.content.forEach((comment: any) => {
         getResponses(comment._id, { size: 5 }).then((data) => {
           setResponses((prev) => ({ ...prev, [comment._id]: data.content }))
@@ -228,7 +229,7 @@ const BuildDetailsPage: React.FC = () => {
   if (isLoading || isVersionLoading || isCommentsLoading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Loading...</Text>
+        <Text className="text-bialas font-chewy">Loading...</Text>
       </View>
     )
   }
@@ -236,7 +237,9 @@ const BuildDetailsPage: React.FC = () => {
   if (error || versionError || commentsError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Error: {(error || versionError || commentsError)?.message}</Text>
+        <Text className="text-bialas font-chewy">
+          Error: {(error || versionError || commentsError)?.message}
+        </Text>
       </View>
     )
   }
@@ -244,21 +247,23 @@ const BuildDetailsPage: React.FC = () => {
   if (!build) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>No build information found.</Text>
+        <Text className="text-bialas font-chewy">
+          No build information found.
+        </Text>
       </View>
     )
   }
 
   if (!userData) {
-    return <Text>Loading...</Text>
+    return <Text className="text-bialas font-chewy">Loading...</Text>
   }
 
   const { username } = userData
 
   return (
     <ScrollView className="flex-1 p-4">
-      <Text className="text-2xl font-bold">{build.title}</Text>
-      <Text className="text-lg mb-2">{build.description}</Text>
+      <Text className="text-bialas font-chewy">{build.title}</Text>
+      <Text className="text-bialas font-chewy">{build.description}</Text>
       <Image
         source={{
           uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${build.championId}.png`,
@@ -286,17 +291,25 @@ const BuildDetailsPage: React.FC = () => {
       {build.runes && (
         <View className="mt-2">
           <View className="mt-1">
-            <Text>Główna runa:</Text>
+            <Text className="text-bialas font-chewy">Główna runa:</Text>
             {build.runes.runes1.length > 0 && (
-              <Text className="text-sm">{build.runes.runes1[0]}</Text>
+              <Text className="text-bialas font-chewy">
+                {build.runes.runes1[0]}
+              </Text>
             )}
-            <Text>Drugie drzewko: {build.runes.keyStone2Id}</Text>
+            <Text className="text-bialas font-chewy">
+              Drugie drzewko: {build.runes.keyStone2Id}
+            </Text>
           </View>
         </View>
       )}
-      <Text>By: {build.username}</Text>
-      <Text>Upvotes: {build.likesCount}</Text>
-      <Text>Downvotes: {build.dislikesCount}</Text>
+      <Text className="text-bialas font-chewy">By: {build.username}</Text>
+      <Text className="text-bialas font-chewy">
+        Upvotes: {build.likesCount}
+      </Text>
+      <Text className="text-bialas font-chewy">
+        Downvotes: {build.dislikesCount}
+      </Text>
       <View className="flex-row mt-4">
         <Button title="Like" onPress={handleLike} />
         <Button title="Dislike" onPress={handleDislike} />
@@ -306,12 +319,14 @@ const BuildDetailsPage: React.FC = () => {
         />
       </View>
       <View className="mt-4 mb-6">
-        <Text className="text-xl font-bold">Comments</Text>
+        <Text className="text-bialas font-chewy">Comments</Text>
         <TextInput
           value={newComment}
           onChangeText={setNewComment}
           placeholder={replyingTo ? 'Add a reply' : 'Add a comment'}
-          className="border p-2 mb-2"
+          placeholderTextColor="#F5F5F5"
+          className="border border-white p-2 mb-2"
+          style={{ color: '#F5F5F5' }}
         />
         <Button
           title={replyingTo ? 'Submit Reply' : 'Submit Comment'}
@@ -325,10 +340,14 @@ const BuildDetailsPage: React.FC = () => {
               key={comment._id}
               className="mt-2 p-2 border-b border-gray-300"
             >
-              <Text className="font-bold">{comment.username}</Text>
-              <Text>{comment.comment}</Text>
-              <Text>Upvotes: {comment.likesCount}</Text>
-              <Text>Downvotes: {comment.dislikesCount}</Text>
+              <Text className="text-bialas font-chewy">{comment.username}</Text>
+              <Text className="text-bialas font-chewy">{comment.comment}</Text>
+              <Text className="text-bialas font-chewy">
+                Upvotes: {comment.likesCount}
+              </Text>
+              <Text className="text-bialas font-chewy">
+                Downvotes: {comment.dislikesCount}
+              </Text>
               <View className="flex-row mt-2">
                 <Button
                   title="Like"
@@ -351,7 +370,9 @@ const BuildDetailsPage: React.FC = () => {
                   handleReplyTextChange(comment._id, text)
                 }
                 placeholder="Add a reply"
-                className="border p-2 mt-2"
+                placeholderTextColor="#F5F5F5"
+                className="border border-white p-2 mb-2"
+                style={{ color: '#F5F5F5' }}
               />
               <Button
                 title="Submit Reply"
@@ -359,13 +380,21 @@ const BuildDetailsPage: React.FC = () => {
               />
               {responses[comment._id]?.length > 0 && (
                 <View className="ml-4 mt-2">
-                  <Text className="font-bold">Responses:</Text>
+                  <Text className="text-bialas font-chewy">Responses:</Text>
                   {responses[comment._id].map((response: any) => (
                     <View key={response._id} className="mt-1">
-                      <Text className="font-bold">{response.username}</Text>
-                      <Text>{response.comment}</Text>
-                      <Text>Upvotes: {response.likesCount}</Text>
-                      <Text>Downvotes: {response.dislikesCount}</Text>
+                      <Text className="text-bialas font-chewy">
+                        {response.username}
+                      </Text>
+                      <Text className="text-bialas font-chewy">
+                        {response.comment}
+                      </Text>
+                      <Text className="text-bialas font-chewy">
+                        Upvotes: {response.likesCount}
+                      </Text>
+                      <Text className="text-bialas font-chewy">
+                        Downvotes: {response.dislikesCount}
+                      </Text>
                       <View className="flex-row mt-2">
                         <Button
                           title="Like"
@@ -389,7 +418,7 @@ const BuildDetailsPage: React.FC = () => {
             </View>
           ))
         ) : (
-          <Text>Empty</Text>
+          <Text className="text-bialas font-chewy">Empty</Text>
         )}
       </View>
     </ScrollView>

@@ -1,42 +1,34 @@
-[
-  {
-    "gameName": "CoarseDiamond",
-    "profileIconId": "3795",
-    "puuid": "LSQV9LXcpiQ7UzFlAnEl9h23_5of7MO65QuyJL-0BFjPElr2TvQV7aym23egyla5EYO1c4p-GM8wlQ",
-    "rank": "I",
-    "server": "eun1",
-    "summonerLevel": 451,
-    "tagLine": "EUNE",
-    "tier": "SILVER"
+{
+  "_id": "e63f234e-deca-42f3-b8e0-872139192780",
+  "championId": "KogMaw",
+  "item1": "223006",
+  "item2": "223124",
+  "item3": "223072",
+  "item4": "223139",
+  "item5": "223302",
+  "item6": "223085",
+  "position": "Bottom",
+  "runes": {
+    "keyStone1Id": "8000",
+    "runes1": ["8008", "9111", "9103", "8014"],
+    "keyStone2Id": "8100",
+    "runes2": ["8139", "8135"],
+    "statShards": ["AttackSpeed", "Adaptive", "HP"]
   },
-  {
-    "gameName": "Kira",
-    "profileIconId": "4073",
-    "puuid": "l6kQb6oCkTofb__oE5iQffnJ1euuHLO4X4VjMg4vnHYzkq3zKuLRMO_UGhSS8gHrQoakmQxQ_Tsesg",
-    "rank": "IV",
-    "server": "eun1",
-    "summonerLevel": 286,
-    "tagLine": "BZ50",
-    "tier": "GOLD"
-  },
-  {
-    "gameName": "Oriol",
-    "profileIconId": "3463",
-    "puuid": "KCin57XOJVygkFwfbdG1zXM_jsy5q4JFasiWBam9_xR9cHd83jN-0asCG_D41SPPV-OeLWx7jDT8gA",
-    "rank": "",
-    "server": "EUW1",
-    "summonerLevel": 711,
-    "tagLine": "ECPU",
-    "tier": ""
-  },
-  {
-    "gameName": "Schmondragon",
-    "profileIconId": "1394",
-    "puuid": "Q_WL9IUWxvSgJ-0bgTbG3AFWR5maysV7k8fTRKtkKjuMltxdgGDrO7DK6qUTLThts84jHgKBHJvbDA",
-    "rank": "I",
-    "server": "EUW1",
-    "summonerLevel": 848,
-    "tagLine": "EUW",
-    "tier": "PLATINUM"
-  }
-]
+  "patch": null,
+  "summoner1Name": "Haste",
+  "summoner2Name": "Flash",
+  "username": "test500",
+  "title": "kogmaw 1v9 build",
+  "description": "ez game",
+  "timestamp": 1736875326,
+  "keystone1": null,
+  "runes1": null,
+  "keystone2": null,
+  "runes2": null,
+  "likesCount": 1,
+  "dislikesCount": 0,
+  "canReact": false,
+  "reaction": false,
+  "saved": false
+}
