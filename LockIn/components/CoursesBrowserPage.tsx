@@ -42,7 +42,9 @@ const CoursesBrowserPage = ({ navigation, route }: CoursesBrowserProps) => {
   if (error) {
     return (
       <View className="justify-center items-center">
-        <Text className="text-lg">Error fetching courses: {error.message}</Text>
+        <Text className="text-bialas font-chewy">
+          Error fetching courses: {error.message}
+        </Text>
       </View>
     )
   }
@@ -59,10 +61,10 @@ const CoursesBrowserPage = ({ navigation, route }: CoursesBrowserProps) => {
         {item.picture && (
           <Image source={{ uri: item.picture }} className="w-full h-40 mb-2" />
         )}
-        <Text className="text-lg font-bold">{item.title}</Text>
-        <Text className="text-sm mb-2">{item.description}</Text>
-        <Text className="text-sm">Price: {item.price}</Text>
-        <Text className="text-sm">By: {item.username}</Text>
+        <Text className="text-bialas font-chewy">{item.title}</Text>
+        <Text className="text-bialas font-chewy">{item.description}</Text>
+        <Text className="text-bialas font-chewy">Price: {item.price}</Text>
+        <Text className="text-bialas font-chewy">By: {item.username}</Text>
       </View>
     </TouchableOpacity>
   )
