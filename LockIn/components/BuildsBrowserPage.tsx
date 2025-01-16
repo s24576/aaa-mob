@@ -5,7 +5,9 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  ScrollView,
+  Modal,
+  TouchableWithoutFeedback,
+  StyleSheet,
 } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { getBuilds } from '../api/build/getBuilds'
@@ -13,7 +15,7 @@ import { getVersion } from '../api/ddragon/version'
 import { getChampionNames } from '../api/ddragon/getChampionNames'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { BuildDetailsScreenProps } from '../App'
-import { Menu, Button, TextInput } from 'react-native-paper'
+import { Button, TextInput } from 'react-native-paper'
 
 interface Build {
   _id: string
@@ -51,6 +53,21 @@ const BuildsBrowserPage: React.FC = () => {
   const [filterAuthorName, setFilterAuthorName] = useState<string | undefined>(
     undefined
   )
+  const [pickerModal, setPickerModal] = useState<{
+    visible: boolean
+    type: string
+    options: string[]
+    onSelect: (value: string[]) => void
+    multiSelect: boolean
+    selectedValues: string[]
+  }>({
+    visible: false,
+    type: '',
+    options: [],
+    onSelect: () => {},
+    multiSelect: false,
+    selectedValues: [],
+  })
 
   const {
     data: buildsData,
@@ -60,7 +77,8 @@ const BuildsBrowserPage: React.FC = () => {
     isFetching,
   } = useQuery({
     queryKey: ['builds', filterChampion, filterAuthorName],
-    queryFn: () => getBuilds(filterAuthorName, filterChampion),
+    queryFn: () =>
+      getBuilds(filterAuthorName || undefined, filterChampion || undefined),
     enabled: false,
   })
 
@@ -99,7 +117,7 @@ const BuildsBrowserPage: React.FC = () => {
   if (isLoading || isVersionLoading || isFetching || isChampionsLoading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Loading...</Text>
+        <Text className="text-bialas font-chewy">Loading...</Text>
       </View>
     )
   }
@@ -107,7 +125,9 @@ const BuildsBrowserPage: React.FC = () => {
   if (error || versionError || championsError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Error: {(error || versionError || championsError)?.message}</Text>
+        <Text className="text-bialas font-chewy">
+          Error: {(error || versionError || championsError)?.message}
+        </Text>
       </View>
     )
   }
@@ -120,8 +140,8 @@ const BuildsBrowserPage: React.FC = () => {
   const renderBuild = ({ item }: { item: Build }) => (
     <TouchableOpacity onPress={() => handleBuildPress(item._id)}>
       <View className="p-4 border-b border-gray-300">
-        <Text className="text-lg font-bold">{item.title}</Text>
-        <Text className="text-sm mb-2">{item.description}</Text>
+        <Text className="text-bialas font-chewy">{item.title}</Text>
+        <Text className="text-bialas font-chewy">{item.description}</Text>
         <Image
           source={{
             uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championId}.png`,
@@ -149,21 +169,29 @@ const BuildsBrowserPage: React.FC = () => {
         {item.runes && (
           <View className="mt-2">
             <View className="mt-1">
-              <Text>Główna runa (Dark Harvest/Electrocute itd):</Text>
+              <Text className="text-bialas font-chewy">
+                Główna runa (Dark Harvest/Electrocute itd):
+              </Text>
 
               {item.runes.runes1.length > 0 && (
-                <Text className="text-sm">{item.runes.runes1[0]}</Text>
+                <Text className="text-bialas font-chewy">
+                  {item.runes.runes1[0]}
+                </Text>
               )}
-              <Text>
+              <Text className="text-bialas font-chewy">
                 Drugie drzewko (Inspiracja/Dominacja itd):{' '}
                 {item.runes.keyStone2Id}
               </Text>
             </View>
           </View>
         )}
-        <Text>By: {item.username}</Text>
-        <Text>Upvotes: {item.likesCount}</Text>
-        <Text>Downvotes: {item.dislikesCount}</Text>
+        <Text className="text-bialas font-chewy">By: {item.username}</Text>
+        <Text className="text-bialas font-chewy">
+          Upvotes: {item.likesCount}
+        </Text>
+        <Text className="text-bialas font-chewy">
+          Downvotes: {item.dislikesCount}
+        </Text>
       </View>
     </TouchableOpacity>
   )
@@ -172,14 +200,19 @@ const BuildsBrowserPage: React.FC = () => {
   const toggleMenu = () => setMenuVisible(!menuVisible)
 
   // Handle champion selection
-  const handleChampionSelect = (champion: string) => {
-    setSelectedChampion(champion)
-    setMenuVisible(false)
+  const handleChampionSelect = (selectedChampions: string[]) => {
+    const selectedChampionKey = Object.keys(champions).find(
+      (key) => champions[key] === selectedChampions[0]
+    )
+    setSelectedChampion(selectedChampionKey)
+    console.log('Selected champion key:', selectedChampionKey)
+    setPickerModal({ ...pickerModal, visible: false })
   }
 
   const handleFilterPress = () => {
     setFilterChampion(selectedChampion)
     setFilterAuthorName(authorName)
+    refetch() // Refetch builds when filters are applied
   }
 
   const handleClearFilters = () => {
@@ -187,64 +220,178 @@ const BuildsBrowserPage: React.FC = () => {
     setAuthorName(undefined)
     setFilterChampion(undefined)
     setFilterAuthorName(undefined)
+    refetch() // Refetch builds when filters are cleared
+  }
+
+  const openPickerModal = (
+    type: string,
+    options: string[],
+    onSelect: (value: string[]) => void,
+    multiSelect: boolean = false,
+    selectedValues: string[] = []
+  ) => {
+    setPickerModal({
+      visible: true,
+      type,
+      options,
+      onSelect,
+      multiSelect,
+      selectedValues,
+    })
   }
 
   return (
-    <FlatList
-      data={buildsData.content}
-      keyExtractor={(item) => item._id}
-      renderItem={renderBuild}
-      ListHeaderComponent={
-        <>
-          <View className="items-center">
-            <Menu
-              visible={menuVisible}
-              onDismiss={() => setMenuVisible(false)}
-              anchor={<Button onPress={toggleMenu}>Select Champion</Button>}
-            >
-              {champions &&
-                Object.keys(champions)
-                  .sort()
-                  .map((champion) => (
-                    <Menu.Item
-                      key={champion}
-                      title={
-                        <View
-                          style={{ flexDirection: 'row', alignItems: 'center' }}
-                        >
+    <>
+      <FlatList
+        data={buildsData?.content || []} // Handle case where buildsData is undefined
+        keyExtractor={(item) => item._id}
+        renderItem={renderBuild}
+        ListHeaderComponent={
+          <>
+            <View className="items-center">
+              <Button
+                onPress={() =>
+                  openPickerModal(
+                    'Select Champions',
+                    Object.keys(champions)
+                      .sort()
+                      .map((key) => champions[key]),
+                    (values) => handleChampionSelect(values),
+                    false, // Disable multi-select
+                    selectedChampion ? [selectedChampion] : []
+                  )
+                }
+              >
+                <Text>Select Champions</Text>
+              </Button>
+              <TextInput
+                label="Author Name"
+                value={authorName}
+                onChangeText={setAuthorName}
+                style={{ marginVertical: 10, width: '80%' }}
+              />
+              <Button onPress={handleFilterPress}>
+                <Text>Filter Builds</Text>
+              </Button>
+              <Button onPress={handleClearFilters}>
+                <Text>Clear Filters</Text>
+              </Button>
+            </View>
+            {selectedChampion && (
+              <View className="p-4">
+                <Button onPress={handleClearFilters}>
+                  <Text>Clear Filters</Text>
+                </Button>
+              </View>
+            )}
+          </>
+        }
+        ListFooterComponent={<View className="mb-24" />}
+      />
+      {/* modal na wybieranie championów */}
+      <Modal
+        visible={pickerModal.visible}
+        animationType="fade"
+        transparent
+        onRequestClose={() =>
+          setPickerModal({ ...pickerModal, visible: false })
+        }
+      >
+        <TouchableWithoutFeedback
+          onPress={() => setPickerModal({ ...pickerModal, visible: false })}
+        >
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <Text className="text-bialas font-chewy">
+                  {pickerModal.type}
+                </Text>
+                <FlatList
+                  data={pickerModal.options}
+                  keyExtractor={(item) => item}
+                  renderItem={({ item: option }) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        pickerModal.onSelect([option])
+                        setPickerModal({ ...pickerModal, visible: false })
+                      }}
+                    >
+                      <View
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                      >
+                        {pickerModal.type === 'Select Champions' ? (
                           <Image
                             source={{
-                              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion}.png`,
+                              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${Object.keys(
+                                champions
+                              ).find((key) => champions[key] === option)}.png`,
                             }}
                             style={{ width: 20, height: 20, marginRight: 10 }}
                           />
-                          <Text>{champions[champion]}</Text>
-                        </View>
-                      }
-                      onPress={() => handleChampionSelect(champion)}
-                    />
-                  ))}
-            </Menu>
+                        ) : null}
+                        <Text
+                          className="text-bialas font-chewy"
+                          style={[
+                            styles.option,
+                            pickerModal.selectedValues.includes(option) &&
+                              styles.selectedOption,
+                          ]}
+                        >
+                          {option}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                />
+                <View style={styles.buttonContainer}>
+                  <Button
+                    onPress={() =>
+                      setPickerModal({ ...pickerModal, visible: false })
+                    }
+                  >
+                    Back
+                  </Button>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-          <View className="p-4">
-            <TextInput
-              label="Author Name"
-              value={authorName}
-              onChangeText={setAuthorName}
-            />
-            <Button onPress={handleFilterPress}>Filter</Button>
-          </View>
-          {selectedChampion && (
-            <View className="p-4">
-              <Text>Selected Champion: {champions[selectedChampion]}</Text>
-              <Button onPress={handleClearFilters}>Clear Filters</Button>
-            </View>
-          )}
-        </>
-      }
-      ListFooterComponent={<View className="mb-24" />}
-    />
+        </TouchableWithoutFeedback>
+      </Modal>
+    </>
   )
 }
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingVertical: 20,
+  },
+  modalContent: {
+    backgroundColor: '#131313',
+    padding: 15,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    width: '80%',
+    maxHeight: '80%',
+  },
+  option: {
+    padding: 10,
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    color: '#F5F5F5',
+  },
+  selectedOption: {
+    color: '#F5B800',
+  },
+  buttonContainer: {
+    marginTop: 10,
+    marginBottom: 0,
+  },
+})
 
 export default BuildsBrowserPage
