@@ -35,7 +35,7 @@ import CoursesBrowser from './screens/CoursesBrowser'
 import CourseDetails from './screens/CourseDetails'
 import { useFonts } from 'expo-font'
 import Settings from './screens/Settings'
-import Duo from './screens/Duo'
+import Duo from './screens/DuoAnswer'
 
 initI18n()
 
@@ -113,11 +113,6 @@ export const Layout = () => {
       setNewNotifications((prev) => prev + 1)
     }
   }, [receivedMessage])
-
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('token')
-    setIsLoggedIn(false)
-  }
 
   const handleNotificationsViewed = () => {
     setNewNotifications(0)
