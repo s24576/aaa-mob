@@ -40,7 +40,7 @@ const ChatPage: React.FC = () => {
   const [isAddFriendModalVisible, setAddFriendModalVisible] = useState(false)
   const [isLeaveChatModalVisible, setLeaveChatModalVisible] = useState(false)
   const [selectedFriends, setSelectedFriends] = useState<string[]>([])
-  const { memberAction } = useSocket()
+  const { memberAction, refreshMessages, setRefreshMessages } = useSocket()
   const [isMembersModalVisible, setMembersModalVisible] = useState(false)
 
   const toggleMembersModal = () => {
@@ -257,11 +257,18 @@ const ChatPage: React.FC = () => {
 
   // Refresh chat rooms and current chat when memberAction is received
   useEffect(() => {
-    if (memberAction && memberAction.includes(chatId)) {
+    if (memberAction) {
       queryClient.invalidateQueries({ queryKey: ['chat', chatId] })
       queryClient.invalidateQueries({ queryKey: ['messages', chatId] })
     }
   }, [memberAction, queryClient, chatId])
+
+  useEffect(() => {
+    if (refreshMessages) {
+      queryClient.invalidateQueries({ queryKey: ['messages', chatId] })
+      setRefreshMessages(false)
+    }
+  }, [refreshMessages, queryClient, chatId])
 
   return (
     <View className="bg-wegielek h-full p-5">

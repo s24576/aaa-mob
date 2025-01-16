@@ -19,6 +19,8 @@ interface SocketContextType {
   setNotificationCount: React.Dispatch<React.SetStateAction<number>>
   duoAnswer: string
   duoNotification: string
+  refreshMessages: boolean
+  setRefreshMessages: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 interface SocketProviderProps {
@@ -40,6 +42,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     duoNotification,
   } = useWebSocket(username)
   const [notificationCount, setNotificationCount] = useState(0)
+  const [refreshMessages, setRefreshMessages] = useState(false)
 
   useEffect(() => {
     if (
@@ -48,7 +51,10 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     ) {
       setNotificationCount((prev) => prev + 1)
     }
-  }, [receivedMessage, memberAction])
+    if (messengerMessage) {
+      setRefreshMessages(true)
+    }
+  }, [receivedMessage, memberAction, messengerMessage])
 
   return (
     <SocketContext.Provider
@@ -62,6 +68,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setNotificationCount,
         duoAnswer,
         duoNotification,
+        refreshMessages,
+        setRefreshMessages,
       }}
     >
       {children}
