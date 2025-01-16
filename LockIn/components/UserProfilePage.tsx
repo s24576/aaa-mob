@@ -190,158 +190,136 @@ const UserProfile = () => {
   const { _id, profileIcon, bio, username, image } = userData
 
   return (
-    <ScrollView
-      style={{ padding: 5, backgroundColor: '#wegielek' }}
-      contentContainerStyle={{ alignItems: 'center' }}
-    >
-      {userData.image && userData.image.contentType && userData.image.data ? (
-        <Image
-          source={{
-            uri: `data:${userData.image.contentType};base64,${userData.image.data}`,
+    <FlatList
+      data={[]}
+      ListHeaderComponent={
+        <View
+          style={{
+            padding: 5,
+            backgroundColor: '#wegielek',
+            alignItems: 'center',
           }}
-          style={{ width: 160, height: 160, borderRadius: 80 }}
-        />
-      ) : (
-        <EvilIcons
-          name="user"
-          size={160}
-          color="#F5F5F5"
-          style={{ width: 160, height: 160, borderRadius: 80 }}
-        />
-      )}
-      <Text
-        style={{
-          color: '#F5F5F5',
-          fontFamily: 'Chewy-Regular',
-          fontSize: 24,
-        }}
-      >
-        {username}
-      </Text>
-      <Text
-        style={{
-          color: '#F5F5F5',
-          fontFamily: 'Chewy-Regular',
-        }}
-      >
-        {bio}
-      </Text>
-      <TextInput
-        className="text-bialas"
-        value={newBio}
-        onChangeText={setNewBio}
-        placeholder="Enter new bio"
-        placeholderTextColor="#F5F5F5"
-        style={{
-          borderWidth: 1,
-          borderColor: '#F5B800',
-          color: '#F5F5F5',
-          width: '100%',
-          borderRadius: 12,
-          marginBottom: 10,
-          paddingLeft: 10,
-        }}
-      />
-      <Button title="Update Bio" onPress={handleBioChange} />
-      <Button
-        title="Upload Profile Picture"
-        onPress={handleProfilePictureUpload}
-      />
-      <Text
-        style={{
-          color: '#F5F5F5',
-          fontFamily: 'Chewy-Regular',
-        }}
-      >
-        Watchlist:
-      </Text>
-      <FlatList
-        data={watchList}
-        keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
-        renderItem={({ item }) => (
-          <View className="flex-row justify-between items-center">
-            {item.name && item.name.trim() && (
-              <Image
-                source={{
-                  uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
-                }}
-                style={{ width: 50, height: 50, borderRadius: 25 }}
-              />
+        >
+          {userData.image &&
+          userData.image.contentType &&
+          userData.image.data ? (
+            <Image
+              source={{
+                uri: `data:${userData.image.contentType};base64,${userData.image.data}`,
+              }}
+              style={{ width: 160, height: 160, borderRadius: 80 }}
+            />
+          ) : (
+            <EvilIcons
+              name="user"
+              size={160}
+              color="#F5F5F5"
+              style={{ width: 160, height: 160, borderRadius: 80 }}
+            />
+          )}
+          <Text
+            style={{
+              color: '#F5F5F5',
+              fontFamily: 'Chewy-Regular',
+              fontSize: 24,
+            }}
+          >
+            {username}
+          </Text>
+          <Text
+            style={{
+              color: '#F5F5F5',
+              fontFamily: 'Chewy-Regular',
+            }}
+          >
+            {bio}
+          </Text>
+          <TextInput
+            className="text-bialas"
+            value={newBio}
+            onChangeText={setNewBio}
+            placeholder="Enter new bio"
+            placeholderTextColor="#F5F5F5"
+            style={{
+              borderWidth: 1,
+              borderColor: '#F5B800',
+              color: '#F5F5F5',
+              width: '100%',
+              borderRadius: 12,
+              marginBottom: 10,
+              paddingLeft: 10,
+            }}
+          />
+          <Button title="Update Bio" onPress={handleBioChange} />
+          <Button
+            title="Upload Profile Picture"
+            onPress={handleProfilePictureUpload}
+          />
+          <Text
+            style={{
+              color: '#F5F5F5',
+              fontFamily: 'Chewy-Regular',
+            }}
+          >
+            Watchlist:
+          </Text>
+        </View>
+      }
+      ListFooterComponent={
+        <View>
+          <Text
+            style={{
+              color: '#F5F5F5',
+              fontFamily: 'Chewy-Regular',
+            }}
+          >
+            My Accounts:
+          </Text>
+          <FlatList
+            data={myAccounts}
+            keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
+            renderItem={({ item }) => (
+              <View className="flex-row justify-between items-center">
+                {item.name && item.name.trim() && (
+                  <Image
+                    source={{
+                      uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
+                    }}
+                    style={{ width: 50, height: 50, borderRadius: 25 }}
+                  />
+                )}
+                <Text
+                  className="text-bialas"
+                  onPress={() => handleProfilePress(item.server, item.id)}
+                >
+                  {item.name && item.name.trim()
+                    ? `${item.name} #${item.tag}`
+                    : 'John Doe'}
+                </Text>
+                {item.name && item.name.trim() && (
+                  <Image
+                    source={rankImages[item.tier] || rankImages['IRON']}
+                    style={{ width: 50, height: 50 }}
+                  />
+                )}
+                <Text className="text-bialas">
+                  {item.name && item.name.trim() ? `${item.server}` : ''}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => handleRemoveMyAccount(item.server, item.id)}
+                ></TouchableOpacity>
+              </View>
             )}
-            <Text
-              className="text-bialas"
-              onPress={() => handleProfilePress(item.server, item.id)}
-            >
-              {item.name && item.name.trim()
-                ? `${item.name} ${item.tag}`
-                : 'John Doe'}
-            </Text>
-            {item.name && item.name.trim() && (
-              <Image
-                source={rankImages[item.tier] || rankImages['IRON']}
-                style={{ width: 50, height: 50 }}
-              />
-            )}
-            <Text className="text-bialas">
-              {item.name && item.name.trim() ? `${item.server}` : ''}
-            </Text>
-            <TouchableOpacity
-              onPress={() => handleRemoveFromWatchlist(item.server, item.id)}
-            ></TouchableOpacity>
-          </View>
-        )}
-      />
-
-      <Text
-        style={{
-          color: '#F5F5F5',
-          fontFamily: 'Chewy-Regular',
-        }}
-      >
-        My Accounts:
-      </Text>
-      <FlatList
-        data={myAccounts}
-        keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
-        renderItem={({ item }) => (
-          <View className="flex-row justify-between items-center">
-            {item.name && item.name.trim() && (
-              <Image
-                source={{
-                  uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
-                }}
-                style={{ width: 50, height: 50, borderRadius: 25 }}
-              />
-            )}
-            <Text
-              className="text-bialas"
-              onPress={() => handleProfilePress(item.server, item.id)}
-            >
-              {item.name && item.name.trim()
-                ? `${item.name} #${item.tag}`
-                : 'John Doe'}
-            </Text>
-            {item.name && item.name.trim() && (
-              <Image
-                source={rankImages[item.tier] || rankImages['IRON']}
-                style={{ width: 50, height: 50 }}
-              />
-            )}
-            <Text className="text-bialas">
-              {item.name && item.name.trim() ? `${item.server}` : ''}
-            </Text>
-            <TouchableOpacity
-              onPress={() => handleRemoveMyAccount(item.server, item.id)}
-            ></TouchableOpacity>
-          </View>
-        )}
-      />
-      <Button
-        title="Lista znajomych"
-        onPress={() => navigation.navigate('FriendList')}
-      />
-      <Button title="Logout" onPress={handleLogout} />
-    </ScrollView>
+          />
+          <Button
+            title="Lista znajomych"
+            onPress={() => navigation.navigate('FriendList')}
+          />
+          <Button title="Logout" onPress={handleLogout} />
+        </View>
+      }
+      renderItem={null}
+    />
   )
 }
 

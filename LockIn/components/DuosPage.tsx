@@ -36,6 +36,7 @@ interface Announcement {
   timestamp: number
   saved: boolean
   puuid: string
+  profileIconId: number
 }
 
 const CustomButton = ({
@@ -235,8 +236,8 @@ const DuosPage = () => {
     refetchAnnouncements()
   }
 
-  const handleDuoPress = (duoId: string) => {
-    navigation.navigate('Duo', { duoId, locale: 'en' })
+  const handleDuoAnwserPress = () => {
+    navigation.navigate('Duo')
   }
 
   const handleApplyForDuo = async () => {
@@ -247,8 +248,6 @@ const DuosPage = () => {
 
     const answer = {
       puuid: selectedProfile.puuid,
-      author: selectedProfile.gameName,
-      message: applyMessage,
     }
 
     try {
@@ -263,36 +262,63 @@ const DuosPage = () => {
     }
   }
 
+  const rankImages: { [key: string]: any } = {
+    IRON: require('../assets/ranks/IRON.png'),
+    BRONZE: require('../assets/ranks/BRONZE.png'),
+    SILVER: require('../assets/ranks/SILVER.png'),
+    GOLD: require('../assets/ranks/GOLD.png'),
+    PLATINUM: require('../assets/ranks/PLATINUM.png'),
+    DIAMOND: require('../assets/ranks/DIAMOND.png'),
+    MASTER: require('../assets/ranks/MASTER.png'),
+    GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
+    CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
+  }
+
   const renderAnnouncement = ({ item }: { item: Announcement }) => (
-    <TouchableOpacity onPress={() => handleDuoPress(item._id)}>
-      <View className="mb-2 border border-bialas p-3 rounded-lg">
-        <Text className="text-bialas font-chewy">Author: {item.author}</Text>
-        <Text className="text-bialas font-chewy">Server: {item.server}</Text>
-        <Text className="text-bialas font-chewy">PUUID: {item.puuid}</Text>
-        <Text className="text-bialas font-chewy">
-          Ranks: {item.minRank} - {item.maxRank}
-        </Text>
-        <Text className="text-bialas font-chewy">
-          Positions: {item.positions.join(', ')}
-        </Text>
-        <Text className="text-bialas font-chewy">
-          Looked Positions:{' '}
-          {item.lookedPositions ? item.lookedPositions.join(', ') : 'None'}
-        </Text>
-        <Text className="text-bialas font-chewy">
-          Champion IDs: {item.championIds.join(', ')}
-        </Text>
-        <TouchableOpacity
-          onPress={() => {
-            setSelectedDuoId(item._id)
-            setApplyModalVisible(true)
-          }}
-          style={styles.applyButton}
-        >
-          <Text style={styles.applyButtonText}>Apply for Duo</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+    <View className="mb-2 border border-bialas p-3 rounded-lg">
+      <Text className="text-bialas font-chewy">Author: {item.author}</Text>
+      <Image
+        source={{
+          uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.profileIconId}.png`,
+        }}
+        style={{ width: 50, height: 50, borderRadius: 25 }}
+      />
+      <Text className="text-bialas font-chewy">Server: {item.server}</Text>
+      <Text className="text-bialas font-chewy">PUUID: {item.puuid}</Text>
+      <Text className="text-bialas font-chewy">
+        Ranks: {item.minRank} - {item.maxRank}
+      </Text>
+      <Text className="text-bialas font-chewy">
+        Positions: {item.positions.join(', ')}
+      </Text>
+      <Text className="text-bialas font-chewy">
+        Looked Positions:{' '}
+        {item.lookedPositions ? item.lookedPositions.join(', ') : 'None'}
+      </Text>
+      <Text className="text-bialas font-chewy">
+        Champion IDs: {item.championIds.join(', ')}
+      </Text>
+      <Text className="text-bialas font-chewy">
+        Rank: {item.tier || 'Unranked'}
+      </Text>
+      {item.tier ? (
+        <Image
+          source={rankImages[item.tier] || rankImages['IRON']}
+          style={{ width: 50, height: 50 }}
+        />
+      ) : (
+        <Text className="text-bialas font-chewy">Unranked</Text>
+      )}
+      <TouchableOpacity
+        onPress={() => {
+          setSelectedDuoId(item._id)
+          setApplyModalVisible(true)
+        }}
+        style={styles.applyButton}
+      >
+        <Text style={styles.applyButtonText}>Apply for Duo</Text>
+      </TouchableOpacity>
+    </View>
   )
 
   if (isLoading) {
@@ -308,7 +334,7 @@ const DuosPage = () => {
   }
 
   return (
-    <View className="p-5">
+    <View className="px-5 pt-2">
       <FlatList
         data={announcements?.content}
         keyExtractor={(item) => item._id}
@@ -321,6 +347,12 @@ const DuosPage = () => {
             <CustomButton
               title="Create a Duo Post"
               onPress={() => setModalVisible(true)}
+              style={styles.customButton}
+              textStyle={styles.customButtonText}
+            />
+            <CustomButton
+              title="Check for Duo Answers"
+              onPress={() => handleDuoAnwserPress()}
               style={styles.customButton}
               textStyle={styles.customButtonText}
             />
@@ -918,13 +950,6 @@ const DuosPage = () => {
                   }
                   style={styles.customButton}
                   textStyle={styles.customButtonText}
-                />
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Enter your message"
-                  placeholderTextColor="#888"
-                  value={applyMessage}
-                  onChangeText={setApplyMessage}
                 />
                 <View>
                   <CustomButton

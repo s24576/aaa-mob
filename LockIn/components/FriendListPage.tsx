@@ -55,6 +55,7 @@ const FriendListPage = () => {
     username: string
     username2: string
   }) => {
+    if (!userData) return
     const usernameToSend: string =
       userData._id === item.username ? item.username2 : item.username
     navigation.navigate('LockInProfile', { username: usernameToSend })
@@ -79,29 +80,34 @@ const FriendListPage = () => {
           Zaproszenia do znajomych
         </Text>
       </TouchableOpacity>
+
       <Text className="text-bialas text-lg font-chewy mb-2">
         Lista znajomych:
       </Text>
-      <FlatList
-        data={userDataQuery?.friends}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View className="mb-2 border border-bialas p-3 rounded-lg flex-row justify-between items-center">
-            <Text
-              className="text-bialas pr-2 font-chewy"
-              onPress={() => handleFriendRequest(item)}
-            >
-              {userData._id === item.username ? item.username2 : item.username}
-            </Text>
-            <TouchableOpacity
-              onPress={() => handleDeleteFriend(item._id)}
-              className="bg-zoltek p-2 rounded-lg"
-            >
-              <Icon name="trash-bin" size={30} color="#131313" />
-            </TouchableOpacity>
-          </View>
-        )}
-      />
+      <View className="flex-row justify-center items-center mb-3 w-full px-10">
+        <FlatList
+          data={userDataQuery?.friends}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <View className="mb-2 border border-bialas p-3 rounded-lg flex-row justify-between items-center">
+              <Text
+                className="text-bialas pr-2 font-chewy"
+                onPress={() => handleFriendRequest(item)}
+              >
+                {userData && userData._id === item.username
+                  ? item.username2
+                  : item.username}
+              </Text>
+              <TouchableOpacity
+                onPress={() => handleDeleteFriend(item._id)}
+                className="bg-zoltek p-2 rounded-lg"
+              >
+                <Icon name="trash-bin" size={30} color="#131313" />
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      </View>
     </View>
   )
 }

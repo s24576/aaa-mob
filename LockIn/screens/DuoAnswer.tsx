@@ -1,11 +1,11 @@
 import { View } from 'react-native'
 import React from 'react'
-import DuoPage from '../components/DuoPage'
+import DuoAnswerPage from '../components/DuoAnswers'
 
 const Announcements = () => {
   return (
     <View>
-      <DuoPage />
+      <DuoAnswerPage />
     </View>
   )
 }
