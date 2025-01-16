@@ -36,6 +36,7 @@ import CourseDetails from './screens/CourseDetails'
 import { useFonts } from 'expo-font'
 import Settings from './screens/Settings'
 import DuoAnswers from './screens/DuoAnswer'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 initI18n()
 
@@ -82,13 +83,15 @@ export default function App() {
   }
 
   return (
-    <UserContextProvider>
-      <SocketProvider>
-        <PaperProvider>
-          <Layout />
-        </PaperProvider>
-      </SocketProvider>
-    </UserContextProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <UserContextProvider>
+        <SocketProvider>
+          <PaperProvider>
+            <Layout />
+          </PaperProvider>
+        </SocketProvider>
+      </UserContextProvider>
+    </GestureHandlerRootView>
   )
 }
 
@@ -157,9 +160,6 @@ export const Layout = () => {
                           case 'UserProfile':
                             iconName = 'person'
                             break
-                          case 'Search':
-                            iconName = 'search'
-                            break
                           case 'Home':
                             iconName = 'home'
                             break
@@ -182,7 +182,7 @@ export const Layout = () => {
                       },
                       headerStyle: { backgroundColor: '#131313' },
                       headerTintColor: '#fff',
-                      headerTitle: ' LOCK.IN ',
+                      headerTitle: ' Lock.In ',
                       headerTitleStyle: {
                         color: '#F5B800',
                         fontFamily: 'Bangers-Regular',
@@ -198,9 +198,8 @@ export const Layout = () => {
                     })}
                   >
                     <Tab.Screen name="UserProfile" component={UserProfile} />
-                    <Tab.Screen name="Search" component={AccountsSearch} />
-                    <Tab.Screen name="Home" component={Home} />
                     <Tab.Screen name="Messages" component={Messages} />
+                    <Tab.Screen name="Home" component={Home} />
                     <Tab.Screen
                       name="Notifications"
                       component={Notifications}

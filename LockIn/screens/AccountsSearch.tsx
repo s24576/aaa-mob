@@ -1,18 +1,10 @@
-import React, { useState } from 'react'
-import { View, Button, StyleSheet } from 'react-native'
-import LockInAccountSearch from '../components/LockInAccountSearch'
-import RiotSearchPage from '../components/RiotSearchPage'
+import React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 
 const AccountsSearch: React.FC = () => {
-  const [showLockInSearch, setShowLockInSearch] = useState(true)
-
   return (
     <View style={styles.container}>
-      <Button
-        title={showLockInSearch ? 'Szukaj konta Riot' : 'Szukaj konta LockIn'}
-        onPress={() => setShowLockInSearch(!showLockInSearch)}
-      />
-      {showLockInSearch ? <LockInAccountSearch /> : <RiotSearchPage />}
+      <Text>Accounts Search Screen</Text>
     </View>
   )
 }

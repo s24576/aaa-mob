@@ -1,5 +1,113 @@
 # TODO List
 
+Pageable
+
+- ograniczyc ilosc page do tylu ile ich serio jest
+
+Account Seach:
+
+- styl na guzik przeniesienie do riotu
+
+Build Browser
+
+- styl na guziki all/my/saved
+- paginacja
+- text na brak builda z filtrem
+- styl na kazdy obiekt
+
+Build Details
+
+- css xd
+- styl na like
+- like co sie zmienia jak jest juz polubione
+
+Course Browser
+
+- kolor czcionek
+- ew. css
+
+Course Details
+
+Duo Browser
+
+- clickable konta riot/lockin
+- stylowanie kazdego pojedynczego ogloszenia
+- ikonki riot
+- placeholdery na ikonki
+- paginacja
+
+Duo Answer
+
+- clickable konta riot/lockin
+- paginacja
+- styl na pojedynczy obiekt duo requesta
+
+Friend List
+
+- czcionka
+- ikonki mniejsze
+- nick/ramka w kolorze zoltek
+
+Friend Requests
+
+- czcionki
+- css
+- nick/ramka w kolorze zoltek
+
+Home
+
+- styl na guziki
+- ew. kafle na komponenty
+- ew. jakis static text na witanie
+
+Lockin Profile
+
+- css
+- poprawic placeholder
+- ew. wyswietlanie wiecej rzeczy np. potwierdzone konto i lista znaj
+- ERROR, websocket daje +1 do notifs on any msg a nie on notification
+
+Login
+
+- usunac placeholdery na produkcje
+
+Register
+
+- ToS wyjezdza za ekran w polskiej wersji jezykowej
+
+Match Details
+
+- css
+- summonery + runy
+- statystyki takie co webowka
+
+Messages + Msg Room
+
+- tlumaczenia 
+- czcionki
+
+Notifications
+
+- czcionka
+
+Riot Profile
+
+- stylowanie
+- statystyki takie jak na webowce
+- ikonki riot
+
+Settings
+
+- padding top
+
+User Profile
+
+- css
+- Zastapic iron unrankedem
+- Unloaded player na niezcachowane konta
+
+
+
 ## Features
 
 Rejestracja
