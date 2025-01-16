@@ -52,6 +52,7 @@ const UserProfile = () => {
     SILVER: require('../assets/ranks/SILVER.png'),
     GOLD: require('../assets/ranks/GOLD.png'),
     PLATINUM: require('../assets/ranks/PLATINUM.png'),
+    EMERALD: require('../assets/ranks/EMERALD.png'),
     DIAMOND: require('../assets/ranks/DIAMOND.png'),
     MASTER: require('../assets/ranks/MASTER.png'),
     GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
