@@ -1,0 +1,92 @@
+[
+  {
+    "code": "BR1",
+    "name": "Brasil",
+    "region": "Brazil"
+  },
+  {
+    "code": "EUN1",
+    "name": "Europe Nordic & East",
+    "region": "EUNE"
+  },
+  {
+    "code": "EUW1",
+    "name": "Europe West",
+    "region": "EUW"
+  },
+  {
+    "code": "LA1",
+    "name": "Latin America North",
+    "region": "LAN"
+  },
+  {
+    "code": "LA2",
+    "name": "Latin America South",
+    "region": "LAS"
+  },
+  {
+    "code": "NA1",
+    "name": "North America",
+    "region": "NA"
+  },
+  {
+    "code": "OCE",
+    "name": "Oceania",
+    "region": "OCE"
+  },
+  {
+    "code": "RU1",
+    "name": "Russia",
+    "region": "RU"
+  },
+  {
+    "code": "TR1",
+    "name": "Turkey",
+    "region": "TR"
+  },
+  {
+    "code": "ME1",
+    "name": "Middle East",
+    "region": "ME"
+  },
+  {
+    "code": "JP1",
+    "name": "Japan",
+    "region": "JP"
+  },
+  {
+    "code": "KR",
+    "name": "Republic of Korea",
+    "region": "KR"
+  },
+  {
+    "code": "PH2",
+    "name": "The Philippines",
+    "region": "PH"
+  },
+  {
+    "code": "SG2",
+    "name": "Singapore, Malaysia, & Indonesia",
+    "region": "SG"
+  },
+  {
+    "code": "TW2",
+    "name": "Taiwan, Hong Kong, and Macao",
+    "region": "TW"
+  },
+  {
+    "code": "TH2",
+    "name": "Thailand",
+    "region": "TH"
+  },
+  {
+    "code": "VN2",
+    "name": "Vietnam",
+    "region": "VN"
+  },
+  {
+    "code": "PBE",
+    "name": "Public Beta Environment",
+    "region": "PBE"
+  }
+]

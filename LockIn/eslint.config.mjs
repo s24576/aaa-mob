@@ -13,10 +13,8 @@ export default [
 
   // Prettier plugin settings
   {
-    plugins: { prettier: prettierPlugin },
+    // plugins: { prettier: prettierPlugin },
     rules: {
-      'prettier/prettier': 'error', // Runs Prettier as an ESLint rule and reports formatting issues
-      // Additional ESLint rules that might conflict with Prettier can be disabled here:
       'arrow-body-style': 'off',
       'prefer-arrow-callback': 'off',
     },
