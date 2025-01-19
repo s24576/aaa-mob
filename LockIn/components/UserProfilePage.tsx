@@ -57,6 +57,7 @@ const UserProfile = () => {
     MASTER: require('../assets/ranks/MASTER.png'),
     GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
     CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
+    UNRANKED: require('../assets/ranks/UNRANKED.png'),
   }
 
   useEffect(() => {
@@ -279,7 +280,7 @@ const UserProfile = () => {
             </Text>
             {item.name && item.name.trim() && (
               <Image
-                source={rankImages[item.tier] || rankImages['IRON']}
+                source={rankImages[item.tier] || rankImages['UNRANKED']}
                 style={{ width: 50, height: 50 }}
               />
             )}
@@ -324,7 +325,9 @@ const UserProfile = () => {
             </Text>
             {item.name && item.name.trim() && (
               <Image
-                source={rankImages[item.tier] || rankImages['IRON']}
+                source={
+                  rankImages[item.tier.toUpperCase()] || rankImages['UNRANKED']
+                }
                 style={{ width: 50, height: 50 }}
               />
             )}

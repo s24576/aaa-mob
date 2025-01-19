@@ -30,11 +30,9 @@ Course Details
 
 Duo Browser
 
-- clickable konta riot/lockin
-- stylowanie kazdego pojedynczego ogloszenia
-- ikonki riot
-- placeholdery na ikonki
+- clickable konta lockin/riot
 - paginacja
+- ikonki rang do modali
 
 Duo Answer
 
@@ -83,7 +81,7 @@ Match Details
 
 Messages + Msg Room
 
-- tlumaczenia 
+- tlumaczenia
 - czcionki
 
 Notifications
@@ -105,8 +103,6 @@ User Profile
 - css
 - Zastapic iron unrankedem
 - Unloaded player na niezcachowane konta
-
-
 
 ## Features
 

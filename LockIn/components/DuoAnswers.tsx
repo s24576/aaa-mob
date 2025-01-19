@@ -76,6 +76,7 @@ const DuoAnswerPage = () => {
     MASTER: require('../assets/ranks/MASTER.png'),
     GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
     CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
+    UNRANKED: require('../assets/ranks/UNRANKED.png'),
   }
 
   if (isLoadingAnswers) {
@@ -143,7 +144,8 @@ const DuoAnswerPage = () => {
                 {answer.profile.tier ? (
                   <Image
                     source={
-                      rankImages[answer.profile.tier] || rankImages['IRON']
+                      rankImages[answer.profile.tier.toUpperCase()] ||
+                      rankImages['UNRANKED']
                     }
                     style={{ width: 50, height: 50 }}
                   />

@@ -103,6 +103,13 @@ const DuosPage = () => {
     champions: [],
     languages: [],
   })
+  const [tempFilters, setTempFilters] = useState<SearchDuo>({
+    minRank: '',
+    maxRank: '',
+    positions: [],
+    champions: [],
+    languages: [],
+  })
 
   const navigation = useNavigation<DuoScreenProps['navigation']>()
 
@@ -234,6 +241,19 @@ const DuosPage = () => {
       champions: [],
       languages: [],
     })
+    setTempFilters({
+      minRank: '',
+      maxRank: '',
+      positions: [],
+      champions: [],
+      languages: [],
+    })
+    refetchDuos()
+  }
+
+  const applyFilters = () => {
+    setFilters(tempFilters)
+    setFiltersVisible(false)
     refetchDuos()
   }
 
@@ -264,16 +284,17 @@ const DuosPage = () => {
   }
 
   const rankImages: { [key: string]: any } = {
-    IRON: require('../assets/ranks/IRON.png'),
-    BRONZE: require('../assets/ranks/BRONZE.png'),
-    SILVER: require('../assets/ranks/SILVER.png'),
-    GOLD: require('../assets/ranks/GOLD.png'),
-    PLATINUM: require('../assets/ranks/PLATINUM.png'),
-    EMERALD: require('../assets/ranks/EMERALD.png'),
-    DIAMOND: require('../assets/ranks/DIAMOND.png'),
-    MASTER: require('../assets/ranks/MASTER.png'),
-    GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
-    CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
+    Iron: require('../assets/ranks/IRON.png'),
+    Bronze: require('../assets/ranks/BRONZE.png'),
+    Silver: require('../assets/ranks/SILVER.png'),
+    Gold: require('../assets/ranks/GOLD.png'),
+    Platinum: require('../assets/ranks/PLATINUM.png'),
+    Emerald: require('../assets/ranks/EMERALD.png'),
+    Diamond: require('../assets/ranks/DIAMOND.png'),
+    Master: require('../assets/ranks/MASTER.png'),
+    Grandmaster: require('../assets/ranks/GRANDMASTER.png'),
+    Challenger: require('../assets/ranks/CHALLENGER.png'),
+    Unranked: require('../assets/ranks/UNRANKED.png'),
   }
 
   const positionImages: { [key: string]: any } = {
@@ -310,22 +331,20 @@ const DuosPage = () => {
           <Text style={styles.dateText}>{dateCreated}</Text>
         </View>
         <View style={styles.bodyContainer}>
+          <Text style={styles.authorText}>Go to Riot Profile</Text>
           <View style={styles.rankContainer}>
             <Image
-              source={
-                rankImages[item.minRank.toUpperCase()] || rankImages['IRON']
-              }
+              source={rankImages[item.minRank] || rankImages['UNRANKED']}
               style={styles.rankImageLarge}
             />
             <Text style={styles.duoText}>-</Text>
             <Image
-              source={
-                rankImages[item.maxRank.toUpperCase()] || rankImages['IRON']
-              }
+              source={rankImages[item.maxRank] || rankImages['UNRANKED']}
               style={styles.rankImageLarge}
             />
           </View>
           <View style={styles.positionContainer}>
+            <Text style={styles.duoText}>Positions:</Text>
             {item.positions.map((position) => (
               <Image
                 key={position}
@@ -334,9 +353,18 @@ const DuosPage = () => {
               />
             ))}
           </View>
-          <Text style={styles.duoText}>
-            Languages: {item.languages.join(', ')}
-          </Text>
+          {item.lookedPositions && (
+            <View style={styles.positionContainer}>
+              <Text style={styles.duoText}>Looked Positions:</Text>
+              {item.lookedPositions.map((position) => (
+                <Image
+                  key={position}
+                  source={positionImages[position]}
+                  style={styles.positionImageLarge}
+                />
+              ))}
+            </View>
+          )}
           <View style={styles.languageContainer}>
             {item.languages.map((language) => (
               <Image
@@ -392,7 +420,7 @@ const DuosPage = () => {
         keyExtractor={(item) => item._id}
         renderItem={renderDuo}
         ListEmptyComponent={
-          <Text className="text-bialas">No posts found.</Text>
+          <Text style={styles.customButtonText}>No posts found.</Text>
         }
         ListHeaderComponent={
           <View className="p-5">
@@ -421,9 +449,9 @@ const DuosPage = () => {
                     <View className="flex-1 items-end pr-2">
                       <CustomButton
                         title={
-                          filters.minRank ? (
+                          tempFilters.minRank ? (
                             <Image
-                              source={rankImages[filters.minRank.toUpperCase()]}
+                              source={rankImages[tempFilters.minRank]}
                               style={styles.rankImage}
                             />
                           ) : (
@@ -435,7 +463,10 @@ const DuosPage = () => {
                             'Min rank',
                             Object.keys(rankImages),
                             (values) =>
-                              setFilters({ ...filters, minRank: values[0] })
+                              setTempFilters({
+                                ...tempFilters,
+                                minRank: values[0],
+                              })
                           )
                         }
                         style={styles.customButton}
@@ -446,9 +477,9 @@ const DuosPage = () => {
                     <View className="flex-1 items-start pl-2">
                       <CustomButton
                         title={
-                          filters.maxRank ? (
+                          tempFilters.maxRank ? (
                             <Image
-                              source={rankImages[filters.maxRank.toUpperCase()]}
+                              source={rankImages[tempFilters.maxRank]}
                               style={styles.rankImage}
                             />
                           ) : (
@@ -460,7 +491,10 @@ const DuosPage = () => {
                             'Max rank',
                             Object.keys(rankImages),
                             (values) =>
-                              setFilters({ ...filters, maxRank: values[0] })
+                              setTempFilters({
+                                ...tempFilters,
+                                maxRank: values[0],
+                              })
                           )
                         }
                         style={styles.customButton}
@@ -472,9 +506,9 @@ const DuosPage = () => {
                 <View>
                   <CustomButton
                     title={
-                      filters.positions.length ? (
+                      tempFilters.positions.length ? (
                         <View style={styles.positionContainer}>
-                          {filters.positions.map((position) => (
+                          {tempFilters.positions.map((position) => (
                             <Image
                               key={position}
                               source={positionImages[position]}
@@ -491,9 +525,9 @@ const DuosPage = () => {
                         'Positions',
                         Object.keys(positionImages),
                         (values) =>
-                          setFilters({ ...filters, positions: values }),
+                          setTempFilters({ ...tempFilters, positions: values }),
                         true,
-                        filters.positions
+                        tempFilters.positions
                       )
                     }
                     style={styles.customButton}
@@ -503,9 +537,9 @@ const DuosPage = () => {
                 <View>
                   <CustomButton
                     title={
-                      filters.languages.length ? (
+                      tempFilters.languages.length ? (
                         <View style={styles.languageContainer}>
-                          {filters.languages.map((language) => (
+                          {tempFilters.languages.map((language) => (
                             <Image
                               key={language}
                               source={languageFlags[language]}
@@ -522,9 +556,9 @@ const DuosPage = () => {
                         'Languages',
                         Object.keys(languageFlags),
                         (values) =>
-                          setFilters({ ...filters, languages: values }),
+                          setTempFilters({ ...tempFilters, languages: values }),
                         true,
-                        filters.languages
+                        tempFilters.languages
                       )
                     }
                     style={styles.customButton}
@@ -534,9 +568,9 @@ const DuosPage = () => {
                 <View>
                   <CustomButton
                     title={
-                      filters.champions.length ? (
+                      tempFilters.champions.length ? (
                         <View style={styles.championContainer}>
-                          {filters.champions.map((championId) => (
+                          {tempFilters.champions.map((championId) => (
                             <Image
                               key={championId}
                               source={{
@@ -563,17 +597,27 @@ const DuosPage = () => {
                                 (key) => champions[key] === name
                               ) || name
                           )
-                          setFilters({ ...filters, champions: selectedIds })
+                          setTempFilters({
+                            ...tempFilters,
+                            champions: selectedIds,
+                          })
                         },
                         true,
-                        filters.champions.map((id) => champions[id]).sort()
+                        tempFilters.champions.map((id) => champions[id]).sort()
                       )
                     }
                     style={styles.customButton}
                     textStyle={styles.customButtonText}
                   />
                 </View>
-
+                <View>
+                  <CustomButton
+                    title="Apply Filters"
+                    onPress={applyFilters}
+                    style={styles.customButton2}
+                    textStyle={styles.customButton2Text}
+                  />
+                </View>
                 <View>
                   <CustomButton
                     title="Reset Filters"
@@ -685,10 +729,13 @@ const DuosPage = () => {
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Your position',
+                                  'Positions',
                                   Object.keys(positionImages),
                                   (values) =>
-                                    setNewDuo({ ...newDuo, positions: values }),
+                                    setNewDuo({
+                                      ...newDuo,
+                                      positions: values,
+                                    }),
                                   true,
                                   newDuo.positions
                                 )
@@ -719,7 +766,7 @@ const DuosPage = () => {
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Searched position',
+                                  'Positions',
                                   Object.keys(positionImages),
                                   (values) =>
                                     setNewDuo({
@@ -742,9 +789,7 @@ const DuosPage = () => {
                               title={
                                 newDuo.minRank ? (
                                   <Image
-                                    source={
-                                      rankImages[newDuo.minRank.toUpperCase()]
-                                    }
+                                    source={rankImages[newDuo.minRank]}
                                     style={styles.rankImage}
                                   />
                                 ) : (
@@ -771,9 +816,7 @@ const DuosPage = () => {
                               title={
                                 newDuo.maxRank ? (
                                   <Image
-                                    source={
-                                      rankImages[newDuo.maxRank.toUpperCase()]
-                                    }
+                                    source={rankImages[newDuo.maxRank]}
                                     style={styles.rankImage}
                                   />
                                 ) : (
@@ -1119,7 +1162,9 @@ const styles = StyleSheet.create({
   customButtonText: {
     color: '#F5F5F5',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
   },
   customButton2: {
     backgroundColor: '#F5B800',
@@ -1130,15 +1175,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   customButton2Text: {
+    fontFamily: 'Chewy-Regular',
     color: '#131313',
     fontSize: 16,
-    fontWeight: 'bold',
   },
   buttonContainer: {
+    fontFamily: 'Chewy-Regular',
     marginTop: 10,
     marginBottom: 0,
   },
   applyButton: {
+    fontFamily: 'Chewy-Regular',
     backgroundColor: '#F5B800',
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -1150,9 +1197,10 @@ const styles = StyleSheet.create({
   applyButtonText: {
     color: '#131313',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Chewy-Regular',
   },
   textInput: {
+    fontFamily: 'Chewy-Regular',
     backgroundColor: '#1E1E1E',
     color: '#F5F5F5',
     padding: 10,
@@ -1211,9 +1259,8 @@ const styles = StyleSheet.create({
   },
   positionContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 10,
-    marginBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bodyContainer: {
     flex: 1,
@@ -1233,7 +1280,6 @@ const styles = StyleSheet.create({
   positionImageLarge: {
     width: 40,
     height: 40,
-    marginRight: 10,
   },
   championImageLarge: {
     width: 30,
@@ -1246,6 +1292,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 10,
   },
   languageFlag: {
     width: 30,
