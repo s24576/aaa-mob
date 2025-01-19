@@ -21,8 +21,8 @@ const LanguageToggleButton = () => {
       <Image
         source={
           language === 'pl'
-            ? require('../assets/flags/pl.png')
-            : require('../assets/flags/en.png')
+            ? require('../assets/flags/PL.png')
+            : require('../assets/flags/GB.png')
         }
         style={{ width: 48, height: 48, borderRadius: 144 }}
       />

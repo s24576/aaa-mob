@@ -22,6 +22,7 @@ import { useNavigation } from '@react-navigation/native'
 import { DuoScreenProps } from '../App'
 import { useSocket } from '../context/SocketProvider'
 import { answerDuo } from '../api/duo/answerDuo'
+import servers from '../assets/servers.json'
 
 interface Duo {
   _id: string
@@ -275,52 +276,102 @@ const DuosPage = () => {
     CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
   }
 
-  const renderDuo = ({ item }: { item: Duo }) => (
-    <View className="mb-2 border border-bialas p-3 rounded-lg">
-      <Text className="text-bialas font-chewy">Author: {item.author}</Text>
-      <Image
-        source={{
-          uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.profileIconId}.png`,
-        }}
-        style={{ width: 50, height: 50, borderRadius: 25 }}
-      />
-      <Text className="text-bialas font-chewy">Server: {item.server}</Text>
-      <Text className="text-bialas font-chewy">PUUID: {item.puuid}</Text>
-      <Text className="text-bialas font-chewy">
-        Ranks: {item.minRank} - {item.maxRank}
-      </Text>
-      <Text className="text-bialas font-chewy">
-        Positions: {item.positions.join(', ')}
-      </Text>
-      <Text className="text-bialas font-chewy">
-        Looked Positions:{' '}
-        {item.lookedPositions ? item.lookedPositions.join(', ') : 'None'}
-      </Text>
-      <Text className="text-bialas font-chewy">
-        Champion IDs: {item.championIds.join(', ')}
-      </Text>
-      <Text className="text-bialas font-chewy">
-        Rank: {item.tier || 'Unranked'}
-      </Text>
-      {item.tier ? (
-        <Image
-          source={rankImages[item.tier] || rankImages['IRON']}
-          style={{ width: 50, height: 50 }}
-        />
-      ) : (
-        <Text className="text-bialas font-chewy">Unranked</Text>
-      )}
-      <TouchableOpacity
-        onPress={() => {
-          setSelectedDuoId(item._id)
-          setApplyModalVisible(true)
-        }}
-        style={styles.applyButton}
-      >
-        <Text style={styles.applyButtonText}>Apply for Duo</Text>
-      </TouchableOpacity>
-    </View>
-  )
+  const positionImages: { [key: string]: any } = {
+    Top: require('../assets/positions/Top.png'),
+    Jungle: require('../assets/positions/Jungle.png'),
+    Mid: require('../assets/positions/Mid.png'),
+    Bot: require('../assets/positions/Bot.png'),
+    Support: require('../assets/positions/Support.png'),
+    Fill: require('../assets/positions/Fill.png'),
+  }
+
+  const languageFlags: { [key: string]: any } = {
+    English: require('../assets/flags/GB.png'),
+    German: require('../assets/flags/DE.png'),
+    French: require('../assets/flags/FR.png'),
+    Spanish: require('../assets/flags/ES.png'),
+    Polish: require('../assets/flags/PL.png'),
+    Chinese: require('../assets/flags/CN.png'),
+    Japanese: require('../assets/flags/JP.png'),
+    Korean: require('../assets/flags/KR.png'),
+    Other: require('../assets/flags/OTHER.png'),
+  }
+
+  const renderDuo = ({ item }: { item: Duo }) => {
+    const serverName =
+      servers.find((s) => s.code === item.server)?.name || item.server
+    const dateCreated = new Date(item.timestamp * 1000).toLocaleDateString()
+
+    return (
+      <View style={styles.duoContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.authorText}>{item.author}</Text>
+          <Text style={styles.duoText}>{serverName}</Text>
+          <Text style={styles.dateText}>{dateCreated}</Text>
+        </View>
+        <View style={styles.bodyContainer}>
+          <View style={styles.rankContainer}>
+            <Image
+              source={
+                rankImages[item.minRank.toUpperCase()] || rankImages['IRON']
+              }
+              style={styles.rankImageLarge}
+            />
+            <Text style={styles.duoText}>-</Text>
+            <Image
+              source={
+                rankImages[item.maxRank.toUpperCase()] || rankImages['IRON']
+              }
+              style={styles.rankImageLarge}
+            />
+          </View>
+          <View style={styles.positionContainer}>
+            {item.positions.map((position) => (
+              <Image
+                key={position}
+                source={positionImages[position]}
+                style={styles.positionImageLarge}
+              />
+            ))}
+          </View>
+          <Text style={styles.duoText}>
+            Languages: {item.languages.join(', ')}
+          </Text>
+          <View style={styles.languageContainer}>
+            {item.languages.map((language) => (
+              <Image
+                key={language}
+                source={languageFlags[language]}
+                style={styles.languageFlag}
+              />
+            ))}
+          </View>
+          <View style={styles.championContainer}>
+            {item.championIds.map((championId) => (
+              <View key={championId} style={styles.championItem}>
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${championId}.png`,
+                  }}
+                  style={styles.championImageLarge}
+                />
+                <Text style={styles.duoText}>{champions[championId]}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedDuoId(item._id)
+            setApplyModalVisible(true)
+          }}
+          style={styles.applyButton}
+        >
+          <Text style={styles.applyButtonText}>Apply for Duo</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   if (isLoading) {
     return (
@@ -335,7 +386,7 @@ const DuosPage = () => {
   }
 
   return (
-    <View className="px-5 pt-2">
+    <View className="pt-2">
       <FlatList
         data={Duos?.content}
         keyExtractor={(item) => item._id}
@@ -344,7 +395,7 @@ const DuosPage = () => {
           <Text className="text-bialas">No posts found.</Text>
         }
         ListHeaderComponent={
-          <>
+          <View className="p-5">
             <CustomButton
               title="Create a Duo Post"
               onPress={() => setModalVisible(true)}
@@ -369,22 +420,20 @@ const DuosPage = () => {
                   <View className="flex-row items-center justify-center">
                     <View className="flex-1 items-end pr-2">
                       <CustomButton
-                        title={filters.minRank || 'Min Rank'}
+                        title={
+                          filters.minRank ? (
+                            <Image
+                              source={rankImages[filters.minRank.toUpperCase()]}
+                              style={styles.rankImage}
+                            />
+                          ) : (
+                            'Min Rank'
+                          )
+                        }
                         onPress={() =>
                           openPickerModal(
                             'Min rank',
-                            [
-                              'Challenger',
-                              'Grandmaster',
-                              'Master',
-                              'Diamond',
-                              'Emerald',
-                              'Platinum',
-                              'Gold',
-                              'Silver',
-                              'Bronze',
-                              'Iron',
-                            ],
+                            Object.keys(rankImages),
                             (values) =>
                               setFilters({ ...filters, minRank: values[0] })
                           )
@@ -396,22 +445,20 @@ const DuosPage = () => {
                     <Text className="text-bialas text-center pt-2">-</Text>
                     <View className="flex-1 items-start pl-2">
                       <CustomButton
-                        title={filters.maxRank || 'Max Rank'}
+                        title={
+                          filters.maxRank ? (
+                            <Image
+                              source={rankImages[filters.maxRank.toUpperCase()]}
+                              style={styles.rankImage}
+                            />
+                          ) : (
+                            'Max Rank'
+                          )
+                        }
                         onPress={() =>
                           openPickerModal(
                             'Max rank',
-                            [
-                              'Challenger',
-                              'Grandmaster',
-                              'Master',
-                              'Diamond',
-                              'Emerald',
-                              'Platinum',
-                              'Gold',
-                              'Silver',
-                              'Bronze',
-                              'Iron',
-                            ],
+                            Object.keys(rankImages),
                             (values) =>
                               setFilters({ ...filters, maxRank: values[0] })
                           )
@@ -425,14 +472,24 @@ const DuosPage = () => {
                 <View>
                   <CustomButton
                     title={
-                      filters.positions.length
-                        ? filters.positions.join(', ')
-                        : 'Select Positions'
+                      filters.positions.length ? (
+                        <View style={styles.positionContainer}>
+                          {filters.positions.map((position) => (
+                            <Image
+                              key={position}
+                              source={positionImages[position]}
+                              style={styles.positionImage}
+                            />
+                          ))}
+                        </View>
+                      ) : (
+                        'Select Positions'
+                      )
                     }
                     onPress={() =>
                       openPickerModal(
                         'Positions',
-                        ['Top', 'Jungle', 'Mid', 'Bot', 'Support', 'Fill'],
+                        Object.keys(positionImages),
                         (values) =>
                           setFilters({ ...filters, positions: values }),
                         true,
@@ -446,24 +503,24 @@ const DuosPage = () => {
                 <View>
                   <CustomButton
                     title={
-                      filters.languages.length
-                        ? filters.languages.join(', ')
-                        : 'Select Languages'
+                      filters.languages.length ? (
+                        <View style={styles.languageContainer}>
+                          {filters.languages.map((language) => (
+                            <Image
+                              key={language}
+                              source={languageFlags[language]}
+                              style={styles.languageFlag}
+                            />
+                          ))}
+                        </View>
+                      ) : (
+                        'Select Languages'
+                      )
                     }
                     onPress={() =>
                       openPickerModal(
                         'Languages',
-                        [
-                          'English',
-                          'German',
-                          'French',
-                          'Spanish',
-                          'Polish',
-                          'Chinese',
-                          'Japanese',
-                          'Korean',
-                          'Other',
-                        ],
+                        Object.keys(languageFlags),
                         (values) =>
                           setFilters({ ...filters, languages: values }),
                         true,
@@ -477,12 +534,21 @@ const DuosPage = () => {
                 <View>
                   <CustomButton
                     title={
-                      filters.champions.length
-                        ? filters.champions
-                            .map((champ) => champions[champ])
-                            .sort()
-                            .join(', ')
-                        : 'Select Champions'
+                      filters.champions.length ? (
+                        <View style={styles.championContainer}>
+                          {filters.champions.map((championId) => (
+                            <Image
+                              key={championId}
+                              source={{
+                                uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${championId}.png`,
+                              }}
+                              style={styles.championImageLarge}
+                            />
+                          ))}
+                        </View>
+                      ) : (
+                        'Select Champions'
+                      )
                     }
                     onPress={() =>
                       openPickerModal(
@@ -518,7 +584,7 @@ const DuosPage = () => {
                 </View>
               </View>
             )}
-          </>
+          </View>
         }
       />
       {/* modal na dodawanie ogłoszenia */}
@@ -603,19 +669,24 @@ const DuosPage = () => {
                           <View>
                             <CustomButton
                               title={
-                                newDuo.positions.join(', ') || 'Your position'
+                                newDuo.positions.length ? (
+                                  <View style={styles.positionContainer}>
+                                    {newDuo.positions.map((position) => (
+                                      <Image
+                                        key={position}
+                                        source={positionImages[position]}
+                                        style={styles.positionImage}
+                                      />
+                                    ))}
+                                  </View>
+                                ) : (
+                                  'Your position'
+                                )
                               }
                               onPress={() =>
                                 openPickerModal(
                                   'Your position',
-                                  [
-                                    'Top',
-                                    'Jungle',
-                                    'Mid',
-                                    'Bot',
-                                    'Support',
-                                    'Fill',
-                                  ],
+                                  Object.keys(positionImages),
                                   (values) =>
                                     setNewDuo({ ...newDuo, positions: values }),
                                   true,
@@ -632,20 +703,24 @@ const DuosPage = () => {
                           <View>
                             <CustomButton
                               title={
-                                newDuo.lookedPositions.join(', ') ||
-                                'Searched position'
+                                newDuo.lookedPositions.length ? (
+                                  <View style={styles.positionContainer}>
+                                    {newDuo.lookedPositions.map((position) => (
+                                      <Image
+                                        key={position}
+                                        source={positionImages[position]}
+                                        style={styles.positionImage}
+                                      />
+                                    ))}
+                                  </View>
+                                ) : (
+                                  'Searched position'
+                                )
                               }
                               onPress={() =>
                                 openPickerModal(
                                   'Searched position',
-                                  [
-                                    'Top',
-                                    'Jungle',
-                                    'Mid',
-                                    'Bot',
-                                    'Support',
-                                    'Fill',
-                                  ],
+                                  Object.keys(positionImages),
                                   (values) =>
                                     setNewDuo({
                                       ...newDuo,
@@ -664,22 +739,22 @@ const DuosPage = () => {
                         return (
                           <View>
                             <CustomButton
-                              title={newDuo.minRank || 'Min Rank'}
+                              title={
+                                newDuo.minRank ? (
+                                  <Image
+                                    source={
+                                      rankImages[newDuo.minRank.toUpperCase()]
+                                    }
+                                    style={styles.rankImage}
+                                  />
+                                ) : (
+                                  'Min Rank'
+                                )
+                              }
                               onPress={() =>
                                 openPickerModal(
                                   'Min rank',
-                                  [
-                                    'Challenger',
-                                    'Grandmaster',
-                                    'Master',
-                                    'Diamond',
-                                    'Emerald',
-                                    'Platinum',
-                                    'Gold',
-                                    'Silver',
-                                    'Bronze',
-                                    'Iron',
-                                  ],
+                                  Object.keys(rankImages),
                                   (values) =>
                                     setNewDuo({ ...newDuo, minRank: values[0] })
                                 )
@@ -693,22 +768,22 @@ const DuosPage = () => {
                         return (
                           <View>
                             <CustomButton
-                              title={newDuo.maxRank || 'Max Rank'}
+                              title={
+                                newDuo.maxRank ? (
+                                  <Image
+                                    source={
+                                      rankImages[newDuo.maxRank.toUpperCase()]
+                                    }
+                                    style={styles.rankImage}
+                                  />
+                                ) : (
+                                  'Max Rank'
+                                )
+                              }
                               onPress={() =>
                                 openPickerModal(
                                   'Max rank',
-                                  [
-                                    'Challenger',
-                                    'Grandmaster',
-                                    'Master',
-                                    'Diamond',
-                                    'Emerald',
-                                    'Platinum',
-                                    'Gold',
-                                    'Silver',
-                                    'Bronze',
-                                    'Iron',
-                                  ],
+                                  Object.keys(rankImages),
                                   (values) =>
                                     setNewDuo({ ...newDuo, maxRank: values[0] })
                                 )
@@ -722,21 +797,25 @@ const DuosPage = () => {
                         return (
                           <View>
                             <CustomButton
-                              title={newDuo.languages.join(', ') || 'Languages'}
+                              title={
+                                newDuo.languages.length ? (
+                                  <View style={styles.languageContainer}>
+                                    {newDuo.languages.map((language) => (
+                                      <Image
+                                        key={language}
+                                        source={languageFlags[language]}
+                                        style={styles.languageFlag}
+                                      />
+                                    ))}
+                                  </View>
+                                ) : (
+                                  'Languages'
+                                )
+                              }
                               onPress={() =>
                                 openPickerModal(
                                   'Languages',
-                                  [
-                                    'English',
-                                    'German',
-                                    'French',
-                                    'Spanish',
-                                    'Polish',
-                                    'Chinese',
-                                    'Japanese',
-                                    'Korean',
-                                    'Other',
-                                  ],
+                                  Object.keys(languageFlags),
                                   (values) =>
                                     setNewDuo({ ...newDuo, languages: values }),
                                   true,
@@ -753,11 +832,21 @@ const DuosPage = () => {
                           <View>
                             <CustomButton
                               title={
-                                newDuo.championIds.length
-                                  ? newDuo.championIds
-                                      .map((champ) => champions[champ])
-                                      .join(', ')
-                                  : 'Select Champions'
+                                newDuo.championIds.length ? (
+                                  <View style={styles.championContainer}>
+                                    {newDuo.championIds.map((championId) => (
+                                      <Image
+                                        key={championId}
+                                        source={{
+                                          uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${championId}.png`,
+                                        }}
+                                        style={styles.championImageLarge}
+                                      />
+                                    ))}
+                                  </View>
+                                ) : (
+                                  'Select Champions'
+                                )
                               }
                               onPress={() =>
                                 openPickerModal(
@@ -870,6 +959,16 @@ const DuosPage = () => {
                                 champions
                               ).find((key) => champions[key] === option)}.png`,
                             }}
+                            style={{ width: 20, height: 20, marginRight: 10 }}
+                          />
+                        ) : pickerModal.type === 'Languages' ? (
+                          <Image
+                            source={languageFlags[option]}
+                            style={{ width: 30, height: 20, marginRight: 10 }}
+                          />
+                        ) : pickerModal.type === 'Positions' ? (
+                          <Image
+                            source={positionImages[option]}
                             style={{ width: 20, height: 20, marginRight: 10 }}
                           />
                         ) : null}
@@ -1045,6 +1144,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     marginTop: 10,
+    marginHorizontal: 80,
     alignItems: 'center',
   },
   applyButtonText: {
@@ -1060,6 +1160,97 @@ const styles = StyleSheet.create({
     borderColor: '#F5B800',
     borderWidth: 1,
     marginVertical: 10,
+  },
+  duoContainer: {
+    padding: 15,
+    borderRadius: 10,
+    borderBottomColor: '#F5B800',
+    borderBottomWidth: 1,
+  },
+  duoText: {
+    color: '#F5F5F5',
+    fontFamily: 'Chewy-Regular',
+    marginBottom: 5,
+  },
+  championContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  championItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  rankContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 5,
+  },
+  rankImage: {
+    width: 20,
+    height: 20,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+  authorText: {
+    color: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    fontSize: 18,
+  },
+  dateText: {
+    color: '#F5F5F5',
+    fontFamily: 'Chewy-Regular',
+  },
+  positionContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  bodyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  positionImage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  rankImageLarge: {
+    width: 60,
+    height: 60,
+    marginHorizontal: 10,
+  },
+  positionImageLarge: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+  },
+  championImageLarge: {
+    width: 30,
+    height: 30,
+    marginRight: 5,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  languageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  languageFlag: {
+    width: 30,
+    height: 20,
+    marginRight: 5,
   },
 })
 
