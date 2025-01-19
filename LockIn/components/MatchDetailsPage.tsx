@@ -47,19 +47,30 @@ const MatchDetailsPage: React.FC = () => {
           }}
           style={{ width: 50, height: 50 }}
         />
-        <Text className="flex-1 text-left"> {item.riotIdGameName}</Text>
-        <Text className="flex-1 text-left">
+        <Text className="text-bialas flex-1 text-left">
+          {' '}
+          {item.riotIdGameName}
+        </Text>
+        <Text className="text-bialas flex-1 text-left">
           {item.kills}/{item.deaths}/{item.assists}
         </Text>
-        <Text className="flex-1 text-left">
-          Question Marks:{item.enemyMissingPings}
-        </Text>
-        <Text className="flex-1 text-left">
+        <Text className="text-bialas flex-1 text-left">
           Rank: {item.tier} {item.rank}
         </Text>
-        <Text className="flex-1 text-left">
-          Summoner Spells: {item.summoner1Name}, {item.summoner2Name}
-        </Text>
+        <View className="flex-1 flex-row items-center">
+          <Image
+            source={{
+              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${item.summoner1Name}.png`,
+            }}
+            style={{ width: 24, height: 24, marginRight: 4 }}
+          />
+          <Image
+            source={{
+              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${item.summoner2Name}.png`,
+            }}
+            style={{ width: 24, height: 24 }}
+          />
+        </View>
       </View>
     </TouchableOpacity>
   )
@@ -75,7 +86,7 @@ const MatchDetailsPage: React.FC = () => {
   if (error || versionError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-lg">
+        <Text className="text-bialas text-lg">
           Error fetching match info: {(error || versionError)?.message}
         </Text>
       </View>
@@ -85,7 +96,7 @@ const MatchDetailsPage: React.FC = () => {
   if (!matchInfo) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-lg">No match information found.</Text>
+        <Text className="text-bialas text-lg">No match information found.</Text>
       </View>
     )
   }
@@ -93,7 +104,9 @@ const MatchDetailsPage: React.FC = () => {
   if (!Array.isArray(matchInfo.info.participants)) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-lg">Invalid match information format.</Text>
+        <Text className="text-bialas text-lg">
+          Invalid match information format.
+        </Text>
       </View>
     )
   }
@@ -105,8 +118,10 @@ const MatchDetailsPage: React.FC = () => {
     <FlatList
       ListHeaderComponent={
         <View className="p-4">
-          <Text className="text-2xl font-bold mb-4">Match Details</Text>
-          <Text className="text-xl font-semibold mb-2">Team 1</Text>
+          <Text className="text-bialas text-2xl font-bold mb-4">
+            Match Details
+          </Text>
+          <Text className="text-bialas text-xl font-semibold mb-2">Team 1</Text>
         </View>
       }
       data={[...team1, { header: 'Team 2' }, ...team2]}
@@ -117,7 +132,7 @@ const MatchDetailsPage: React.FC = () => {
         if (item.header) {
           return (
             <View className="p-4">
-              <Text className="text-xl font-semibold mt-4 mb-2">
+              <Text className="text-bialas text-xl font-semibold mt-4 mb-2">
                 {item.header}
               </Text>
             </View>
