@@ -466,7 +466,8 @@ const DuosPage = () => {
                               setTempFilters({
                                 ...tempFilters,
                                 minRank: values[0],
-                              })
+                              }),
+                            true
                           )
                         }
                         style={styles.customButton}
@@ -479,7 +480,7 @@ const DuosPage = () => {
                         title={
                           tempFilters.maxRank ? (
                             <Image
-                              source={rankImages[tempFilters.maxRank]}
+                              source={rankImages[tempFilters.maxRank]} //tutaj zrobic tak jak w innych
                               style={styles.rankImage}
                             />
                           ) : (
@@ -488,13 +489,14 @@ const DuosPage = () => {
                         }
                         onPress={() =>
                           openPickerModal(
-                            'Max rank',
+                            'Ranks',
                             Object.keys(rankImages),
                             (values) =>
                               setTempFilters({
                                 ...tempFilters,
                                 maxRank: values[0],
-                              })
+                              }),
+                            true
                           )
                         }
                         style={styles.customButton}
