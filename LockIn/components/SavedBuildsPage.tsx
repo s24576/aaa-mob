@@ -10,6 +10,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { getSavedBuilds } from '../api/build/getSavedBuilds'
 import { getVersion } from '../api/ddragon/version'
+import { getRunes } from '../api/ddragon/getRunes'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { BuildDetailsScreenProps } from '../App'
 
@@ -34,6 +35,8 @@ interface Build {
     runes2: string[]
     statShards: string[]
   }
+  summoner1Name: string
+  summoner2Name: string
 }
 
 const BuildsBrowserPage: React.FC = () => {
@@ -59,13 +62,41 @@ const BuildsBrowserPage: React.FC = () => {
     queryFn: getVersion,
   })
 
+  const {
+    data: runesData,
+    isLoading: isRunesLoading,
+    error: runesError,
+  } = useQuery({
+    queryKey: ['runes'],
+    queryFn: getRunes,
+  })
+
+  const findRuneById = (runeId: string) => {
+    if (!runesData) return null
+    for (const tree of runesData) {
+      for (const slot of tree.slots) {
+        for (const rune of slot.runes) {
+          if (rune.id === runeId) {
+            return rune
+          }
+        }
+      }
+    }
+    return null
+  }
+
+  const findRuneTreeById = (treeId: string) => {
+    if (!runesData) return null
+    return runesData.find((tree) => tree.id === treeId)
+  }
+
   useFocusEffect(
     React.useCallback(() => {
       refetch()
     }, [refetch])
   )
 
-  if (isLoading || isVersionLoading || isFetching) {
+  if (isLoading || isVersionLoading || isRunesLoading || isFetching) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text className="text-bialas font-chewy">Loading...</Text>
@@ -73,11 +104,11 @@ const BuildsBrowserPage: React.FC = () => {
     )
   }
 
-  if (error || versionError) {
+  if (error || versionError || runesError) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text className="text-bialas font-chewy">
-          Error: {(error || versionError)?.message}
+          Error: {(error || versionError || runesError)?.message}
         </Text>
       </View>
     )
@@ -116,21 +147,59 @@ const BuildsBrowserPage: React.FC = () => {
             />
           ))}
         </View>
+        <View className="flex-1 flex-row items-center mt-2">
+          <Image
+            source={{
+              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner1Name}.png`,
+            }}
+            style={{ width: 24, height: 24, marginRight: 4 }}
+          />
+          <Image
+            source={{
+              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner2Name}.png`,
+            }}
+            style={{ width: 24, height: 24 }}
+          />
+        </View>
         {item.runes && (
-          <View className="mt-2">
-            <View className="mt-1">
-              <Text className="text-bialas font-chewy">
-                Główna runa (Dark Harvest/Electrocute itd):
-              </Text>
-              {item.runes.runes1.length > 0 && (
-                <Text className="text-bialas font-chewy">
-                  {item.runes.runes1[0]}
-                </Text>
+          <View className="mt-2 flex-row">
+            <View className="flex-row items-center">
+              {item.runes.keyStone1Id && (
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(item.runes.keyStone1Id)?.icon}`,
+                  }}
+                  className="w-8 h-8 mr-2"
+                />
               )}
-              <Text className="text-bialas font-chewy">
-                Drugie drzewko (Inspiracja/Dominacja itd):{' '}
-                {item.runes.keyStone2Id}
-              </Text>
+              {item.runes.runes1.map((runeId, index) => (
+                <Image
+                  key={index}
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
+                  }}
+                  className="w-6 h-6 mr-1"
+                />
+              ))}
+            </View>
+            <View className="flex-row items-center ml-4">
+              {item.runes.keyStone2Id && (
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneTreeById(item.runes.keyStone2Id)?.icon}`,
+                  }}
+                  className="w-8 h-8 mr-2"
+                />
+              )}
+              {item.runes.runes2.map((runeId, index) => (
+                <Image
+                  key={index}
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
+                  }}
+                  className="w-6 h-6 mr-1"
+                />
+              ))}
             </View>
           </View>
         )}
