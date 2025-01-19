@@ -6,20 +6,15 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-  TextInput,
 } from 'react-native'
 import { useRoute } from '@react-navigation/native'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getCoursePreviewById } from '../api/course/getCoursePreviewById'
 import YoutubePlayer from 'react-native-youtube-iframe'
 import { getCourseById } from '../api/course/getCourseById'
-import { getComments } from '../api/comments/getComments'
-import { react } from '../api/comments/react'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
 import { FontAwesome } from '@expo/vector-icons'
-import { findProfile } from '../api/profile/findProfile'
-import { addComment } from '../api/comments/addComment'
 
 const CourseDetailsPage = () => {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
@@ -27,11 +22,7 @@ const CourseDetailsPage = () => {
   const { courseId } = route.params as { courseId: string }
   const queryClient = useQueryClient()
   const { userData } = useContext(UserContext) as UserContextType
-  const [profileImages, setProfileImages] = useState<{
-    [key: string]: string | null
-  }>({})
   const [ownsCourse, setOwnsCourse] = useState(true)
-  const [newComment, setNewComment] = useState('')
   const [showPurchaseMessage, setShowPurchaseMessage] = useState(false)
 
   useEffect(() => {
@@ -60,92 +51,6 @@ const CourseDetailsPage = () => {
     enabled: !!courseId,
   })
 
-  const {
-    data: commentsData,
-    isLoading: isCommentsLoading,
-    error: commentsError,
-  } = useQuery({
-    queryKey: ['comments', courseId],
-    queryFn: () => getComments(courseId, { page: 0, size: 10 }),
-    enabled: !!courseId,
-  })
-
-  const courseMutation = useMutation({
-    mutationFn: ({ objectId, value }: { objectId: string; value: boolean }) =>
-      react(objectId, value),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['course', courseId] })
-    },
-  })
-
-  const commentMutation = useMutation({
-    mutationFn: ({ commentId, value }: { commentId: string; value: boolean }) =>
-      react(commentId, value),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', courseId] })
-    },
-  })
-
-  const addCommentMutation = useMutation({
-    mutationFn: (comment: any) => addComment(comment),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', courseId] })
-      setNewComment('')
-    },
-  })
-
-  const handleCourseLike = () => {
-    courseMutation.mutate({ objectId: courseId, value: true })
-  }
-
-  const handleCourseDislike = () => {
-    courseMutation.mutate({ objectId: courseId, value: false })
-  }
-
-  const handleCommentLike = (commentId: string) => {
-    commentMutation.mutate({ commentId, value: true })
-  }
-
-  const handleCommentDislike = (commentId: string) => {
-    commentMutation.mutate({ commentId, value: false })
-  }
-
-  const handleAddComment = () => {
-    const commentPayload = {
-      objectId: courseId,
-      comment: newComment,
-      username: userData.username,
-      timestamp: Date.now(),
-    }
-    addCommentMutation.mutate(commentPayload)
-  }
-
-  const getProfileImage = async (username: string) => {
-    try {
-      const profile = await findProfile(username)
-      return profile.image
-        ? `data:${profile.image.contentType};base64,${profile.image.data}`
-        : null
-    } catch (error) {
-      console.error('Error fetching profile image:', error)
-      return null
-    }
-  }
-
-  useEffect(() => {
-    const fetchProfileImages = async () => {
-      const images: { [key: string]: string | null } = {}
-      for (const comment of commentsData.content) {
-        images[comment.username] = await getProfileImage(comment.username)
-      }
-      setProfileImages(images)
-    }
-
-    if (commentsData?.content) {
-      fetchProfileImages()
-    }
-  }, [commentsData])
-
   const handleVideoClick = (link: string) => {
     if (ownsCourse) {
       setSelectedVideo(link)
@@ -155,7 +60,7 @@ const CourseDetailsPage = () => {
     }
   }
 
-  if (isCourseLoading || isCommentsLoading) {
+  if (isCourseLoading) {
     return (
       <View className="flex-grow justify-center items-center bg-[#131313]">
         <ActivityIndicator size="large" color="#FFD700" />
@@ -168,16 +73,6 @@ const CourseDetailsPage = () => {
       <View className="flex-grow justify-center items-center bg-[#131313]">
         <Text className="text-lg text-white text-center">
           Error fetching course details: {courseError.message}
-        </Text>
-      </View>
-    )
-  }
-
-  if (commentsError) {
-    return (
-      <View className="flex-grow justify-center items-center bg-[#131313]">
-        <Text className="text-lg text-white text-center">
-          Error fetching comments: {commentsError.message}
         </Text>
       </View>
     )
@@ -225,22 +120,6 @@ const CourseDetailsPage = () => {
           </Text>
         )}
       </View>
-      <View className="flex-row px-4 justify-center mt-4">
-        <TouchableOpacity
-          onPress={handleCourseLike}
-          className="bg-[#F5F5F5] p-2 rounded m-2 flex-row items-center"
-        >
-          <FontAwesome name="thumbs-up" size={24} color="[#131313]" />
-          <Text className="text-[#131313] ml-2">{course.likesCount}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleCourseDislike}
-          className="bg-[#F5F5F5] p-2 rounded m-2 flex-row items-center"
-        >
-          <FontAwesome name="thumbs-down" size={24} color="[#131313]" />
-          <Text className="text-[#131313] ml-2">{course.dislikesCount}</Text>
-        </TouchableOpacity>
-      </View>
       {!ownsCourse && (
         <View className="px-4 text-center">
           <TouchableOpacity
@@ -255,84 +134,6 @@ const CourseDetailsPage = () => {
           </Text>
         </View>
       )}
-      <View className="mt-4 px-4">
-        <Text className="text-xl font-bold text-white text-center">
-          Comments
-        </Text>
-        {commentsData.content.length === 0 ? (
-          <Text className="text-white text-center">No comments yet.</Text>
-        ) : (
-          commentsData.content.map(
-            (comment: {
-              _id: string
-              username: string
-              comment: string
-              likesCount: number
-              dislikesCount: number
-            }) => (
-              <View
-                key={comment._id}
-                className="flex-row items-center pb-2 px-4"
-              >
-                <Image
-                  source={{ uri: profileImages[comment.username] }}
-                  className="w-10 h-10 rounded-full mr-2"
-                />
-                <View className="flex-1">
-                  <Text className="text-lg text-[#F5F5F5]">
-                    {comment.username}
-                  </Text>
-                  <Text className="text-white">{comment.comment}</Text>
-                  <View className="flex-row justify-center mt-2">
-                    <TouchableOpacity
-                      onPress={() => handleCommentLike(comment._id)}
-                      className="bg-[#F5F5F5] p-2 rounded m-2 flex-row items-center"
-                    >
-                      <FontAwesome
-                        name="thumbs-up"
-                        size={24}
-                        color="[#131313]"
-                      />
-                      <Text className="text-[#131313] ml-2">
-                        {comment.likesCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleCommentDislike(comment._id)}
-                      className="bg-[#F5F5F5] p-2 rounded m-2 flex-row items-center"
-                    >
-                      <FontAwesome
-                        name="thumbs-down"
-                        size={24}
-                        color="[#131313]"
-                      />
-                      <Text className="text-[#131313] ml-2">
-                        {comment.dislikesCount}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            )
-          )
-        )}
-        {ownsCourse && (
-          <View className="mt-4 pb-2">
-            <TextInput
-              value={newComment}
-              onChangeText={setNewComment}
-              placeholder="Add a comment"
-              className="bg-white p-2 rounded"
-            />
-            <TouchableOpacity
-              onPress={handleAddComment}
-              className="bg-[#F5B800] p-2 rounded mt-2"
-            >
-              <Text className="text-center text-[#131313]">Submit Comment</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
     </ScrollView>
   )
 }
