@@ -13,6 +13,7 @@ import { getUserData } from '../api/user/getUserData'
 import { deleteComment } from '../api/comments/deleteComment'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
+import { getRunes } from '../api/ddragon/getRunes'
 
 const BuildDetailsPage: React.FC = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -52,6 +53,15 @@ const BuildDetailsPage: React.FC = () => {
     queryKey: ['comments', buildId],
     queryFn: () => getComments(buildId, { size: 10 }),
     enabled: !!buildId,
+  })
+
+  const {
+    data: runesData,
+    isLoading: isRunesLoading,
+    error: runesError,
+  } = useQuery({
+    queryKey: ['runes'],
+    queryFn: getRunes,
   })
 
   useEffect(() => {
@@ -226,7 +236,26 @@ const BuildDetailsPage: React.FC = () => {
     deleteResponseMutation.mutate(responseId)
   }
 
-  if (isLoading || isVersionLoading || isCommentsLoading) {
+  const findRuneById = (runeId: string) => {
+    if (!runesData) return null
+    for (const tree of runesData) {
+      for (const slot of tree.slots) {
+        for (const rune of slot.runes) {
+          if (rune.id === runeId) {
+            return rune
+          }
+        }
+      }
+    }
+    return null
+  }
+
+  const findRuneTreeById = (treeId: string) => {
+    if (!runesData) return null
+    return runesData.find((tree) => tree.id === treeId)
+  }
+
+  if (isLoading || isVersionLoading || isCommentsLoading || isRunesLoading) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text className="text-bialas font-chewy">Loading...</Text>
@@ -234,11 +263,12 @@ const BuildDetailsPage: React.FC = () => {
     )
   }
 
-  if (error || versionError || commentsError) {
+  if (error || versionError || commentsError || runesError) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text className="text-bialas font-chewy">
-          Error: {(error || versionError || commentsError)?.message}
+          Error:{' '}
+          {(error || versionError || commentsError || runesError)?.message}
         </Text>
       </View>
     )
@@ -289,20 +319,61 @@ const BuildDetailsPage: React.FC = () => {
         ))}
       </View>
       {build.runes && (
-        <View className="mt-2">
-          <View className="mt-1">
-            <Text className="text-bialas font-chewy">Główna runa:</Text>
-            {build.runes.runes1.length > 0 && (
-              <Text className="text-bialas font-chewy">
-                {build.runes.runes1[0]}
-              </Text>
+        <View className="mt-2 flex-row">
+          <View className="flex-row items-center">
+            {build.runes.keyStone1Id && (
+              <Image
+                source={{
+                  uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(build.runes.keyStone1Id)?.icon}`,
+                }}
+                className="w-8 h-8 mr-2"
+              />
             )}
-            <Text className="text-bialas font-chewy">
-              Drugie drzewko: {build.runes.keyStone2Id}
-            </Text>
+            {build.runes.runes1.map((runeId, index) => (
+              <Image
+                key={index}
+                source={{
+                  uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
+                }}
+                className="w-6 h-6 mr-1"
+              />
+            ))}
+          </View>
+          <View className="flex-row items-center ml-4">
+            {build.runes.keyStone2Id && (
+              <Image
+                source={{
+                  uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneTreeById(build.runes.keyStone2Id)?.icon}`,
+                }}
+                className="w-8 h-8 mr-2"
+              />
+            )}
+            {build.runes.runes2.map((runeId, index) => (
+              <Image
+                key={index}
+                source={{
+                  uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
+                }}
+                className="w-6 h-6 mr-1"
+              />
+            ))}
           </View>
         </View>
       )}
+      <View className="flex-1 flex-row items-center mt-2">
+        <Image
+          source={{
+            uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${build.summoner1Name}.png`,
+          }}
+          style={{ width: 24, height: 24, marginRight: 4 }}
+        />
+        <Image
+          source={{
+            uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${build.summoner2Name}.png`,
+          }}
+          style={{ width: 24, height: 24 }}
+        />
+      </View>
       <Text className="text-bialas font-chewy">By: {build.username}</Text>
       <Text className="text-bialas font-chewy">
         Upvotes: {build.likesCount}
