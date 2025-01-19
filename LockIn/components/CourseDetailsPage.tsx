@@ -288,20 +288,20 @@ const CourseDetailsPage = () => {
       <View className="flex-row justify-center space-x-4 mt-2 mb-4">
         <TouchableOpacity
           onPress={handleLike}
-          className="py-2 px-6 flex-row items-center"
+          className="bg-zoltek py-2 px-4 rounded-lg flex-row items-center"
         >
-          <Text className="text-zoltek font-chewy text-lg mr-2">👍</Text>
-          <Text className="text-zoltek font-chewy text-lg">
+          <FontAwesome name="thumbs-up" size={24} color="#131313" />
+          <Text className="text-wegielek font-chewy text-lg ml-2">
             {course.likesCount || 0}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={handleDislike}
-          className="py-2 px-6 flex-row items-center"
+          className="bg-zoltek py-2 px-4 rounded-lg flex-row items-center"
         >
-          <Text className="text-zoltek font-chewy text-lg mr-2">👎</Text>
-          <Text className="text-zoltek font-chewy text-lg">
+          <FontAwesome name="thumbs-down" size={24} color="#131313" />
+          <Text className="text-wegielek font-chewy text-lg ml-2">
             {course.dislikesCount || 0}
           </Text>
         </TouchableOpacity>
@@ -361,7 +361,10 @@ const CourseDetailsPage = () => {
             onPress={
               replyingTo ? () => handleAddReply(replyingTo) : handleAddComment
             }
-            className="bg-zoltek py-2 px-4 rounded-lg items-center"
+            className={`py-2 px-4 rounded-lg items-center ${
+              newComment.trim() ? 'bg-zoltek' : 'bg-gray-500'
+            }`}
+            disabled={!newComment.trim()}
           >
             <Text className="text-wegielek font-chewy">
               {replyingTo ? 'Submit Reply' : 'Submit Comment'}
@@ -386,16 +389,30 @@ const CourseDetailsPage = () => {
                 <View className="flex-row items-center">
                   <TouchableOpacity
                     onPress={() => handleCommentLike(comment._id)}
+                    className="flex-row items-center mr-4"
                   >
-                    <Text className="text-zoltek font-chewy">
-                      👍 {comment.likesCount}
+                    <FontAwesome
+                      name="thumbs-up"
+                      size={20}
+                      color="#F5B800"
+                      className="mr-2"
+                    />
+                    <Text className="text-zoltek font-chewy ml-2">
+                      {comment.likesCount}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => handleCommentDislike(comment._id)}
+                    className="flex-row items-center"
                   >
-                    <Text className="text-zoltek font-chewy">
-                      👎 {comment.dislikesCount}
+                    <FontAwesome
+                      name="thumbs-down"
+                      size={20}
+                      color="#F5B800"
+                      className="mr-2"
+                    />
+                    <Text className="text-zoltek font-chewy ml-2">
+                      {comment.dislikesCount}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -422,7 +439,12 @@ const CourseDetailsPage = () => {
                 />
                 <TouchableOpacity
                   onPress={() => handleAddReply(comment._id)}
-                  className="bg-zoltek py-2 px-4 rounded-lg items-center"
+                  className={`py-2 px-4 rounded-lg items-center ${
+                    replyTexts[comment._id]?.trim()
+                      ? 'bg-zoltek'
+                      : 'bg-gray-500'
+                  }`}
+                  disabled={!replyTexts[comment._id]?.trim()}
                 >
                   <Text className="text-wegielek font-chewy">Submit Reply</Text>
                 </TouchableOpacity>
@@ -449,16 +471,30 @@ const CourseDetailsPage = () => {
                         <View className="flex-row items-center">
                           <TouchableOpacity
                             onPress={() => handleResponseLike(response._id)}
+                            className="flex-row items-center mr-4"
                           >
-                            <Text className="text-zoltek font-chewy">
-                              👍 {response.likesCount}
+                            <FontAwesome
+                              name="thumbs-up"
+                              size={20}
+                              color="#F5B800"
+                              className="mr-2"
+                            />
+                            <Text className="text-zoltek font-chewy ml-2">
+                              {response.likesCount}
                             </Text>
                           </TouchableOpacity>
                           <TouchableOpacity
                             onPress={() => handleResponseDislike(response._id)}
+                            className="flex-row items-center"
                           >
-                            <Text className="text-zoltek font-chewy">
-                              👎 {response.dislikesCount}
+                            <FontAwesome
+                              name="thumbs-down"
+                              size={20}
+                              color="#F5B800"
+                              className="mr-2"
+                            />
+                            <Text className="text-zoltek font-chewy ml-2">
+                              {response.dislikesCount}
                             </Text>
                           </TouchableOpacity>
                         </View>
