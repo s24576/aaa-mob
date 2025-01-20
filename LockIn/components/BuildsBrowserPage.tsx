@@ -41,6 +41,7 @@ interface Build {
   }
   summoner1Name: string
   summoner2Name: string
+  position: string
 }
 
 const BuildsBrowserPage: React.FC = () => {
@@ -175,6 +176,24 @@ const BuildsBrowserPage: React.FC = () => {
     return runesData.find((tree) => tree.id === treeId)
   }
 
+  const statShardImages: { [key: string]: any } = {
+    Adaptive: require('../assets/statShards/Adaptive.png'),
+    AttackSpeed: require('../assets/statShards/AttackSpeed.png'),
+    CDR: require('../assets/statShards/CDR.png'),
+    HP: require('../assets/statShards/HP.png'),
+    HPScaling: require('../assets/statShards/HPScaling.png'),
+    MS: require('../assets/statShards/MS.png'),
+    Tenacity: require('../assets/statShards/Tenacity.png'),
+  }
+
+  const positions: { [key: string]: any } = {
+    Top: require('../assets/positions/Top.png'),
+    Jungle: require('../assets/positions/Jungle.png'),
+    Mid: require('../assets/positions/Mid.png'),
+    Bottom: require('../assets/positions/Bot.png'),
+    Support: require('../assets/positions/Support.png'),
+  }
+
   const renderBuild = ({ item }: { item: Build }) => (
     <TouchableOpacity onPress={() => handleBuildPress(item._id)}>
       <View className="p-4 border-b border-gray-300">
@@ -247,6 +266,15 @@ const BuildsBrowserPage: React.FC = () => {
           </View>
         )}
         <View className="flex-1 flex-row items-center">
+          {item.runes.statShards.map((shard, index) => (
+            <Image
+              key={index}
+              source={statShardImages[shard] || statShardImages['DEFAULT']}
+              style={{ width: 24, height: 24, marginRight: 4 }}
+            />
+          ))}
+        </View>
+        <View className="flex-1 flex-row items-center">
           <Image
             source={{
               uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner1Name}.png`,
@@ -260,6 +288,9 @@ const BuildsBrowserPage: React.FC = () => {
             style={{ width: 24, height: 24 }}
           />
         </View>
+        {item.position && (
+          <Image source={positions[item.position]} className="w-6 h-6" />
+        )}
         <Text className="text-bialas font-chewy">
           Upvotes: {item.likesCount}
         </Text>

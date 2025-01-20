@@ -39,6 +39,24 @@ interface Build {
   summoner2Name: string
 }
 
+const statShardImages: { [key: string]: any } = {
+  Adaptive: require('../assets/statShards/Adaptive.png'),
+  AttackSpeed: require('../assets/statShards/AttackSpeed.png'),
+  CDR: require('../assets/statShards/CDR.png'),
+  HP: require('../assets/statShards/HP.png'),
+  HPScaling: require('../assets/statShards/HPScaling.png'),
+  MS: require('../assets/statShards/MS.png'),
+  Tenacity: require('../assets/statShards/Tenacity.png'),
+}
+
+const positions: { [key: string]: any } = {
+  Top: require('../assets/positions/Top.png'),
+  Jungle: require('../assets/positions/Jungle.png'),
+  Mid: require('../assets/positions/Mid.png'),
+  Bottom: require('../assets/positions/Bot.png'),
+  Support: require('../assets/positions/Support.png'),
+}
+
 const BuildsBrowserPage: React.FC = () => {
   const navigation = useNavigation<BuildDetailsScreenProps['navigation']>()
 
@@ -147,20 +165,6 @@ const BuildsBrowserPage: React.FC = () => {
             />
           ))}
         </View>
-        <View className="flex-1 flex-row items-center mt-2">
-          <Image
-            source={{
-              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner1Name}.png`,
-            }}
-            style={{ width: 24, height: 24, marginRight: 4 }}
-          />
-          <Image
-            source={{
-              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner2Name}.png`,
-            }}
-            style={{ width: 24, height: 24 }}
-          />
-        </View>
         {item.runes && (
           <View className="mt-2 flex-row">
             <View className="flex-row items-center">
@@ -202,6 +206,32 @@ const BuildsBrowserPage: React.FC = () => {
               ))}
             </View>
           </View>
+        )}
+        <View className="flex-1 flex-row items-center">
+          {item.runes.statShards.map((shard, index) => (
+            <Image
+              key={index}
+              source={statShardImages[shard] || statShardImages['DEFAULT']}
+              style={{ width: 24, height: 24, marginRight: 4 }}
+            />
+          ))}
+        </View>
+        <View className="flex-1 flex-row items-center">
+          <Image
+            source={{
+              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner1Name}.png`,
+            }}
+            style={{ width: 24, height: 24, marginRight: 4 }}
+          />
+          <Image
+            source={{
+              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner2Name}.png`,
+            }}
+            style={{ width: 24, height: 24 }}
+          />
+        </View>
+        {item.position && (
+          <Image source={positions[item.position]} className="w-6 h-6" />
         )}
         <Text className="text-bialas font-chewy">By: {item.username}</Text>
         <Text className="text-bialas font-chewy">
