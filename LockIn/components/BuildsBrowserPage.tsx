@@ -8,6 +8,7 @@ import {
   Modal,
   TouchableWithoutFeedback,
   StyleSheet,
+  TextInput,
 } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { getBuilds } from '../api/build/getBuilds'
@@ -15,7 +16,7 @@ import { getVersion } from '../api/ddragon/version'
 import { getChampionNames } from '../api/ddragon/getChampionNames'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { BuildDetailsScreenProps } from '../App'
-import { Button, TextInput } from 'react-native-paper'
+import { Button } from 'react-native-paper'
 import { getRunes } from '../api/ddragon/getRunes'
 import { FontAwesome } from '@expo/vector-icons'
 
@@ -46,6 +47,22 @@ interface Build {
   timestamp: number
 }
 
+const CustomButton = ({
+  title,
+  onPress,
+  style,
+  textStyle,
+}: {
+  title: string
+  onPress: () => void
+  style?: any
+  textStyle?: any
+}) => (
+  <TouchableOpacity onPress={onPress} style={style}>
+    <Text style={textStyle}>{title}</Text>
+  </TouchableOpacity>
+)
+
 const BuildsBrowserPage: React.FC = () => {
   const navigation = useNavigation<BuildDetailsScreenProps['navigation']>()
   const [selectedChampion, setSelectedChampion] = useState<string | undefined>(
@@ -74,6 +91,7 @@ const BuildsBrowserPage: React.FC = () => {
     multiSelect: false,
     selectedValues: [],
   })
+  const [filtersVisible, setFiltersVisible] = useState(false)
 
   const {
     data: buildsData,
@@ -281,7 +299,6 @@ const BuildsBrowserPage: React.FC = () => {
       (key) => champions[key] === selectedChampions[0]
     )
     setSelectedChampion(selectedChampionKey)
-    console.log('Selected champion key:', selectedChampionKey)
     setPickerModal({ ...pickerModal, visible: false })
   }
 
@@ -323,46 +340,69 @@ const BuildsBrowserPage: React.FC = () => {
         keyExtractor={(item) => item._id}
         renderItem={renderBuild}
         ListHeaderComponent={
-          <>
-            <View className="items-center">
-              <Button
-                onPress={() =>
-                  openPickerModal(
-                    'Select Champions',
-                    Object.keys(champions)
-                      .sort()
-                      .map((key) => champions[key]),
-                    (values) => handleChampionSelect(values),
-                    false,
-                    selectedChampion ? [selectedChampion] : []
-                  )
-                }
-              >
-                <Text>Select Champions</Text>
-              </Button>
-              <TextInput
-                label="Author Name"
-                value={authorName}
-                onChangeText={setAuthorName}
-                style={{ marginVertical: 10, width: '80%' }}
-              />
-              <Button onPress={handleFilterPress}>
-                <Text>Filter Builds</Text>
-              </Button>
-              <Button onPress={handleClearFilters}>
-                <Text>Clear Filters</Text>
-              </Button>
-            </View>
-            {selectedChampion && (
-              <View className="p-4">
-                <Button onPress={handleClearFilters}>
-                  <Text>Clear Filters</Text>
-                </Button>
-              </View>
+          <View className="p-5">
+            <CustomButton
+              title={filtersVisible ? 'Hide Filters' : 'Show Filters'}
+              onPress={() => setFiltersVisible(!filtersVisible)}
+              style={styles.customButton}
+              textStyle={styles.customButtonText}
+            />
+            {filtersVisible && (
+              <>
+                <CustomButton
+                  title={
+                    selectedChampion ? (
+                      <View style={styles.selectedChampionContainer}>
+                        <Image
+                          source={{
+                            uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${selectedChampion}.png`,
+                          }}
+                          style={styles.championImage}
+                        />
+                        <Text style={styles.selectedChampionText}>
+                          {champions[selectedChampion]}
+                        </Text>
+                      </View>
+                    ) : (
+                      'Select Champions'
+                    )
+                  }
+                  onPress={() =>
+                    openPickerModal(
+                      'Select Champions',
+                      Object.keys(champions)
+                        .sort()
+                        .map((key) => champions[key]),
+                      (values) => handleChampionSelect(values),
+                      false,
+                      selectedChampion ? [selectedChampion] : []
+                    )
+                  }
+                  style={styles.customButton}
+                  textStyle={styles.customButtonText}
+                />
+                <TextInput
+                  value={authorName}
+                  onChangeText={setAuthorName}
+                  style={styles.textInput}
+                />
+                <CustomButton
+                  title="Filter Builds"
+                  onPress={handleFilterPress}
+                  style={styles.customButton}
+                  textStyle={styles.customButtonText}
+                />
+                <CustomButton
+                  title="Clear Filters"
+                  onPress={handleClearFilters}
+                  style={styles.customButton2}
+                  textStyle={styles.customButton2Text}
+                />
+              </>
             )}
-          </>
+          </View>
         }
-        ListFooterComponent={<View className="mb-24" />}
+        ListFooterComponent={<View className="mb-40" />}
       />
       {/* modal na wybieranie championów */}
       <Modal
@@ -420,13 +460,14 @@ const BuildsBrowserPage: React.FC = () => {
                   )}
                 />
                 <View style={styles.buttonContainer}>
-                  <Button
+                  <CustomButton
+                    title="Back"
                     onPress={() =>
                       setPickerModal({ ...pickerModal, visible: false })
                     }
-                  >
-                    Back
-                  </Button>
+                    style={styles.customButton}
+                    textStyle={styles.customButtonText}
+                  />
                 </View>
               </View>
             </TouchableWithoutFeedback>
@@ -523,6 +564,62 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
     marginBottom: 0,
+  },
+  customButton: {
+    backgroundColor: '#13131313',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+  },
+  customButtonText: {
+    color: '#F5F5F5',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  customButton2: {
+    backgroundColor: '#F5B800',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    margin: 5,
+    alignItems: 'center',
+  },
+  customButton2Text: {
+    fontFamily: 'Chewy-Regular',
+    color: '#131313',
+    fontSize: 16,
+  },
+  textInput: {
+    fontFamily: 'Chewy-Regular',
+    backgroundColor: '#1E1E1E',
+    color: '#F5F5F5',
+    padding: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    marginVertical: 10,
+  },
+  championImage: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  selectedChampionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  selectedChampionText: {
+    color: '#F5F5F5',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    marginLeft: 10,
   },
 })
 
