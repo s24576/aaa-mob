@@ -222,6 +222,10 @@ const DuosPage = () => {
     navigation.navigate('DuoAnswers')
   }
 
+  const handleMemberPress = (username: string) => {
+    navigation.navigate('LockInProfile', { username })
+  }
+
   const handleApplyForDuo = async () => {
     if (!selectedProfile || !selectedDuoId) {
       console.error('No Riot profile selected or duo ID missing')
@@ -290,6 +294,10 @@ const DuosPage = () => {
     Other: require('../assets/flags/OTHER.png'),
   }
 
+  const handleProfilePress = (server: string, puuid: string) => {
+    navigation.navigate('RiotProfile', { server, puuid })
+  }
+
   const renderDuo = ({ item }: { item: Duo }) => {
     const serverName =
       servers.find((s) => s.code === item.server)?.name || item.server
@@ -299,7 +307,9 @@ const DuosPage = () => {
       <View style={styles2.answerContainer}>
         <View style={styles2.headerContainer}>
           <Text style={[styles.duoText, styles2.serverName]}>{serverName}</Text>
-          <Text style={styles.authorText}>{item.author}</Text>
+          <TouchableOpacity onPress={() => handleMemberPress(item.author)}>
+            <Text style={styles.authorText}>{item.author}</Text>
+          </TouchableOpacity>
           <Text style={styles.dateText}>{dateCreated}</Text>
         </View>
         <View style={styles.bodyContainer}>
@@ -314,8 +324,16 @@ const DuosPage = () => {
               style={styles.rankImageLarge}
             />
           </View>
-
-          <Text style={styles.authorText}>Go to Riot Profile</Text>
+          <TouchableOpacity
+            onPress={() =>
+              handleProfilePress(
+                item.server,
+                item.puuid.split('_').slice(1).join('_')
+              )
+            }
+          >
+            <Text style={styles.authorText}>Go to Riot Profile</Text>
+          </TouchableOpacity>
           <View className="flex-row items-center justify-space-between">
             <View className="flex-1 items-start">
               <Text style={[styles.duoText, styles.positionsText]}>

@@ -60,6 +60,14 @@ const DuoAnswerPage = () => {
     }
   }
 
+  const handleProfilePress = (server: string, puuid: string) => {
+    navigation.navigate('RiotProfile', { server, puuid })
+  }
+
+  const handleMemberPress = (username: string) => {
+    navigation.navigate('LockInProfile', { username })
+  }
+
   useEffect(() => {
     if (duoAnswer) {
       console.log('New duo answer:', duoAnswer)
@@ -124,13 +132,25 @@ const DuoAnswerPage = () => {
                     <Text style={[styles.answerText, styles.serverName]}>
                       {serverName}
                     </Text>
-                    <Text style={styles.answerTitle}>{answer.username}</Text>
+                    <TouchableOpacity
+                      onPress={() => handleMemberPress(answer.username)}
+                    >
+                      <Text style={styles.answerTitle}>{answer.username}</Text>
+                    </TouchableOpacity>
                     <Text style={[styles.answerText, styles.serverName]}>
                       {new Date(answer.timestamp * 1000).toLocaleDateString()}
                     </Text>
                   </View>
                   <View style={styles.profileContainer}>
-                    <View style={styles.profileContents}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleProfilePress(
+                          answer.profile.server,
+                          answer.profile.puuid
+                        )
+                      }
+                      style={styles.profileContents}
+                    >
                       <Image
                         source={{
                           uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${answer.profile.profileIconId}.png`,
@@ -140,7 +160,7 @@ const DuoAnswerPage = () => {
                       <Text style={styles.profileText}>
                         {answer.profile.gameName}#{answer.profile.tagLine}
                       </Text>
-                    </View>
+                    </TouchableOpacity>
                     <View style={styles.profileContents}>
                       {answer.profile.tier ? (
                         <Image
