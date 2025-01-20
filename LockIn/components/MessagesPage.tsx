@@ -200,7 +200,7 @@ const MessagesPage: React.FC = () => {
           <Text className="text-bialas">No chats available</Text>
         }
       />
-      <View className="flex-row justify-between items-center mt-2 absolute bottom-3 left-5 right-5">
+      <View className="flex-row justify-between items-center mt-2 absolute bottom-0 left-0 right-0 bg-wegielek">
         <TouchableOpacity onPress={handlePreviousPage} disabled={page === 0}>
           <Ionicons name="arrow-back" size={30} color="#F5B800" />
         </TouchableOpacity>

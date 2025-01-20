@@ -21,6 +21,8 @@ import { useNavigation } from '@react-navigation/native'
 import { DuoScreenProps } from '../App'
 import { answerDuo } from '../api/duo/answerDuo'
 import servers from '../assets/servers.json'
+import { Ionicons } from '@expo/vector-icons'
+import styles2 from '../styles/BrowserStyles'
 
 interface Duo {
   _id: string
@@ -60,7 +62,7 @@ const DuosPage = () => {
   const [applyModalVisible, setApplyModalVisible] = useState(false)
   const [selectedDuoId, setSelectedDuoId] = useState<string | null>(null)
   const [applyMessage, setApplyMessage] = useState<string>('')
-  const [pages, setPages] = useState<number[]>([0])
+  const [page, setPage] = useState(0)
   const size = 5
   const [pickerModal, setPickerModal] = useState<{
     visible: boolean
@@ -107,9 +109,9 @@ const DuosPage = () => {
   const navigation = useNavigation<DuoScreenProps['navigation']>()
 
   const duosQueries = useQuery({
-    queryKey: ['Duos', filters, pages],
+    queryKey: ['Duos', filters, page],
     queryFn: () =>
-      getDuos(filters, { size: 5, sort: 'timestamp', direction: 'DESC' }),
+      getDuos(filters, { page, size: 5, sort: 'timestamp', direction: 'DESC' }),
   })
 
   useEffect(() => {
@@ -220,6 +222,10 @@ const DuosPage = () => {
     navigation.navigate('DuoAnswers')
   }
 
+  const handleMemberPress = (username: string) => {
+    navigation.navigate('LockInProfile', { username })
+  }
+
   const handleApplyForDuo = async () => {
     if (!selectedProfile || !selectedDuoId) {
       console.error('No Riot profile selected or duo ID missing')
@@ -239,6 +245,17 @@ const DuosPage = () => {
     } catch (error) {
       console.error('Error applying for duo:', error)
       console.log(answerDuo, answer)
+    }
+  }
+  const handleNextPage = () => {
+    setPage((prevPage) => prevPage + 1)
+    duosQueries.refetch()
+  }
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage((prevPage) => prevPage - 1)
+      duosQueries.refetch()
     }
   }
 
@@ -277,20 +294,25 @@ const DuosPage = () => {
     Other: require('../assets/flags/OTHER.png'),
   }
 
+  const handleProfilePress = (server: string, puuid: string) => {
+    navigation.navigate('RiotProfile', { server, puuid })
+  }
+
   const renderDuo = ({ item }: { item: Duo }) => {
     const serverName =
       servers.find((s) => s.code === item.server)?.name || item.server
     const dateCreated = new Date(item.timestamp * 1000).toLocaleDateString()
 
     return (
-      <View style={styles.duoContainer}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.authorText}>{item.author}</Text>
-          <Text style={styles.duoText}>{serverName}</Text>
+      <View style={styles2.answerContainer}>
+        <View style={styles2.headerContainer}>
+          <Text style={[styles.duoText, styles2.serverName]}>{serverName}</Text>
+          <TouchableOpacity onPress={() => handleMemberPress(item.author)}>
+            <Text style={styles.authorText}>{item.author}</Text>
+          </TouchableOpacity>
           <Text style={styles.dateText}>{dateCreated}</Text>
         </View>
         <View style={styles.bodyContainer}>
-          <Text style={styles.authorText}>Go to Riot Profile</Text>
           <View style={styles.rankContainer}>
             <Image
               source={rankImages[item.minRank] || rankImages['UNRANKED']}
@@ -302,21 +324,26 @@ const DuosPage = () => {
               style={styles.rankImageLarge}
             />
           </View>
-          <View className="flex-1 items-center justify-center">
-            <View style={styles.positionContainer}>
+          <TouchableOpacity
+            onPress={() =>
+              handleProfilePress(
+                item.server,
+                item.puuid.split('_').slice(1).join('_')
+              )
+            }
+          >
+            <Text style={styles.authorText}>Go to Riot Profile</Text>
+          </TouchableOpacity>
+          <View className="flex-row items-center justify-space-between">
+            <View className="flex-1 items-start">
+              <Text style={[styles.duoText, styles.positionsText]}>
+                Looked Positions:
+              </Text>
               <Text style={styles.duoText}>Played Positions:</Text>
-              {item.positions.map((position) => (
-                <Image
-                  key={position}
-                  source={positionImages[position]}
-                  style={styles.positionImageLarge}
-                />
-              ))}
             </View>
-            {item.lookedPositions && (
+            <View className="flex-1 items-center justify-center">
               <View style={styles.positionContainer}>
-                <Text style={styles.duoText}>Looked Positions:</Text>
-                {item.lookedPositions.map((position) => (
+                {item.positions.map((position) => (
                   <Image
                     key={position}
                     source={positionImages[position]}
@@ -324,7 +351,18 @@ const DuosPage = () => {
                   />
                 ))}
               </View>
-            )}
+              {item.lookedPositions && (
+                <View style={styles.positionContainer}>
+                  {item.lookedPositions.map((position) => (
+                    <Image
+                      key={position}
+                      source={positionImages[position]}
+                      style={styles.positionImageLarge}
+                    />
+                  ))}
+                </View>
+              )}
+            </View>
           </View>
           <View style={styles.languageContainer}>
             {item.languages.map((language) => (
@@ -377,7 +415,16 @@ const DuosPage = () => {
   }
 
   return (
-    <View className="pt-2">
+    <View style={styles2.container}>
+      <View style={styles2.header}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Home')}
+          style={styles2.backButton}
+        >
+          <Ionicons name="arrow-back" size={30} color="#F5B800" />
+        </TouchableOpacity>
+        <Text style={styles2.headerText}>Duo Browser:</Text>
+      </View>
       <FlatList
         data={duosQueries.data?.content}
         keyExtractor={(item) => item._id}
@@ -588,6 +635,15 @@ const DuosPage = () => {
           </View>
         }
       />
+      <View style={styles2.paginationContainer}>
+        <TouchableOpacity onPress={handlePreviousPage} disabled={page === 0}>
+          <Ionicons name="arrow-back" size={30} color="#F5B800" />
+        </TouchableOpacity>
+        <Text style={styles2.pageNumber}>{page + 1}</Text>
+        <TouchableOpacity onPress={handleNextPage}>
+          <Ionicons name="arrow-forward" size={30} color="#F5B800" />
+        </TouchableOpacity>
+      </View>
       {/* modal na dodawanie ogłoszenia */}
       <Modal
         visible={modalVisible}
@@ -928,7 +984,9 @@ const DuosPage = () => {
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.modalContent}>
-                <Text className="text-bialas">{pickerModal.type}</Text>
+                <Text style={[styles.modalTitle, styles.duoText]}>
+                  {pickerModal.type}
+                </Text>
                 <FlatList
                   data={pickerModal.options}
                   keyExtractor={(item) => item}
@@ -949,9 +1007,7 @@ const DuosPage = () => {
                         }
                       }}
                     >
-                      <View
-                        style={{ flexDirection: 'row', alignItems: 'center' }}
-                      >
+                      <View style={styles.modalOptionContainer}>
                         {pickerModal.type === 'Select Champions' ? (
                           <Image
                             source={{
@@ -980,7 +1036,7 @@ const DuosPage = () => {
                         ) : null}
                         <Text
                           style={[
-                            styles.option,
+                            styles.modalOptionText,
                             pickerModal.selectedValues.includes(option) &&
                               styles.selectedOption,
                           ]}
@@ -1114,6 +1170,7 @@ const styles = StyleSheet.create({
   },
   customButton: {
     backgroundColor: '#13131313',
+    fontFamily: 'Chewy-Regular',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -1203,8 +1260,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   rankImage: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -1261,6 +1318,27 @@ const styles = StyleSheet.create({
     width: 30,
     height: 20,
     marginRight: 5,
+  },
+  positionsText: {
+    marginTop: 5,
+    marginBottom: 15,
+  },
+  modalTitle: {
+    color: '#F5F5F5',
+    fontFamily: 'Chewy-Regular',
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  modalOptionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+  },
+  modalOptionText: {
+    color: '#F5F5F5',
+    fontFamily: 'Chewy-Regular',
+    fontSize: 16,
   },
 })
 
