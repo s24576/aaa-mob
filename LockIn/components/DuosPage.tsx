@@ -966,7 +966,9 @@ const DuosPage = () => {
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.modalContent}>
-                <Text style={styles.duoText}>{pickerModal.type}</Text>
+                <Text style={[styles.modalTitle, styles.duoText]}>
+                  {pickerModal.type}
+                </Text>
                 <FlatList
                   data={pickerModal.options}
                   keyExtractor={(item) => item}
@@ -987,9 +989,7 @@ const DuosPage = () => {
                         }
                       }}
                     >
-                      <View
-                        style={{ flexDirection: 'row', alignItems: 'center' }}
-                      >
+                      <View style={styles.modalOptionContainer}>
                         {pickerModal.type === 'Select Champions' ? (
                           <Image
                             source={{
@@ -1018,7 +1018,7 @@ const DuosPage = () => {
                         ) : null}
                         <Text
                           style={[
-                            styles.option,
+                            styles.modalOptionText,
                             pickerModal.selectedValues.includes(option) &&
                               styles.selectedOption,
                           ]}
@@ -1242,8 +1242,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   rankImage: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -1304,6 +1304,23 @@ const styles = StyleSheet.create({
   positionsText: {
     marginTop: 5,
     marginBottom: 15,
+  },
+  modalTitle: {
+    color: '#F5F5F5',
+    fontFamily: 'Chewy-Regular',
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  modalOptionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+  },
+  modalOptionText: {
+    color: '#F5F5F5',
+    fontFamily: 'Chewy-Regular',
+    fontSize: 16,
   },
 })
 
