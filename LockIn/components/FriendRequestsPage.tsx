@@ -73,29 +73,22 @@ const FriendRequestsPage: React.FC = () => {
     }
   }
 
-  const handleAcceptRequest = async (id: string) => {
+  const handleRespondRequest = async (id: string, response: boolean) => {
     try {
-      await respondFriendRequest({ requestId: id, response: true })
-      Alert.alert('Success', 'Friend request accepted!', [
-        { text: 'OK', style: 'cancel' },
-      ])
+      await respondFriendRequest({ requestId: id, response })
+      Alert.alert(
+        'Success',
+        `Friend request ${response ? 'accepted' : 'declined'}!`,
+        [{ text: 'OK', style: 'cancel' }]
+      )
       refetchIncomingRequests()
     } catch (error) {
       console.error(error)
-      Alert.alert('Error', 'Failed to accept friend request.', [{ text: 'OK' }])
-    }
-  }
-
-  const handleDeclineRequest = async (id: string) => {
-    try {
-      await respondFriendRequest({ requestId: id, response: false })
-      Alert.alert('Success', 'Friend request declined!', [{ text: 'OK' }])
-      refetchIncomingRequests()
-    } catch (error) {
-      console.error(error)
-      Alert.alert('Error', 'Failed to decline friend request.', [
-        { text: 'OK' },
-      ])
+      Alert.alert(
+        'Error',
+        `Failed to ${response ? 'accept' : 'decline'} friend request.`,
+        [{ text: 'OK' }]
+      )
     }
   }
 
@@ -182,11 +175,13 @@ const FriendRequestsPage: React.FC = () => {
                 >
                   {item.from}
                 </Text>
-                <TouchableOpacity onPress={() => handleAcceptRequest(item._id)}>
+                <TouchableOpacity
+                  onPress={() => handleRespondRequest(item._id, true)}
+                >
                   <Icon name="checkmark-circle" size={30} color="#F5B800" />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => handleDeclineRequest(item._id)}
+                  onPress={() => handleRespondRequest(item._id, false)}
                 >
                   <Icon name="close-circle" size={30} color="#F5B800" />
                 </TouchableOpacity>
