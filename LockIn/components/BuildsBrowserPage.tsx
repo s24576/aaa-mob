@@ -178,16 +178,6 @@ const BuildsBrowserPage: React.FC = () => {
     return runesData.find((tree) => tree.id === treeId)
   }
 
-  const statShardImages: { [key: string]: any } = {
-    Adaptive: require('../assets/statShards/Adaptive.png'),
-    AttackSpeed: require('../assets/statShards/AttackSpeed.png'),
-    CDR: require('../assets/statShards/CDR.png'),
-    HP: require('../assets/statShards/HP.png'),
-    HPScaling: require('../assets/statShards/HPScaling.png'),
-    MS: require('../assets/statShards/MS.png'),
-    Tenacity: require('../assets/statShards/Tenacity.png'),
-  }
-
   const positions: { [key: string]: any } = {
     Top: require('../assets/positions/Top.png'),
     Jungle: require('../assets/positions/Jungle.png'),
