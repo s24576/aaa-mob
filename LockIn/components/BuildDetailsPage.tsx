@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Text, Image, Button, ScrollView, TextInput } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  Button,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getBuildById } from '../api/build/getBuildById'
@@ -14,6 +22,7 @@ import { deleteComment } from '../api/comments/deleteComment'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
 import { getRunes } from '../api/ddragon/getRunes'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 const BuildDetailsPage: React.FC = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -390,96 +399,167 @@ const BuildDetailsPage: React.FC = () => {
         />
       </View>
       <View className="mt-4 mb-6">
-        <Text className="text-bialas font-chewy">Comments</Text>
-        <TextInput
-          value={newComment}
-          onChangeText={setNewComment}
-          placeholder={replyingTo ? 'Add a reply' : 'Add a comment'}
-          placeholderTextColor="#F5F5F5"
-          className="border border-white p-2 mb-2"
-          style={{ color: '#F5F5F5' }}
-        />
-        <Button
-          title={replyingTo ? 'Submit Reply' : 'Submit Comment'}
-          onPress={
-            replyingTo ? () => handleAddReply(replyingTo) : handleAddComment
-          }
-        />
+        <Text className="text-xl text-bialas font-chewy mb-4">Comments</Text>
+
+        <View className="bg-wegielek border border-zoltek rounded-lg mb-4 p-3">
+          <TextInput
+            value={newComment}
+            onChangeText={setNewComment}
+            placeholder={replyingTo ? 'Add a reply' : 'Add a comment'}
+            placeholderTextColor="#A9A9A9"
+            className="text-bialas font-chewy mb-3"
+          />
+          <TouchableOpacity
+            onPress={
+              replyingTo ? () => handleAddReply(replyingTo) : handleAddComment
+            }
+            className={`py-2 px-4 rounded-lg items-center ${
+              newComment.trim() ? 'bg-zoltek' : 'bg-gray-500'
+            }`}
+            disabled={!newComment.trim()}
+          >
+            <Text className="text-wegielek font-chewy">
+              {replyingTo ? 'Submit Reply' : 'Submit Comment'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         {comments?.content.length > 0 ? (
           comments.content.map((comment: any) => (
             <View
               key={comment._id}
-              className="mt-2 p-2 border-b border-gray-300"
+              className="bg-wegielek border border-zoltek rounded-lg mb-4 p-3"
             >
-              <Text className="text-bialas font-chewy">{comment.username}</Text>
-              <Text className="text-bialas font-chewy">{comment.comment}</Text>
-              <Text className="text-bialas font-chewy">
-                Upvotes: {comment.likesCount}
+              <Text className="text-zoltek font-chewy text-lg mb-1">
+                {comment.username}
               </Text>
-              <Text className="text-bialas font-chewy">
-                Downvotes: {comment.dislikesCount}
+              <Text className="text-bialas font-chewy mb-3">
+                {comment.comment}
               </Text>
-              <View className="flex-row mt-2">
-                <Button
-                  title="Like"
-                  onPress={() => handleCommentLike(comment._id)}
-                />
-                <Button
-                  title="Dislike"
-                  onPress={() => handleCommentDislike(comment._id)}
-                />
+
+              <View className="flex-row justify-between items-center mb-3">
+                <View className="flex-row items-center">
+                  <TouchableOpacity
+                    onPress={() => handleCommentLike(comment._id)}
+                    className="flex-row items-center mr-4"
+                  >
+                    <FontAwesome
+                      name="thumbs-up"
+                      size={20}
+                      color="#F5B800"
+                      className="mr-2"
+                    />
+                    <Text className="text-zoltek font-chewy ml-2">
+                      {comment.likesCount}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleCommentDislike(comment._id)}
+                    className="flex-row items-center"
+                  >
+                    <FontAwesome
+                      name="thumbs-down"
+                      size={20}
+                      color="#F5B800"
+                      className="mr-2"
+                    />
+                    <Text className="text-zoltek font-chewy ml-2">
+                      {comment.dislikesCount}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
                 {comment.username === username && (
-                  <Button
-                    title="Delete"
+                  <TouchableOpacity
                     onPress={() => handleDeleteComment(comment._id)}
-                  />
+                    className="bg-red-500 py-2 px-4 rounded-lg"
+                  >
+                    <Text className="text-wegielek font-chewy">Delete</Text>
+                  </TouchableOpacity>
                 )}
               </View>
-              <TextInput
-                value={replyTexts[comment._id] || ''}
-                onChangeText={(text) =>
-                  handleReplyTextChange(comment._id, text)
-                }
-                placeholder="Add a reply"
-                placeholderTextColor="#F5F5F5"
-                className="border border-white p-2 mb-2"
-                style={{ color: '#F5F5F5' }}
-              />
-              <Button
-                title="Submit Reply"
-                onPress={() => handleAddReply(comment._id)}
-              />
+
+              <View className="border-t border-zoltek pt-3">
+                <TextInput
+                  value={replyTexts[comment._id] || ''}
+                  onChangeText={(text) =>
+                    handleReplyTextChange(comment._id, text)
+                  }
+                  placeholder="Add a reply"
+                  placeholderTextColor="#A9A9A9"
+                  className="text-bialas font-chewy mb-3"
+                />
+                <TouchableOpacity
+                  onPress={() => handleAddReply(comment._id)}
+                  className={`py-2 px-4 rounded-lg items-center ${
+                    replyTexts[comment._id]?.trim()
+                      ? 'bg-zoltek'
+                      : 'bg-gray-500'
+                  }`}
+                  disabled={!replyTexts[comment._id]?.trim()}
+                >
+                  <Text className="text-wegielek font-chewy">Submit Reply</Text>
+                </TouchableOpacity>
+              </View>
+
               {responses[comment._id]?.length > 0 && (
-                <View className="ml-4 mt-2">
-                  <Text className="text-bialas font-chewy">Responses:</Text>
+                <View className="mt-3 pl-4 border-l-2 border-zoltek">
+                  <Text className="text-zoltek font-chewy text-lg mb-2">
+                    Responses:
+                  </Text>
                   {responses[comment._id].map((response: any) => (
-                    <View key={response._id} className="mt-1">
-                      <Text className="text-bialas font-chewy">
+                    <View
+                      key={response._id}
+                      className="bg-wegielek border-b border-zoltek rounded-lg mb-2 p-3"
+                    >
+                      <Text className="text-zoltek font-chewy">
                         {response.username}
                       </Text>
-                      <Text className="text-bialas font-chewy">
+                      <Text className="text-bialas font-chewy mb-2">
                         {response.comment}
                       </Text>
-                      <Text className="text-bialas font-chewy">
-                        Upvotes: {response.likesCount}
-                      </Text>
-                      <Text className="text-bialas font-chewy">
-                        Downvotes: {response.dislikesCount}
-                      </Text>
-                      <View className="flex-row mt-2">
-                        <Button
-                          title="Like"
-                          onPress={() => handleResponseLike(response._id)}
-                        />
-                        <Button
-                          title="Dislike"
-                          onPress={() => handleResponseDislike(response._id)}
-                        />
+
+                      <View className="flex-row justify-between items-center">
+                        <View className="flex-row items-center">
+                          <TouchableOpacity
+                            onPress={() => handleResponseLike(response._id)}
+                            className="flex-row items-center mr-4"
+                          >
+                            <FontAwesome
+                              name="thumbs-up"
+                              size={20}
+                              color="#F5B800"
+                              className="mr-2"
+                            />
+                            <Text className="text-zoltek font-chewy ml-2">
+                              {response.likesCount}
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => handleResponseDislike(response._id)}
+                            className="flex-row items-center"
+                          >
+                            <FontAwesome
+                              name="thumbs-down"
+                              size={20}
+                              color="#F5B800"
+                              className="mr-2"
+                            />
+                            <Text className="text-zoltek font-chewy ml-2">
+                              {response.dislikesCount}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+
                         {response.username === username && (
-                          <Button
-                            title="Delete"
+                          <TouchableOpacity
                             onPress={() => handleDeleteResponse(response._id)}
-                          />
+                            className="bg-red-500 py-2 px-4 rounded-lg"
+                          >
+                            <Text className="text-wegielek font-chewy">
+                              Delete
+                            </Text>
+                          </TouchableOpacity>
                         )}
                       </View>
                     </View>
@@ -489,7 +569,9 @@ const BuildDetailsPage: React.FC = () => {
             </View>
           ))
         ) : (
-          <Text className="text-bialas font-chewy">Empty</Text>
+          <Text className="text-bialas font-chewy text-center">
+            No comments yet
+          </Text>
         )}
       </View>
     </ScrollView>
