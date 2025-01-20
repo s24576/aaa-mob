@@ -17,6 +17,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { BuildDetailsScreenProps } from '../App'
 import { Button, TextInput } from 'react-native-paper'
 import { getRunes } from '../api/ddragon/getRunes'
+import { FontAwesome } from '@expo/vector-icons'
 
 interface Build {
   _id: string
@@ -42,6 +43,7 @@ interface Build {
   summoner1Name: string
   summoner2Name: string
   position: string
+  timestamp: number
 }
 
 const BuildsBrowserPage: React.FC = () => {
@@ -136,7 +138,7 @@ const BuildsBrowserPage: React.FC = () => {
   ) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-bialas font-chewy">Loading...</Text>
+        <Text style={styles.text}>Loading...</Text>
       </View>
     )
   }
@@ -144,7 +146,7 @@ const BuildsBrowserPage: React.FC = () => {
   if (error || versionError || championsError || runesError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-bialas font-chewy">
+        <Text style={styles.text}>
           Error:{' '}
           {(error || versionError || championsError || runesError)?.message}
         </Text>
@@ -195,17 +197,62 @@ const BuildsBrowserPage: React.FC = () => {
   }
 
   const renderBuild = ({ item }: { item: Build }) => (
-    <TouchableOpacity onPress={() => handleBuildPress(item._id)}>
-      <View className="p-4 border-b border-gray-300">
-        <Text className="text-bialas font-chewy">{item.title}</Text>
-        <Text className="text-bialas font-chewy">{item.description}</Text>
-        <Image
-          source={{
-            uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championId}.png`,
-          }}
-          className="w-12 h-12 mb-2"
-        />
-        <View className="flex-row mb-2">
+    <TouchableOpacity
+      onPress={() => handleBuildPress(item._id)}
+      style={styles.container}
+    >
+      {/* BUILD */}
+      <View className="p-4 border-b border-[#F5B800]">
+        <View style={styles.header}>
+          <Text style={styles.text} className="text-zoltek font-Chewy-Regular">
+            {item.username}
+          </Text>
+          <Text style={styles.text}>
+            {new Date(item.timestamp * 1000).toLocaleDateString()}
+          </Text>
+        </View>
+        <View style={styles.subheader}>
+          <Text style={styles.title} className="text-bialas font-chewy">
+            {item.title}
+          </Text>
+        </View>
+        <View style={styles.thirdRow}>
+          <Image
+            source={{
+              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championId}.png`,
+            }}
+            style={styles.champion}
+          />
+          {/* POZYCJA */}
+          {item.position && (
+            <Image source={positions[item.position]} className="w-14 h-14" />
+          )}
+          {item.runes && (
+            <View className=" flex-row">
+              <View className="flex-row items-center">
+                {item.runes.runes1.length > 0 && (
+                  <Image
+                    source={{
+                      uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(item.runes.runes1[0])?.icon}`,
+                    }}
+                    className="w-12 h-12"
+                  />
+                )}
+              </View>
+              <View className="flex-row items-center ml-4">
+                {item.runes.keyStone2Id && (
+                  <Image
+                    source={{
+                      uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneTreeById(item.runes.keyStone2Id)?.icon}`,
+                    }}
+                    className="w-8 h-8"
+                  />
+                )}
+              </View>
+            </View>
+          )}
+        </View>
+        <View style={styles.fifthRow}>
           {[
             item.item1,
             item.item2,
@@ -219,92 +266,26 @@ const BuildsBrowserPage: React.FC = () => {
               source={{
                 uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${itemId}.png`,
               }}
-              className="w-12 h-12 mr-2"
+              style={styles.leagueItem}
             />
           ))}
         </View>
-        {item.runes && (
-          <View className="mt-2 flex-row">
-            <View className="flex-row items-center">
-              {item.runes.keyStone1Id && (
-                <Image
-                  source={{
-                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(item.runes.keyStone1Id)?.icon}`,
-                  }}
-                  className="w-8 h-8 mr-2"
-                />
-              )}
-              {item.runes.runes1.map((runeId, index) => (
-                <Image
-                  key={index}
-                  source={{
-                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
-                  }}
-                  className="w-6 h-6 mr-1"
-                />
-              ))}
-            </View>
-            <View className="flex-row items-center ml-4">
-              {item.runes.keyStone2Id && (
-                <Image
-                  source={{
-                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneTreeById(item.runes.keyStone2Id)?.icon}`,
-                  }}
-                  className="w-8 h-8 mr-2"
-                />
-              )}
-              {item.runes.runes2.map((runeId, index) => (
-                <Image
-                  key={index}
-                  source={{
-                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
-                  }}
-                  className="w-6 h-6 mr-1"
-                />
-              ))}
-            </View>
-          </View>
-        )}
-        <View className="flex-1 flex-row items-center">
-          {item.runes.statShards.map((shard, index) => (
-            <Image
-              key={index}
-              source={statShardImages[shard] || statShardImages['DEFAULT']}
-              style={{ width: 24, height: 24, marginRight: 4 }}
-            />
-          ))}
+        <View className="flex-row justify-center space-x-4">
+          <FontAwesome name="thumbs-up" size={24} color="#F5B800" />
+          <Text className="text-zoltek font-chewy text-lg ml-2">
+            {item.likesCount || 0}
+          </Text>
+          <FontAwesome name="thumbs-down" size={24} color="#F5B800" />
+          <Text className="text-zoltek font-chewy text-lg ml-2">
+            {item.dislikesCount || 0}
+          </Text>
         </View>
-        <View className="flex-1 flex-row items-center">
-          <Image
-            source={{
-              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner1Name}.png`,
-            }}
-            style={{ width: 24, height: 24, marginRight: 4 }}
-          />
-          <Image
-            source={{
-              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${item.summoner2Name}.png`,
-            }}
-            style={{ width: 24, height: 24 }}
-          />
-        </View>
-        {item.position && (
-          <Image source={positions[item.position]} className="w-6 h-6" />
-        )}
-        <Text className="text-bialas font-chewy">
-          Upvotes: {item.likesCount}
-        </Text>
-        <Text className="text-bialas font-chewy">
-          Downvotes: {item.dislikesCount}
-        </Text>
       </View>
     </TouchableOpacity>
   )
 
-  // Toggle the visibility of the menu
   const toggleMenu = () => setMenuVisible(!menuVisible)
 
-  // Handle champion selection
   const handleChampionSelect = (selectedChampions: string[]) => {
     const selectedChampionKey = Object.keys(champions).find(
       (key) => champions[key] === selectedChampions[0]
@@ -317,7 +298,7 @@ const BuildsBrowserPage: React.FC = () => {
   const handleFilterPress = () => {
     setFilterChampion(selectedChampion)
     setFilterAuthorName(authorName)
-    refetch() // Refetch builds when filters are applied
+    refetch()
   }
 
   const handleClearFilters = () => {
@@ -325,7 +306,7 @@ const BuildsBrowserPage: React.FC = () => {
     setAuthorName(undefined)
     setFilterChampion(undefined)
     setFilterAuthorName(undefined)
-    refetch() // Refetch builds when filters are cleared
+    refetch()
   }
 
   const openPickerModal = (
@@ -348,7 +329,7 @@ const BuildsBrowserPage: React.FC = () => {
   return (
     <>
       <FlatList
-        data={buildsData?.content || []} // Handle case where buildsData is undefined
+        data={buildsData?.content || []}
         keyExtractor={(item) => item._id}
         renderItem={renderBuild}
         ListHeaderComponent={
@@ -362,7 +343,7 @@ const BuildsBrowserPage: React.FC = () => {
                       .sort()
                       .map((key) => champions[key]),
                     (values) => handleChampionSelect(values),
-                    false, // Disable multi-select
+                    false,
                     selectedChampion ? [selectedChampion] : []
                   )
                 }
@@ -467,6 +448,62 @@ const BuildsBrowserPage: React.FC = () => {
 }
 
 const styles = StyleSheet.create({
+  sixthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  champion: {
+    width: 96,
+    height: 96,
+    borderRadius: 8,
+  },
+  leagueItem: {
+    width: 48,
+    height: 48,
+    marginRight: 8,
+    borderRadius: 10,
+  },
+  fifthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  thirdRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  fourthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  subheader: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5B800',
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5F5F5',
+  },
+  container: {
+    borderBottomColor: '#F5B800',
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
