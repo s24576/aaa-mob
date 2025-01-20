@@ -7,7 +7,7 @@ interface UseWebSocketResult {
   connectionStatus: string
   messengerMessage: string
   memberEvent: string
-  memberAction: string // Added new property
+  memberAction: string
   duoAnswer: string
   duoNotification: string
 }
@@ -26,7 +26,6 @@ const useWebSocket = (username: string): UseWebSocketResult => {
   const [client, setClient] = useState<Client | null>(null)
 
   useEffect(() => {
-    // Initialize SockJS and STOMP client
     const socket = new SockJS(BACKEND_WS_ADDRESS)
     const stompClient = new Client({
       webSocketFactory: () => socket,
@@ -35,15 +34,14 @@ const useWebSocket = (username: string): UseWebSocketResult => {
         setConnectionStatus('Connected')
         const subscriptions = [
           `/user/${username}/notification`,
-          `/user/${username}/friendRequest/to`, //dostales zapro
-          `/user/${username}/friendRequest/from`, //wyslales zapro
-          `/user/${username}/delete/friendRequest/to`, //odrzuciles zapro // zaakceptowales zapro
-          `/user/${username}/delete/friendRequest/from`, //anulowałeś zapro // ackeptowano twoje zapro
+          `/user/${username}/friendRequest/to`,
+          `/user/${username}/friendRequest/from`,
+          `/user/${username}/delete/friendRequest/to`, 
+          `/user/${username}/delete/friendRequest/from`,
           `/user/${username}/messenger/message`,
           `/user/${username}/member/event`,
           `/user/${username}/messenger/members`,
           `/user/${username}/team/duo/answer`,
-          `/user/${username}/notification`,
         ]
         console.log('STOMP Debug: Subscribing to', subscriptions)
         subscriptions.forEach((sub) => {
