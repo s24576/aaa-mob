@@ -2,6 +2,7 @@ import api from '../axios/useAxios'
 import { handleError } from '../error/handleError'
 
 interface Pageable {
+  page?: number
   size?: number
   sort?: string
   direction?: 'ASC' | 'DESC'

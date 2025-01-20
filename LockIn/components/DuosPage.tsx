@@ -21,6 +21,8 @@ import { useNavigation } from '@react-navigation/native'
 import { DuoScreenProps } from '../App'
 import { answerDuo } from '../api/duo/answerDuo'
 import servers from '../assets/servers.json'
+import { Ionicons } from '@expo/vector-icons'
+import styles2 from '../styles/BrowserStyles'
 
 interface Duo {
   _id: string
@@ -60,7 +62,7 @@ const DuosPage = () => {
   const [applyModalVisible, setApplyModalVisible] = useState(false)
   const [selectedDuoId, setSelectedDuoId] = useState<string | null>(null)
   const [applyMessage, setApplyMessage] = useState<string>('')
-  const [pages, setPages] = useState<number[]>([0])
+  const [page, setPage] = useState(0)
   const size = 5
   const [pickerModal, setPickerModal] = useState<{
     visible: boolean
@@ -107,9 +109,9 @@ const DuosPage = () => {
   const navigation = useNavigation<DuoScreenProps['navigation']>()
 
   const duosQueries = useQuery({
-    queryKey: ['Duos', filters, pages],
+    queryKey: ['Duos', filters, page],
     queryFn: () =>
-      getDuos(filters, { size: 5, sort: 'timestamp', direction: 'DESC' }),
+      getDuos(filters, { page, size: 5, sort: 'timestamp', direction: 'DESC' }),
   })
 
   useEffect(() => {
@@ -241,6 +243,17 @@ const DuosPage = () => {
       console.log(answerDuo, answer)
     }
   }
+  const handleNextPage = () => {
+    setPage((prevPage) => prevPage + 1)
+    duosQueries.refetch()
+  }
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage((prevPage) => prevPage - 1)
+      duosQueries.refetch()
+    }
+  }
 
   const rankImages: { [key: string]: any } = {
     Iron: require('../assets/ranks/IRON.png'),
@@ -283,14 +296,13 @@ const DuosPage = () => {
     const dateCreated = new Date(item.timestamp * 1000).toLocaleDateString()
 
     return (
-      <View style={styles.duoContainer}>
-        <View style={styles.headerContainer}>
+      <View style={styles2.answerContainer}>
+        <View style={styles2.headerContainer}>
+          <Text style={[styles.duoText, styles2.serverName]}>{serverName}</Text>
           <Text style={styles.authorText}>{item.author}</Text>
-          <Text style={styles.duoText}>{serverName}</Text>
           <Text style={styles.dateText}>{dateCreated}</Text>
         </View>
         <View style={styles.bodyContainer}>
-          <Text style={styles.authorText}>Go to Riot Profile</Text>
           <View style={styles.rankContainer}>
             <Image
               source={rankImages[item.minRank] || rankImages['UNRANKED']}
@@ -302,21 +314,18 @@ const DuosPage = () => {
               style={styles.rankImageLarge}
             />
           </View>
-          <View className="flex-1 items-center justify-center">
-            <View style={styles.positionContainer}>
+
+          <Text style={styles.authorText}>Go to Riot Profile</Text>
+          <View className="flex-row items-center justify-space-between">
+            <View className="flex-1 items-start">
+              <Text style={[styles.duoText, styles.positionsText]}>
+                Looked Positions:
+              </Text>
               <Text style={styles.duoText}>Played Positions:</Text>
-              {item.positions.map((position) => (
-                <Image
-                  key={position}
-                  source={positionImages[position]}
-                  style={styles.positionImageLarge}
-                />
-              ))}
             </View>
-            {item.lookedPositions && (
+            <View className="flex-1 items-center justify-center">
               <View style={styles.positionContainer}>
-                <Text style={styles.duoText}>Looked Positions:</Text>
-                {item.lookedPositions.map((position) => (
+                {item.positions.map((position) => (
                   <Image
                     key={position}
                     source={positionImages[position]}
@@ -324,7 +333,18 @@ const DuosPage = () => {
                   />
                 ))}
               </View>
-            )}
+              {item.lookedPositions && (
+                <View style={styles.positionContainer}>
+                  {item.lookedPositions.map((position) => (
+                    <Image
+                      key={position}
+                      source={positionImages[position]}
+                      style={styles.positionImageLarge}
+                    />
+                  ))}
+                </View>
+              )}
+            </View>
           </View>
           <View style={styles.languageContainer}>
             {item.languages.map((language) => (
@@ -377,7 +397,16 @@ const DuosPage = () => {
   }
 
   return (
-    <View className="pt-2">
+    <View style={styles2.container}>
+      <View style={styles2.header}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Home')}
+          style={styles2.backButton}
+        >
+          <Ionicons name="arrow-back" size={30} color="#F5B800" />
+        </TouchableOpacity>
+        <Text style={styles2.headerText}>Duo Browser:</Text>
+      </View>
       <FlatList
         data={duosQueries.data?.content}
         keyExtractor={(item) => item._id}
@@ -588,6 +617,15 @@ const DuosPage = () => {
           </View>
         }
       />
+      <View style={styles2.paginationContainer}>
+        <TouchableOpacity onPress={handlePreviousPage} disabled={page === 0}>
+          <Ionicons name="arrow-back" size={30} color="#F5B800" />
+        </TouchableOpacity>
+        <Text style={styles2.pageNumber}>{page + 1}</Text>
+        <TouchableOpacity onPress={handleNextPage}>
+          <Ionicons name="arrow-forward" size={30} color="#F5B800" />
+        </TouchableOpacity>
+      </View>
       {/* modal na dodawanie ogłoszenia */}
       <Modal
         visible={modalVisible}
@@ -928,7 +966,7 @@ const DuosPage = () => {
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.modalContent}>
-                <Text className="text-bialas">{pickerModal.type}</Text>
+                <Text style={styles.duoText}>{pickerModal.type}</Text>
                 <FlatList
                   data={pickerModal.options}
                   keyExtractor={(item) => item}
@@ -1114,6 +1152,7 @@ const styles = StyleSheet.create({
   },
   customButton: {
     backgroundColor: '#13131313',
+    fontFamily: 'Chewy-Regular',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -1261,6 +1300,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 20,
     marginRight: 5,
+  },
+  positionsText: {
+    marginTop: 5,
+    marginBottom: 15,
   },
 })
 
