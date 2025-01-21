@@ -391,8 +391,8 @@ const BuildsBrowserPage: React.FC = () => {
                 <CustomButton
                   title="Filter Builds"
                   onPress={handleFilterPress}
-                  style={styles.customButton}
-                  textStyle={styles.customButtonText}
+                  style={styles.applyFiltersButton}
+                  textStyle={styles.applyFiltersButtonText}
                 />
                 <CustomButton
                   title="Clear Filters"
@@ -566,6 +566,26 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
     marginBottom: 0,
+  },
+  applyFiltersButton: {
+    backgroundColor: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  applyFiltersButtonText: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
   },
   filtersButton: {
     backgroundColor: '#F5B800',
