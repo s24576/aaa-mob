@@ -1,94 +1,114 @@
 {
-  "_id": "e63f234e-deca-42f3-b8e0-872139192780",
-  "canReact": false,
-  "championId": "KogMaw",
-  "description": "ez game",
-  "dislikesCount": 2,
-  "item1": "223006",
-  "item2": "223124",
-  "item3": "223072",
-  "item4": "223139",
-  "item5": "223302",
-  "item6": "223085",
-  "keystone1": {
-    "icon": "perk-images/Styles/7201_Precision.png",
-    "id": "8000",
-    "key": "Precision",
-    "name": "Precision"
-  },
-  "keystone2": {
-    "icon": "perk-images/Styles/7200_Domination.png",
-    "id": "8100",
-    "key": "Domination",
-    "name": "Domination"
-  },
-  "likesCount": 1,
-  "patch": null,
-  "position": "Bottom",
-  "reaction": true,
-  "runes": {
-    "keyStone1Id": "8000",
-    "keyStone2Id": "8100",
-    "runes1": ["8008", "9111", "9103", "8014"],
-    "runes2": ["8139", "8135"],
-    "statShards": ["AttackSpeed", "Adaptive", "HP"]
-  },
-  "runes1": [
+  "accountId": "skRswUMYS-0FKnTKfj61VSY0RygRdL-eTMC_lMsNe8aUmw",
+  "gameName": "BlingBlingBoi",
+  "id": "LHRBpjxgbAtzz9MBulK0rCmTp6zG_hQPuJTqZS0_1-sOAYs",
+  "mastery": [
     {
-      "icon": "perk-images/Styles/Precision/LethalTempo/LethalTempoTemp.png",
-      "id": "8008",
-      "key": "LethalTempo",
-      "longDesc": "Attacking an enemy champion grants you [6% Melee || 4% Ranged] Attack Speed for 6 seconds, up to 6. At max stacks, deal [9 - 30 Melee || 6 - 24 Ranged] <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>bonus adaptive damage On-Attack, increased by 1% per 1% Bonus Attack Speed</lol-uikit-tooltipped-keyword>.",
-      "name": "Lethal Tempo",
-      "shortDesc": "Attacking an enemy champion grants you Attack Speed, up to 6 stacks. At max stacks, deal <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>bonus adaptive damage</font></lol-uikit-tooltipped-keyword> On-Attack."
+      "championId": 412,
+      "championLevel": 20,
+      "championName": "Thresh",
+      "championPoints": 239829,
+      "chestGranted": false,
+      "lastPlayTime": 1737403594000,
+      "puuid": "OV8uGHepGlxme5GdAGWR3uidsM8oZwspiyGDTLOjmvC_HVsaeeD-QHrk_Fuizh4NPuyiiz3v_UMpdQ"
     },
     {
-      "icon": "perk-images/Styles/Precision/Triumph.png",
-      "id": "9111",
-      "key": "Triumph",
-      "longDesc": "Takedowns restore 5% of your missing health, 2.5% of your max health, and grant an additional 20 gold. <br><br><hr><br><i>'The most dangerous game brings the greatest glory.' <br>—Noxian Reckoner</i>",
-      "name": "Triumph",
-      "shortDesc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> restore 5% of your missing health and grant an additional 20 gold. "
+      "championId": 64,
+      "championLevel": 16,
+      "championName": "LeeSin",
+      "championPoints": 197059,
+      "chestGranted": false,
+      "lastPlayTime": 1727643628000,
+      "puuid": "OV8uGHepGlxme5GdAGWR3uidsM8oZwspiyGDTLOjmvC_HVsaeeD-QHrk_Fuizh4NPuyiiz3v_UMpdQ"
     },
     {
-      "icon": "perk-images/Styles/Precision/LegendBloodline/LegendBloodline.png",
-      "id": "9103",
-      "key": "LegendBloodline",
-      "longDesc": "Gain <scaleAD>0.35% Life Steal</scaleAD> for every <i>Legend</i> stack (<statGood>max 15 stacks</statGood>). At maximum <i>Legend</i> stacks, gain <scaleHealth>85 max health</scaleHealth>.<br><br>Earn progress toward <i>Legend</i> stacks for every champion takedown, epic monster takedown, large monster kill, and minion kill.",
-      "name": "Legend: Bloodline",
-      "shortDesc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemies grant permanent<b> Life Steal</b>, up to a cap. Once the cap is reached, increase your max health. Weaker earlier but stronger later game than other Legend Runes."
-    },
-    {
-      "icon": "perk-images/Styles/Precision/CoupDeGrace/CoupDeGrace.png",
-      "id": "8014",
-      "key": "CoupDeGrace",
-      "longDesc": "Deal 8% more damage to champions who have less than 40% health.",
-      "name": "Coup de Grace",
-      "shortDesc": "Deal more damage to low health enemy champions."
+      "championId": 12,
+      "championLevel": 10,
+      "championName": "Alistar",
+      "championPoints": 110051,
+      "chestGranted": false,
+      "lastPlayTime": 1727729176000,
+      "puuid": "OV8uGHepGlxme5GdAGWR3uidsM8oZwspiyGDTLOjmvC_HVsaeeD-QHrk_Fuizh4NPuyiiz3v_UMpdQ"
     }
   ],
-  "runes2": [
+  "matches": [
     {
-      "icon": "perk-images/Styles/Domination/TasteOfBlood/GreenTerror_TasteOfBlood.png",
-      "id": "8139",
-      "key": "TasteOfBlood",
-      "longDesc": "Heal when you damage an enemy champion.<br><br>Healing: 16-40 (+0.1 bonus AD, +0.05 AP) health (based on level)<br><br>Cooldown: 20s",
-      "name": "Taste of Blood",
-      "shortDesc": "Heal when you damage an enemy champion."
+      "assists": 44,
+      "championName": "Swain",
+      "deaths": 16,
+      "kills": 11,
+      "matchId": "EUN1_3730743633",
+      "queueType": "5v5 ARAM games",
+      "win": true
     },
     {
-      "icon": "perk-images/Styles/Domination/TreasureHunter/TreasureHunter.png",
-      "id": "8135",
-      "key": "TreasureHunter",
-      "longDesc": "Gain an additional <gold>50 gold</gold> the next time you collect a <i>Bounty Hunter</i> stack. Increase the gold gained by <gold>20 gold</gold> for each <i>Bounty Hunter</i> stack, up to <gold>130 gold</gold>.<br><br><i>Bounty Hunter</i> stacks are earned the first time you get a takedown on each enemy champion.",
-      "name": "Treasure Hunter",
-      "shortDesc": "<b>Unique</b> <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>takedowns</lol-uikit-tooltipped-keyword> grant additional gold the first time they are collected. "
+      "assists": 20,
+      "championName": "Vayne",
+      "deaths": 5,
+      "kills": 12,
+      "matchId": "EUN1_3730727563",
+      "queueType": "5v5 ARAM games",
+      "win": true
+    },
+    {
+      "assists": 26,
+      "championName": "Smolder",
+      "deaths": 9,
+      "kills": 15,
+      "matchId": "EUN1_3730703403",
+      "queueType": "5v5 ARAM games",
+      "win": true
+    },
+    {
+      "assists": 14,
+      "championName": "Zyra",
+      "deaths": 3,
+      "kills": 4,
+      "matchId": "EUN1_3730310074",
+      "queueType": "5v5 Ranked Solo games",
+      "win": false
+    },
+    {
+      "assists": 12,
+      "championName": "Thresh",
+      "deaths": 7,
+      "kills": 2,
+      "matchId": "EUN1_3730234116",
+      "queueType": "5v5 Ranked Flex games",
+      "win": false
     }
   ],
-  "saved": false,
-  "summoner1Name": "Haste",
-  "summoner2Name": "Flash",
-  "timestamp": 1736875326,
-  "title": "kogmaw 1v9 build",
-  "username": "test500"
+  "name": undefined,
+  "profileIconId": "3523",
+  "puuid": "OV8uGHepGlxme5GdAGWR3uidsM8oZwspiyGDTLOjmvC_HVsaeeD-QHrk_Fuizh4NPuyiiz3v_UMpdQ",
+  "rankedRank": "I",
+  "rankedTier": "EMERALD",
+  "ranks": [
+    {
+      "leagueId": "2d3d2495-8ecf-4086-8e51-36b83bc2fc1f",
+      "leaguePoints": 27,
+      "losses": 4,
+      "queueType": "RANKED_FLEX_SR",
+      "rank": "IV",
+      "summonerId": "LHRBpjxgbAtzz9MBulK0rCmTp6zG_hQPuJTqZS0_1-sOAYs",
+      "summonerName": null,
+      "tier": "DIAMOND",
+      "wins": 6
+    },
+    {
+      "leagueId": "a00fa3a6-1895-4630-bdb5-4ce0a69a989b",
+      "leaguePoints": 30,
+      "losses": 10,
+      "queueType": "RANKED_SOLO_5x5",
+      "rank": "I",
+      "summonerId": "LHRBpjxgbAtzz9MBulK0rCmTp6zG_hQPuJTqZS0_1-sOAYs",
+      "summonerName": null,
+      "tier": "EMERALD",
+      "wins": 8
+    }
+  ],
+  "revisionDate": 1737493790514,
+  "server": "eun1",
+  "summonerLevel": 508,
+  "tagLine": "BBB"
 }

@@ -19,8 +19,12 @@ export const findPlayer = async (
     }
 
     const response = await api.get(url)
+    // console.log('Fetched profile data:', response)
     const data = response.data
     const profileData = new Profile(data)
+
+    console.log('Fetched profile data:', profileData)
+
     return profileData
   } catch (error) {
     console.error('Error fetching data:', error)

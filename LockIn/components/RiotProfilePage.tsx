@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Button,
   ActivityIndicator,
+  StyleSheet,
+  Image,
 } from 'react-native'
 import { Profile } from '../types/riot/profileClass'
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
@@ -93,32 +95,22 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   }
 
   return (
-    <View className="mt-5">
-      <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-        Profile Information
-      </Text>
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          PUUID
+    <View>
+      <View style={styles.header}>
+        <Text style={styles.text} className="text-zoltek font-Chewy-Regular">
+          {profile.server}
         </Text>
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          {profile.puuid}
-        </Text>
+        <Text style={styles.text}>{profile.summonerLevel}</Text>
       </View>
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          Game Name
-        </Text>
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          {profile.gameName}
-        </Text>
-      </View>
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          Tag Line
-        </Text>
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          {profile.tagLine}
+      <View style={styles.subheader}>
+        <Image
+          source={{
+            uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${profile.profileIconId}.png`,
+          }}
+          style={styles.profileIcon}
+        />
+        <Text style={styles.gameName} className="text-bialas font-chewy">
+          {profile.gameName} #{profile.tagLine}
         </Text>
       </View>
       <View className="flex-row justify-between py-2 border-b border-gray-300">
@@ -201,9 +193,17 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
           key={index}
           className="flex-row justify-between py-2 border-b border-gray-300"
         >
-          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-            {mastery.championName}
-          </Text>
+          <View style={styles.championContainer}>
+            <Image
+              source={{
+                uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${mastery.championName}.png`,
+              }}
+              style={styles.championIcon}
+            />
+            <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+              {mastery.championName}
+            </Text>
+          </View>
           <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
             {mastery.championPoints}
           </Text>
@@ -217,9 +217,14 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
           key={match.matchId}
           className="flex-row justify-between py-2 border-b border-gray-300"
         >
-          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-            {match.championName}
-          </Text>
+          <View style={styles.championContainer}>
+            <Image
+              source={{
+                uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${match.championName}.png`,
+              }}
+              style={styles.championIcon}
+            />
+          </View>
           <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
             {match.kills}/{match.deaths}/{match.assists}
           </Text>
@@ -262,5 +267,231 @@ const ProfilePage: React.FC = () => {
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  description: {
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5F5F5',
+  },
+  sixthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  champion: {
+    width: 96,
+    height: 96,
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  leagueItem: {
+    width: 48,
+    height: 48,
+    marginRight: 8,
+    borderRadius: 10,
+  },
+  summonerSpell: {
+    width: 36,
+    height: 36,
+    marginRight: 8,
+    borderRadius: 10,
+  },
+  fifthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  thirdRow: {
+    flexDirection: 'row',
+    marginBottom: 16,
+  },
+  fourthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  subheader: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  gameName: {
+    fontSize: 24,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5B800',
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5F5F5',
+  },
+  container: {
+    borderBottomColor: '#F5B800',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingVertical: 20,
+  },
+  modalContent: {
+    backgroundColor: '#131313',
+    padding: 15,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    width: '80%',
+    maxHeight: '80%',
+  },
+  option: {
+    padding: 10,
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    color: '#F5F5F5',
+  },
+  selectedOption: {
+    color: '#F5B800',
+  },
+  buttonContainer: {
+    marginTop: 10,
+    marginBottom: 0,
+  },
+  applyFiltersButton: {
+    backgroundColor: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  applyFiltersButtonText: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  filtersButton: {
+    backgroundColor: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  filtersButtonText: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  customButton: {
+    backgroundColor: '#13131313',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  textInput: {
+    fontFamily: 'Chewy-Regular',
+    backgroundColor: '#1E1E1E',
+    color: '#F5F5F5',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  customButtonText: {
+    color: '#F5F5F5',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  customButton2: {
+    backgroundColor: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  customButton2Text: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  championImage: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    marginBottom: 6,
+  },
+  selectedChampionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  selectedChampionText: {
+    color: '#F5F5F5',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    marginLeft: 10,
+  },
+  profileIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  championContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  championIcon: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    marginRight: 8,
+  },
+})
 
 export default ProfilePage
