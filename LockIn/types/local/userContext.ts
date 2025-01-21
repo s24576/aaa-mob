@@ -1,4 +1,17 @@
-export class UserData {
+export interface UserData {
+  _id?: string
+  username?: string
+  bio?: string | null
+  profileIcon?: string | null
+  friends?: Friend[]
+  image?: {
+    contentType: string
+    data: string
+  }
+  getUserData?: () => Promise<UserData>
+}
+
+export class UserDataClass {
   public _id: string
   public profileIcon: string | null
   public bio: string | null

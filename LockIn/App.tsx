@@ -180,6 +180,13 @@ export const Layout = () => {
                           <Icon name={iconName} size={size} color={color} />
                         )
                       },
+                      tabBarShowLabel: false,
+                      tabBarStyle: {
+                        backgroundColor: '#131313',
+                        borderTopWidth: 0,
+                      },
+                      tabBarActiveTintColor: '#F5B800',
+                      tabBarInactiveTintColor: '#F5B800',
                       headerStyle: { backgroundColor: '#131313' },
                       headerTintColor: '#fff',
                       headerTitle: ' Lock.In ',
@@ -197,9 +204,9 @@ export const Layout = () => {
                       ),
                     })}
                   >
+                    <Tab.Screen name="Home" component={Home} />
                     <Tab.Screen name="UserProfile" component={UserProfile} />
                     <Tab.Screen name="Messages" component={Messages} />
-                    <Tab.Screen name="Home" component={Home} />
                     <Tab.Screen
                       name="Notifications"
                       component={Notifications}
@@ -213,7 +220,11 @@ export const Layout = () => {
                         tabPress: handleNotificationsViewed,
                       }}
                     />
-                    <Tab.Screen name="Settings" component={Settings} />
+                    <Tab.Screen
+                      name="Settings"
+                      component={Settings}
+                      options={{ tabBarButton: () => null }}
+                    />
                     <Tab.Screen
                       name="RiotProfile"
                       component={RiotProfile}

@@ -2,7 +2,7 @@
 
 Pageable
 
-* ograniczyc ilosc page do tylu ile ich serio jest
+- ograniczyc ilosc page do tylu ile ich serio jest
 
 Account Seach:
 
@@ -49,10 +49,6 @@ Friend Requests
 * układ jak na x/ss
 
 Home
-
-- styl na guziki
-- ew. kafle na komponenty
-- ew. jakis static text na witanie
 
 Lockin Profile
 

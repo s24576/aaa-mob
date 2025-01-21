@@ -35,7 +35,7 @@ const SettingsPage = () => {
   }
 
   return (
-    <View className="justify-center items-center">
+    <View className="justify-center items-center pt-10">
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
         style={{
