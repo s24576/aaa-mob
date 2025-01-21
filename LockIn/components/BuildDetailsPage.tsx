@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -259,6 +260,24 @@ const BuildDetailsPage: React.FC = () => {
     return null
   }
 
+  const positions: { [key: string]: any } = {
+    Top: require('../assets/positions/Top.png'),
+    Jungle: require('../assets/positions/Jungle.png'),
+    Mid: require('../assets/positions/Mid.png'),
+    Bottom: require('../assets/positions/Bot.png'),
+    Support: require('../assets/positions/Support.png'),
+  }
+
+  const statShardImages: { [key: string]: any } = {
+    Adaptive: require('../assets/statShards/Adaptive.png'),
+    AttackSpeed: require('../assets/statShards/AttackSpeed.png'),
+    CDR: require('../assets/statShards/CDR.png'),
+    HP: require('../assets/statShards/HP.png'),
+    HPScaling: require('../assets/statShards/HPScaling.png'),
+    MS: require('../assets/statShards/MS.png'),
+    Tenacity: require('../assets/statShards/Tenacity.png'),
+  }
+
   const findRuneTreeById = (treeId: string) => {
     if (!runesData) return null
     return runesData.find((tree) => tree.id === treeId)
@@ -301,15 +320,32 @@ const BuildDetailsPage: React.FC = () => {
 
   return (
     <ScrollView className="flex-1 p-4">
-      <Text className="text-bialas font-chewy">{build.title}</Text>
-      <Text className="text-bialas font-chewy">{build.description}</Text>
-      <Image
-        source={{
-          uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${build.championId}.png`,
-        }}
-        className="w-24 h-24 mb-2"
-      />
-      <View className="flex-row mb-2">
+      <View style={styles.header}>
+        <Text style={styles.text} className="text-zoltek font-Chewy-Regular">
+          {build.username}
+        </Text>
+        {build.position && (
+          <Image source={positions[build.position]} className="w-12 h-12" />
+        )}
+        <Text style={styles.text}>
+          {new Date(build.timestamp * 1000).toLocaleDateString()}
+        </Text>
+      </View>
+      <View style={styles.subheader}>
+        <Text style={styles.title} className="text-bialas font-chewy">
+          {build.title}
+        </Text>
+      </View>
+      <View style={styles.thirdRow}>
+        <Image
+          source={{
+            uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${build.championId}.png`,
+          }}
+          style={styles.champion}
+        />
+        <Text style={styles.description}>{build.description}</Text>
+      </View>
+      <View className="flex-row mb-6">
         {[
           build.item1,
           build.item2,
@@ -323,67 +359,66 @@ const BuildDetailsPage: React.FC = () => {
             source={{
               uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${itemId}.png`,
             }}
-            className="w-12 h-12 mr-2"
+            style={styles.leagueItem}
           />
         ))}
       </View>
       {build.runes && (
-        <View className="mt-2 flex-row">
-          <View className="flex-row items-center">
-            {build.runes.keyStone1Id && (
-              <Image
-                source={{
-                  uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(build.runes.keyStone1Id)?.icon}`,
-                }}
-                className="w-8 h-8 mr-2"
-              />
-            )}
+        <View className="flex-row items-center justify-center mb-3">
+          <View className="flex-row items-center justify-center">
             {build.runes.runes1.map((runeId, index) => (
               <Image
                 key={index}
                 source={{
                   uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
                 }}
-                className="w-6 h-6 mr-1"
+                className="w-8 h-8 mr-2"
               />
             ))}
           </View>
-          <View className="flex-row items-center ml-4">
-            {build.runes.keyStone2Id && (
-              <Image
-                source={{
-                  uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneTreeById(build.runes.keyStone2Id)?.icon}`,
-                }}
-                className="w-8 h-8 mr-2"
-              />
-            )}
-            {build.runes.runes2.map((runeId, index) => (
-              <Image
-                key={index}
-                source={{
-                  uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
-                }}
-                className="w-6 h-6 mr-1"
-              />
-            ))}
+          <View className="flex-row items-center justify-center">
+            <View className="flex-row items-center justify-center">
+              {build.runes.runes2.map((runeId, index) => (
+                <Image
+                  key={index}
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${findRuneById(runeId)?.icon}`,
+                  }}
+                  className="w-8 h-8 mr-2"
+                />
+              ))}
+            </View>
           </View>
         </View>
       )}
-      <View className="flex-1 flex-row items-center mt-2">
+      <View className="flex-1 flex-row items-center justify-center mb-6">
+        {build.runes.statShards.map((shard, index) => (
+          <Image
+            key={index}
+            source={statShardImages[shard] || statShardImages['DEFAULT']}
+            style={{ width: 24, height: 24, marginRight: 4 }}
+          />
+        ))}
+      </View>
+      <View className="flex-1 flex-row items-center justify-center mb-6">
         <Image
           source={{
             uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${build.summoner1Name}.png`,
           }}
-          style={{ width: 24, height: 24, marginRight: 4 }}
+          style={styles.summonerSpell}
         />
         <Image
           source={{
             uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/Summoner${build.summoner2Name}.png`,
           }}
-          style={{ width: 24, height: 24 }}
+          style={styles.summonerSpell}
         />
       </View>
-      <Text className="text-bialas font-chewy">By: {build.username}</Text>
+      {/* <View className="flex-1 items-center justify-center mb-6">
+        {build.position && (
+          <Image source={positions[build.position]} className="w-12 h-12" />
+        )}
+      </View> */}
       <Text className="text-bialas font-chewy">
         Upvotes: {build.likesCount}
       </Text>
@@ -577,5 +612,214 @@ const BuildDetailsPage: React.FC = () => {
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  description: {
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5F5F5',
+  },
+  sixthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  champion: {
+    width: 96,
+    height: 96,
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  leagueItem: {
+    width: 48,
+    height: 48,
+    marginRight: 8,
+    borderRadius: 10,
+  },
+  summonerSpell: {
+    width: 36,
+    height: 36,
+    marginRight: 8,
+    borderRadius: 10,
+  },
+  fifthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  thirdRow: {
+    flexDirection: 'row',
+    marginBottom: 16,
+  },
+  fourthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  subheader: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5B800',
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5F5F5',
+  },
+  container: {
+    borderBottomColor: '#F5B800',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingVertical: 20,
+  },
+  modalContent: {
+    backgroundColor: '#131313',
+    padding: 15,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    width: '80%',
+    maxHeight: '80%',
+  },
+  option: {
+    padding: 10,
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    color: '#F5F5F5',
+  },
+  selectedOption: {
+    color: '#F5B800',
+  },
+  buttonContainer: {
+    marginTop: 10,
+    marginBottom: 0,
+  },
+  applyFiltersButton: {
+    backgroundColor: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  applyFiltersButtonText: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  filtersButton: {
+    backgroundColor: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  filtersButtonText: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  customButton: {
+    backgroundColor: '#13131313',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  textInput: {
+    fontFamily: 'Chewy-Regular',
+    backgroundColor: '#1E1E1E',
+    color: '#F5F5F5',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  customButtonText: {
+    color: '#F5F5F5',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  customButton2: {
+    backgroundColor: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  customButton2Text: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  championImage: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    marginBottom: 6,
+  },
+  selectedChampionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  selectedChampionText: {
+    color: '#F5F5F5',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    marginLeft: 10,
+  },
+})
 
 export default BuildDetailsPage
