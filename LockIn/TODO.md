@@ -2,7 +2,7 @@
 
 Pageable
 
-- ograniczyc ilosc page do tylu ile ich serio jest
+* ograniczyc ilosc page do tylu ile ich serio jest
 
 Account Seach:
 
@@ -33,16 +33,7 @@ Course Details
 
 Duo Browser
 
-- clickable konta lockin/riot
-- paginacja
-
-* ikonki rang do modali
-
 Duo Answer
-
-- clickable konta riot/lockin
-- paginacja
-- styl na pojedynczy obiekt duo requesta
 
 Friend List
 
