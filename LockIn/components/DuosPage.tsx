@@ -22,7 +22,7 @@ import { DuoScreenProps } from '../App'
 import { answerDuo } from '../api/duo/answerDuo'
 import servers from '../assets/servers.json'
 import { Ionicons } from '@expo/vector-icons'
-import styles2 from '../styles/BrowserStyles'
+import styles from '../styles/BrowserStyles'
 
 interface Duo {
   _id: string
@@ -304,9 +304,9 @@ const DuosPage = () => {
     const dateCreated = new Date(item.timestamp * 1000).toLocaleDateString()
 
     return (
-      <View style={styles2.answerContainer}>
-        <View style={styles2.headerContainer}>
-          <Text style={[styles.duoText, styles2.serverName]}>{serverName}</Text>
+      <View style={styles.answerContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={[styles.duoText, styles.serverName]}>{serverName}</Text>
           <TouchableOpacity onPress={() => handleMemberPress(item.author)}>
             <Text style={styles.authorText}>{item.author}</Text>
           </TouchableOpacity>
@@ -415,15 +415,15 @@ const DuosPage = () => {
   }
 
   return (
-    <View style={styles2.container}>
-      <View style={styles2.header}>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Home')}
-          style={styles2.backButton}
+          style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={30} color="#F5B800" />
         </TouchableOpacity>
-        <Text style={styles2.headerText}>Duo Browser:</Text>
+        <Text style={styles.headerText}>Duo Browser:</Text>
       </View>
       <FlatList
         data={duosQueries.data?.content}
@@ -462,7 +462,7 @@ const DuosPage = () => {
                           filters.minRank ? (
                             <Image
                               source={rankImages[filters.minRank]}
-                              style={styles.rankImage}
+                              style={styles.rankImageDuo}
                             />
                           ) : (
                             'Min Rank'
@@ -491,7 +491,7 @@ const DuosPage = () => {
                           filters.maxRank ? (
                             <Image
                               source={rankImages[filters.maxRank]}
-                              style={styles.rankImage}
+                              style={styles.rankImageDuo}
                             />
                           ) : (
                             'Max Rank'
@@ -635,11 +635,11 @@ const DuosPage = () => {
           </View>
         }
       />
-      <View style={styles2.paginationContainer}>
+      <View style={styles.paginationContainer}>
         <TouchableOpacity onPress={handlePreviousPage} disabled={page === 0}>
           <Ionicons name="arrow-back" size={30} color="#F5B800" />
         </TouchableOpacity>
-        <Text style={styles2.pageNumber}>{page + 1}</Text>
+        <Text style={styles.pageNumber}>{page + 1}</Text>
         <TouchableOpacity onPress={handleNextPage}>
           <Ionicons name="arrow-forward" size={30} color="#F5B800" />
         </TouchableOpacity>
@@ -803,7 +803,7 @@ const DuosPage = () => {
                                 newDuo.minRank ? (
                                   <Image
                                     source={rankImages[newDuo.minRank]}
-                                    style={styles.rankImage}
+                                    style={styles.rankImageDuo}
                                   />
                                 ) : (
                                   'Min Rank'
@@ -830,7 +830,7 @@ const DuosPage = () => {
                                 newDuo.maxRank ? (
                                   <Image
                                     source={rankImages[newDuo.maxRank]}
-                                    style={styles.rankImage}
+                                    style={styles.rankImageDuo}
                                   />
                                 ) : (
                                   'Max Rank'
@@ -1047,7 +1047,7 @@ const DuosPage = () => {
                     </TouchableOpacity>
                   )}
                 />
-                <View style={styles.buttonContainer}>
+                <View style={styles.buttonContainerDuo}>
                   {pickerModal.multiSelect && (
                     <CustomButton
                       title="Done"
@@ -1140,206 +1140,5 @@ const DuosPage = () => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    paddingVertical: 20,
-  },
-  modalContent: {
-    backgroundColor: '#131313',
-    padding: 15,
-    borderRadius: 10,
-    borderColor: '#F5B800',
-    borderWidth: 1,
-    width: '80%',
-    maxHeight: '80%',
-  },
-  option: {
-    padding: 10,
-    fontSize: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    color: '#F5F5F5',
-  },
-  selectedOption: {
-    color: '#F5B800',
-  },
-  customButton: {
-    backgroundColor: '#13131313',
-    fontFamily: 'Chewy-Regular',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    borderColor: '#F5B800',
-    borderWidth: 1,
-    margin: 5,
-    alignItems: 'center',
-  },
-  customButtonText: {
-    color: '#F5F5F5',
-    fontSize: 16,
-    fontFamily: 'Chewy-Regular',
-    textAlign: 'center',
-    alignItems: 'center',
-  },
-  customButton2: {
-    backgroundColor: '#F5B800',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    margin: 5,
-    alignItems: 'center',
-  },
-  customButton2Text: {
-    fontFamily: 'Chewy-Regular',
-    color: '#131313',
-    fontSize: 16,
-  },
-  buttonContainer: {
-    fontFamily: 'Chewy-Regular',
-    marginTop: 10,
-    marginBottom: 0,
-  },
-  applyButton: {
-    fontFamily: 'Chewy-Regular',
-    backgroundColor: '#F5B800',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginTop: 10,
-    marginHorizontal: 80,
-    alignItems: 'center',
-  },
-  applyButtonText: {
-    color: '#131313',
-    fontSize: 16,
-    fontFamily: 'Chewy-Regular',
-  },
-  textInput: {
-    fontFamily: 'Chewy-Regular',
-    backgroundColor: '#1E1E1E',
-    color: '#F5F5F5',
-    padding: 10,
-    borderRadius: 10,
-    borderColor: '#F5B800',
-    borderWidth: 1,
-    marginVertical: 10,
-  },
-  duoContainer: {
-    padding: 15,
-    borderRadius: 10,
-    borderBottomColor: '#F5B800',
-    borderBottomWidth: 1,
-  },
-  duoText: {
-    color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
-    marginBottom: 5,
-  },
-  championContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  championItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 10,
-    marginBottom: 10,
-  },
-  rankContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 5,
-  },
-  rankImage: {
-    width: 30,
-    height: 30,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-  },
-  authorText: {
-    color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
-    fontSize: 18,
-  },
-  dateText: {
-    color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
-  },
-  positionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bodyContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  positionImage: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-  },
-  rankImageLarge: {
-    width: 60,
-    height: 60,
-    marginHorizontal: 10,
-  },
-  positionImageLarge: {
-    width: 40,
-    height: 40,
-  },
-  championImageLarge: {
-    width: 30,
-    height: 30,
-    marginRight: 5,
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-  languageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  languageFlag: {
-    width: 30,
-    height: 20,
-    marginRight: 5,
-  },
-  positionsText: {
-    marginTop: 5,
-    marginBottom: 15,
-  },
-  modalTitle: {
-    color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
-    fontSize: 20,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  modalOptionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 8,
-  },
-  modalOptionText: {
-    color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
-    fontSize: 16,
-  },
-})
 
 export default DuosPage

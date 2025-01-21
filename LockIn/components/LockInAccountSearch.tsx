@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import { ProfileScreenProps } from '../App'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/Ionicons'
+import styles from '../styles/BrowserStyles'
 
 const LockInAccountSearch: React.FC = () => {
   const [username, setUsername] = useState('inzynierka')
@@ -13,35 +14,30 @@ const LockInAccountSearch: React.FC = () => {
   }
 
   return (
-    <View className="flex-row justify-center items-center mb-3 pt-5  w-full px-10">
-      <TextInput
-        style={{
-          borderWidth: 1,
-          borderColor: '#F5B800',
-          color: '#F5F5F5',
-          width: '100%',
-          borderRadius: 12,
-          paddingLeft: 10,
-          fontFamily: 'Chewy-Regular',
-        }}
-        placeholder="Username"
-        placeholderTextColor="#F5F5F5"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TouchableOpacity
-        onPress={handleSearch}
-        disabled={!username.trim()}
-        className={`ml-2 p-3 rounded-lg ${
-          !username.trim() ? 'bg-gray-300' : 'bg-zoltek'
-        }`}
-      >
-        <Icon
-          name="search"
-          size={24}
-          color={!username.trim() ? '#A9A9A9' : '#131313'}
+    <View style={styles.searchContainer}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TextInput
+          style={[styles.searchInput, { flex: 1 }]}
+          placeholder="Username"
+          placeholderTextColor="#787878"
+          value={username}
+          onChangeText={setUsername}
         />
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleSearch}
+          disabled={!username.trim()}
+          style={[
+            styles.searchButton,
+            !username.trim() && styles.searchButtonDisabled,
+          ]}
+        >
+          <Icon
+            name="search"
+            size={24}
+            color={!username.trim() ? '#787878' : '#131313'}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
