@@ -414,24 +414,36 @@ const BuildDetailsPage: React.FC = () => {
           style={styles.summonerSpell}
         />
       </View>
-      {/* <View className="flex-1 items-center justify-center mb-6">
-        {build.position && (
-          <Image source={positions[build.position]} className="w-12 h-12" />
-        )}
-      </View> */}
-      <Text className="text-bialas font-chewy">
-        Upvotes: {build.likesCount}
-      </Text>
-      <Text className="text-bialas font-chewy">
-        Downvotes: {build.dislikesCount}
-      </Text>
-      <View className="flex-row mt-4">
-        <Button title="Like" onPress={handleLike} />
-        <Button title="Dislike" onPress={handleDislike} />
-        <Button
-          title={isSaved ? 'Unsave Build' : 'Save Build'}
+      <View className="flex-row justify-center space-x-4 mt-2 mb-4">
+        <TouchableOpacity
+          onPress={handleLike}
+          className="bg-zoltek py-2 px-4 rounded-lg flex-row items-center"
+        >
+          <FontAwesome name="thumbs-up" size={24} color="#131313" />
+          <Text className="text-wegielek font-chewy text-lg ml-2">
+            {build.likesCount || 0}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={handleDislike}
+          className="bg-zoltek py-2 px-4 rounded-lg flex-row items-center"
+        >
+          <FontAwesome name="thumbs-down" size={24} color="#131313" />
+          <Text className="text-wegielek font-chewy text-lg ml-2">
+            {build.dislikesCount || 0}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           onPress={handleSave}
-        />
+          className="bg-zoltek py-2 px-4 rounded-lg flex-row items-center"
+        >
+          <FontAwesome name="bookmark" size={24} color="#131313" />
+          <Text className="text-wegielek font-chewy text-lg ml-2">
+            {isSaved ? 'Saved' : 'Save'}
+          </Text>
+        </TouchableOpacity>
       </View>
       <View className="mt-4 mb-6">
         <Text className="text-xl text-bialas font-chewy mb-4">Comments</Text>
