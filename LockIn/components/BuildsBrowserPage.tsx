@@ -404,7 +404,7 @@ const BuildsBrowserPage: React.FC = () => {
             )}
           </View>
         }
-        ListFooterComponent={<View className="mb-40" />}
+        ListFooterComponent={<View className="mb-1" />}
       />
       {/* modal na wybieranie championów */}
       <Modal

@@ -222,7 +222,7 @@ const BuildsBrowserPage: React.FC = () => {
       data={buildsData.content}
       keyExtractor={(item) => item._id}
       renderItem={renderBuild}
-      ListFooterComponent={<View className="mb-40" />}
+      ListFooterComponent={<View className="mb-1" />}
     />
   )
 }
