@@ -24,7 +24,7 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState('all')
 
   return (
-    <View>
+    <View style={styles.buttonContainer}>
       <View>
         <CustomButton
           title="SHOW ALL BUILDS"
@@ -54,7 +54,7 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   customButton: {
-    backgroundColor: '#13131313',
+    backgroundColor: '#F5B800',
     fontFamily: 'Chewy-Regular',
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -63,12 +63,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: '85%',
   },
   customButtonText: {
-    color: '#F5F5F5',
+    color: '#131313',
     fontSize: 16,
     fontFamily: 'Chewy-Regular',
     textAlign: 'center',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
 })

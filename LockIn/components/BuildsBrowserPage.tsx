@@ -344,8 +344,8 @@ const BuildsBrowserPage: React.FC = () => {
             <CustomButton
               title={filtersVisible ? 'Hide Filters' : 'Show Filters'}
               onPress={() => setFiltersVisible(!filtersVisible)}
-              style={styles.customButton}
-              textStyle={styles.customButtonText}
+              style={styles.filtersButton}
+              textStyle={styles.filtersButtonText}
             />
             {filtersVisible && (
               <>
@@ -382,6 +382,8 @@ const BuildsBrowserPage: React.FC = () => {
                   textStyle={styles.customButtonText}
                 />
                 <TextInput
+                  placeholder="Author Name"
+                  placeholderTextColor="#F5F5F5"
                   value={authorName}
                   onChangeText={setAuthorName}
                   style={styles.textInput}
@@ -565,16 +567,52 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 0,
   },
-  customButton: {
-    backgroundColor: '#13131313',
+  filtersButton: {
+    backgroundColor: '#F5B800',
     fontFamily: 'Chewy-Regular',
     paddingVertical: 10,
-    paddingHorizontal: 20,
     borderRadius: 10,
     borderColor: '#F5B800',
     borderWidth: 1,
     margin: 5,
     alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  filtersButtonText: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  customButton: {
+    backgroundColor: '#13131313',
+    fontFamily: 'Chewy-Regular',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  textInput: {
+    fontFamily: 'Chewy-Regular',
+    backgroundColor: '#1E1E1E',
+    color: '#F5F5F5',
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderColor: '#F5B800',
+    borderWidth: 1,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
   },
   customButtonText: {
     color: '#F5F5F5',
@@ -585,26 +623,23 @@ const styles = StyleSheet.create({
   },
   customButton2: {
     backgroundColor: '#F5B800',
+    fontFamily: 'Chewy-Regular',
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    margin: 5,
-    alignItems: 'center',
-  },
-  customButton2Text: {
-    fontFamily: 'Chewy-Regular',
-    color: '#131313',
-    fontSize: 16,
-  },
-  textInput: {
-    fontFamily: 'Chewy-Regular',
-    backgroundColor: '#1E1E1E',
-    color: '#F5F5F5',
-    padding: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
     borderWidth: 1,
-    marginVertical: 10,
+    margin: 5,
+    alignItems: 'center',
+    minWidth: '94%',
+    maxWidth: '94%',
+    paddingHorizontal: 20,
+  },
+  customButton2Text: {
+    color: '#131313',
+    fontSize: 16,
+    fontFamily: 'Chewy-Regular',
+    textAlign: 'center',
+    alignItems: 'center',
   },
   championImage: {
     width: 20,
