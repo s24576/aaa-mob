@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native'
 import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query'
 import { UserContext } from '../context/UserContext'
@@ -16,6 +17,7 @@ import { deleteFriend } from '../api/profile/deleteFriend'
 import { ProfileScreenProps } from '../App'
 import { useSocket } from '../context/SocketProvider'
 import Icon from 'react-native-vector-icons/Ionicons'
+import styles from '../styles/BrowserStyles'
 
 const FriendListPage = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
@@ -41,7 +43,7 @@ const FriendListPage = () => {
 
   if (isLoading) {
     return (
-      <View className="bg-wegielek">
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#F5B800" />
       </View>
     )
@@ -71,44 +73,46 @@ const FriendListPage = () => {
   }
 
   return (
-    <View className=" p-5 bg-wegielek items-center">
-      <TouchableOpacity
-        onPress={() => navigation.navigate('FriendRequests')}
-        className="bg-zoltek py-2 px-6 rounded-lg mb-4"
-      >
-        <Text className="text-wegielek text-lg font-chewy">
-          Zaproszenia do znajomych
-        </Text>
-      </TouchableOpacity>
+    <ScrollView style={styles.friendListContainer}>
+      <View style={{ paddingBottom: 20 }}>
+        <TouchableOpacity
+          style={styles.friendRequestsButton}
+          onPress={() => navigation.navigate('FriendRequests')}
+        >
+          <Text style={styles.customButton2Text}>Friend Requests</Text>
+        </TouchableOpacity>
 
-      <Text className="text-bialas text-lg font-chewy mb-2">
-        Lista znajomych:
-      </Text>
-      <View className="flex-row justify-center items-center mb-3 w-full px-10">
-        <FlatList
-          data={userDataQuery?.friends}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <View className="mb-2 border border-bialas p-3 rounded-lg flex-row justify-between items-center">
-              <Text
-                className="text-bialas pr-2 font-chewy"
-                onPress={() => handleFriendRequest(item)}
-              >
-                {userData && userData._id === item.username
-                  ? item.username2
-                  : item.username}
-              </Text>
-              <TouchableOpacity
-                onPress={() => handleDeleteFriend(item._id)}
-                className="bg-zoltek p-2 rounded-lg"
-              >
-                <Icon name="trash-bin" size={30} color="#131313" />
-              </TouchableOpacity>
-            </View>
-          )}
-        />
+        <Text style={styles.friendListHeader}>Friends List</Text>
+        
+        {userDataQuery?.friends?.length === 0 ? (
+          <Text style={styles.emptyListText}>No friends added yet</Text>
+        ) : (
+          <FlatList
+            scrollEnabled={false}
+            data={userDataQuery?.friends}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <View style={styles.friendItem}>
+                <Text
+                  style={styles.friendName}
+                  onPress={() => handleFriendRequest(item)}
+                >
+                  {userData && userData._id === item.username
+                    ? item.username2
+                    : item.username}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => handleDeleteFriend(item._id)}
+                  style={styles.declineRequestButton}
+                >
+                  <Icon name="trash-bin" size={24} color="#F5F5F5" />
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        )}
       </View>
-    </View>
+    </ScrollView>
   )
 }
 

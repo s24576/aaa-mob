@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
+  StyleSheet,
 } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
@@ -271,81 +272,78 @@ const CourseDetailsPage = () => {
   const course = courseData
 
   return (
-    <ScrollView className="pb-2 bg-[#131313] ">
-      {course.picture && (
-        <Image source={{ uri: course.picture }} className="w-full h-52" />
-      )}
-      <Text className="text-2xl px-4 font-bold text-white my-2 text-center">
-        {course.title}
-      </Text>
-      <Text className="text-lg px-4 text-white my-1 text-center">
-        <Text className="text-[#F5B800]">By:</Text> {course.username}
-      </Text>
-      <Text className="text-lg px-4 text-white my-1 text-center">
-        {course.description}
-      </Text>
-
-      <View className="flex-row justify-center space-x-4 mt-2 mb-4">
-        <TouchableOpacity
-          onPress={handleLike}
-          className="bg-zoltek py-2 px-4 rounded-lg flex-row items-center"
-        >
-          <FontAwesome name="thumbs-up" size={24} color="#131313" />
-          <Text className="text-wegielek font-chewy text-lg ml-2">
-            {course.likesCount || 0}
+    <ScrollView style={styles.courseDetailsScroll}>
+      <View style={styles.courseDetailHeaderContainer}>
+        {course.picture && (
+          <Image
+            source={{ uri: course.picture }}
+            style={styles.courseDetailImage}
+          />
+        )}
+        <View style={styles.courseDetailTitleContainer}>
+          <Text style={styles.courseDetailTitle}>{course.title}</Text>
+          <Text style={styles.courseDetailAuthor}>By: {course.username}</Text>
+          <Text style={styles.courseDetailDescription}>
+            {course.description}
           </Text>
-        </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
-          onPress={handleDislike}
-          className="bg-zoltek py-2 px-4 rounded-lg flex-row items-center"
-        >
-          <FontAwesome name="thumbs-down" size={24} color="#131313" />
-          <Text className="text-wegielek font-chewy text-lg ml-2">
-            {course.dislikesCount || 0}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.courseStatsContainer}>
+          <TouchableOpacity onPress={handleLike} style={styles.customButton2}>
+            <FontAwesome name="thumbs-up" size={24} color="#131313" />
+            <Text style={styles.customButton2Text}>
+              {course.likesCount || 0}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleDislike}
+            style={styles.customButton2}
+          >
+            <FontAwesome name="thumbs-down" size={24} color="#131313" />
+            <Text style={styles.customButton2Text}>
+              {course.dislikesCount || 0}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View className="px-4">
+
+      <View style={styles.courseVideosContainer}>
         {course.films &&
           course.films.map(
             (film: { _id: string; link: string; title: string }) => (
               <TouchableOpacity
                 key={film._id}
                 onPress={() => handleVideoClick(film.link)}
-                className="flex-grow bg-[#F5B800] text-center m-2 justify-center items-center rounded"
+                style={styles.courseVideoButton}
               >
-                <Text className="text-lg font-bold text-[#131313] my-2 text-center">
-                  {film.title}
-                </Text>
+                <Text style={styles.courseVideoTitle}>{film.title}</Text>
+                <View style={styles.courseVideoIcon}>
+                  <FontAwesome name="play-circle" size={24} color="#F5B800" />
+                </View>
               </TouchableOpacity>
             )
           )}
+
         {selectedVideo && (
-          <View className="pt-2">
+          <View style={{ marginVertical: 15 }}>
             <YoutubePlayer height={200} play={false} videoId={selectedVideo} />
           </View>
         )}
-        {showPurchaseMessage && (
-          <Text className="text-lg text-white text-center mt-2">
-            To access the course, you must purchase it first.
-          </Text>
-        )}
       </View>
+
       {!ownsCourse && (
-        <View className="px-4 text-center">
-          <TouchableOpacity
-            disabled
-            className="bg-[#D3D3D3] p-2 rounded mt-2 flex-row justify-center items-center self-center"
-          >
-            <FontAwesome name="shopping-cart" size={24} color="#A9A9A9" />
-            <Text className="text-[#A9A9A9] ml-2">{course.price} EUR</Text>
+        <View style={styles.purchaseContainer}>
+          <TouchableOpacity disabled style={styles.purchaseButton}>
+            <FontAwesome name="shopping-cart" size={24} color="#131313" />
+            <Text style={styles.purchaseButtonText}>{course.price} EUR</Text>
           </TouchableOpacity>
-          <Text className="text-lg text-white my-1 text-center">
+          <Text style={styles.purchaseMessage}>
             To pay for this course please visit our website.
           </Text>
         </View>
       )}
+
       <View className="mt-4 mb-6 px-4">
         <Text className="text-xl text-bialas font-chewy mb-4">Comments</Text>
 
@@ -525,5 +523,163 @@ const CourseDetailsPage = () => {
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    backgroundColor: '#131313',
+    paddingBottom: 8,
+  },
+  courseHeaderImage: {
+    width: '100%',
+    height: 200,
+  },
+  courseDetailsContainer: {
+    paddingHorizontal: 16,
+  },
+  courseDetailTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginVertical: 8,
+    textAlign: 'center',
+  },
+  courseAuthor: {
+    fontSize: 18,
+    color: '#FFFFFF',
+    marginVertical: 4,
+    textAlign: 'center',
+  },
+  courseDescription: {
+    fontSize: 18,
+    color: '#FFFFFF',
+    marginVertical: 4,
+    textAlign: 'center',
+  },
+  courseStats: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  customButton2: {
+    backgroundColor: '#F5B800',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 8,
+  },
+  customButton2Text: {
+    color: '#131313',
+    fontSize: 18,
+    marginLeft: 8,
+  },
+  videoButton: {
+    backgroundColor: '#F5B800',
+    textAlign: 'center',
+    marginVertical: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    flexDirection: 'row',
+    paddingVertical: 8,
+  },
+  videoButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#131313',
+    marginRight: 8,
+  },
+  courseDetailsScroll: {
+    backgroundColor: '#131313',
+    paddingBottom: 8,
+  },
+  courseDetailHeaderContainer: {
+    paddingHorizontal: 16,
+  },
+  courseDetailImage: {
+    width: '100%',
+    height: 200,
+  },
+  courseDetailTitleContainer: {
+    paddingHorizontal: 16,
+  },
+  courseDetailTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginVertical: 8,
+    textAlign: 'center',
+  },
+  courseDetailAuthor: {
+    fontSize: 18,
+    color: '#FFFFFF',
+    marginVertical: 4,
+    textAlign: 'center',
+  },
+  courseDetailDescription: {
+    fontSize: 18,
+    color: '#FFFFFF',
+    marginVertical: 4,
+    textAlign: 'center',
+  },
+  courseStatsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  courseVideosContainer: {
+    paddingHorizontal: 16,
+  },
+  courseVideoButton: {
+    backgroundColor: '#F5B800',
+    textAlign: 'center',
+    marginVertical: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    flexDirection: 'row',
+    paddingVertical: 8,
+  },
+  courseVideoTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#131313',
+    marginRight: 8,
+  },
+  courseVideoIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  purchaseContainer: {
+    paddingHorizontal: 16,
+    textAlign: 'center',
+  },
+  purchaseButton: {
+    backgroundColor: '#D3D3D3',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    selfCenter: 'center',
+  },
+  purchaseButtonText: {
+    color: '#A9A9A9',
+    fontSize: 18,
+    marginLeft: 8,
+  },
+  purchaseMessage: {
+    fontSize: 18,
+    color: '#FFFFFF',
+    marginVertical: 4,
+    textAlign: 'center',
+  },
+})
 
 export default CourseDetailsPage

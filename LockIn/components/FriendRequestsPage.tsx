@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native'
 import { ProfileScreenProps } from '../App'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -18,6 +19,7 @@ import { cancelFriendRequest } from '../api/profile/cancelFriendRequest'
 import { useSocket } from '../context/SocketProvider'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
+import styles from '../styles/BrowserStyles'
 
 const FriendRequestsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -109,7 +111,7 @@ const FriendRequestsPage: React.FC = () => {
 
   if (isIncomingLoading || isOutgoingLoading) {
     return (
-      <View className="bg-wegielek">
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#F5B800" />
       </View>
     )
@@ -124,94 +126,105 @@ const FriendRequestsPage: React.FC = () => {
   }
 
   return (
-    <FlatList
-      data={[]}
-      ListHeaderComponent={
-        <View className="px-5 pt-5 bg-wegielek items-center">
-          <View className="flex-row justify-center items-center mb-3 w-full">
-            <TouchableOpacity
-              onPress={() => navigation.navigate('FriendList')}
-              className="mr-2"
-            >
-              <Icon name="arrow-back" size={30} color="#F5B800" />
-            </TouchableOpacity>
-            <TextInput
-              className="flex-1 border border-zoltek text-bialas rounded-lg px-2 py-3 font-chewy bg-wegielek"
-              placeholder="Search..."
-              placeholderTextColor="#F5F5F5"
-              value={searchQuery}
-              onChangeText={handleSearchChange}
-            />
-            <TouchableOpacity
-              onPress={handleSendRequest}
-              disabled={!searchQuery.trim()}
-              className={`ml-2 p-3 rounded-lg ${
-                !searchQuery.trim() ? 'bg-gray-300' : 'bg-zoltek'
-              }`}
-            >
-              <Icon
-                name="send"
-                size={24}
-                color={!searchQuery.trim() ? '#A9A9A9' : '#131313'}
-              />
-            </TouchableOpacity>
-          </View>
+    <View style={styles.friendRequestsContainer}>
+      <View style={styles.searchBarContainer}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate('FriendList')}
+        >
+          <Icon name="arrow-back" size={24} color="#F5B800" />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.searchInputFR}
+          placeholder="Search username..."
+          placeholderTextColor="#808080"
+          value={searchQuery}
+          onChangeText={handleSearchChange}
+        />
+        <TouchableOpacity
+          onPress={handleSendRequest}
+          disabled={!searchQuery.trim()}
+          style={[
+            styles.acceptRequestButton,
+            !searchQuery.trim() && styles.searchButtonDisabled,
+          ]}
+        >
+          <Icon
+            name="send"
+            size={24}
+            color={!searchQuery.trim() ? '#808080' : '#F5F5F5'}
+          />
+        </TouchableOpacity>
+      </View>
 
-          <Text className="text-bialas pt-2 text-lg font-chewy">
-            Incoming Friend Requests
-          </Text>
+      <ScrollView className="mb-20">
+        <View style={styles.requestsSection}>
+          <Text style={styles.requestsSectionTitle}>Incoming Requests</Text>
+          {incomingRequestsData?.content?.length === 0 ? (
+            <Text style={styles.emptyListText}>No incoming requests</Text>
+          ) : (
+            <FlatList
+              scrollEnabled={false}
+              data={incomingRequestsData?.content}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <View style={styles.requestItem}>
+                  <Text
+                    style={styles.requestName}
+                    onPress={() => navigateToProfile(item.from)}
+                  >
+                    {item.from}
+                  </Text>
+                  <View style={styles.requestActions}>
+                    <TouchableOpacity
+                      style={styles.acceptRequestButton}
+                      onPress={() => handleRespondRequest(item._id, true)}
+                    >
+                      <Icon name="checkmark" size={24} color="#F5F5F5" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.declineRequestButton}
+                      onPress={() => handleRespondRequest(item._id, false)}
+                    >
+                      <Icon name="close" size={24} color="#F5F5F5" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+            />
+          )}
         </View>
-      }
-      ListFooterComponent={
-        <View className="px-10 pt-2">
-          <FlatList
-            data={incomingRequestsData.content}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View className="m-1 border border-bialas p-3 rounded-lg flex-row justify-between items-center">
-                <Text
-                  className="text-bialas pr-2 font-chewy"
-                  onPress={() => navigateToProfile(item.from)}
-                >
-                  {item.from}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => handleRespondRequest(item._id, true)}
-                >
-                  <Icon name="checkmark-circle" size={30} color="#F5B800" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleRespondRequest(item._id, false)}
-                >
-                  <Icon name="close-circle" size={30} color="#F5B800" />
-                </TouchableOpacity>
-              </View>
-            )}
-          />
-          <Text className="text-bialas text-center text-lg font-chewy mt-5 mb-2">
-            Outgoing Friend Requests
-          </Text>
-          <FlatList
-            data={outgoingRequestsData.content}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View className="m-1 border border-bialas p-3 rounded-lg flex-row justify-between items-center">
-                <Text
-                  className="text-bialas pr-2 font-chewy"
-                  onPress={() => navigateToProfile(item.to)}
-                >
-                  {item.to}
-                </Text>
-                <TouchableOpacity onPress={() => handleCancelRequest(item._id)}>
-                  <Icon name="close-circle" size={30} color="#F5B800" />
-                </TouchableOpacity>
-              </View>
-            )}
-          />
+
+        <View style={styles.requestsSection}>
+          <Text style={styles.requestsSectionTitle}>Outgoing Requests</Text>
+          {outgoingRequestsData?.content?.length === 0 ? (
+            <Text style={styles.emptyListText}>No outgoing requests</Text>
+          ) : (
+            <FlatList
+              scrollEnabled={false}
+              data={outgoingRequestsData?.content}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <View style={styles.requestItem}>
+                  <Text
+                    style={styles.requestName}
+                    onPress={() => navigateToProfile(item.to)}
+                  >
+                    {item.to}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.declineRequestButton}
+                    onPress={() => handleCancelRequest(item._id)}
+                  >
+                    <Icon name="close" size={24} color="#F5F5F5" />
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          )}
         </View>
-      }
-      renderItem={null}
-    />
+      </ScrollView>
+    </View>
   )
 }
 

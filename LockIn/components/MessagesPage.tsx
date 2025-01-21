@@ -20,6 +20,7 @@ import Modal from 'react-native-modal'
 import Checkbox from 'expo-checkbox'
 import { Chat } from '../types/messenger'
 import { Ionicons } from '@expo/vector-icons'
+import styles from '../styles/BrowserStyles'
 
 const MessagesPage: React.FC = () => {
   const navigation = useNavigation<ChatPageScreenProps['navigation']>()
@@ -116,63 +117,70 @@ const MessagesPage: React.FC = () => {
   const renderChat = ({ item }: { item: Chat }) => (
     <TouchableOpacity
       onPress={() => handleChatPress(item._id)}
-      className="bg-wegielek p-2 pt-1 mb-4 border-2 border-solid border-zoltek rounded-lg"
+      style={styles.chatItem}
     >
-      <View>
-        <Text className="text-lg font-bold text-zoltek">{item.name}</Text>
-        <Text className="text-sm text-bialas">
-          Members: {item.members.map((member) => member.username).join(', ')}
-        </Text>
-        {item.lastMessage && (
-          <Text className="text-sm text-bialas">
-            Last message: {item.lastMessage.message}
-          </Text>
-        )}
+      <View style={styles.chatItemHeader}>
+        <Text style={styles.chatTitle}>{item.name}</Text>
       </View>
+      <Text style={styles.chatMembers}>
+        Members: {item.members.map((member) => member.username).join(', ')}
+      </Text>
+      {item.lastMessage && (
+        <Text style={styles.lastMessage}>
+          Last message: {item.lastMessage.message}
+        </Text>
+      )}
     </TouchableOpacity>
   )
 
   const renderCreateChatModal = () => (
-    <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-      <View className="bg-wegielek rounded p-5">
-        <Text className="text-lg font-boldd text-zoltek mb-2">
-          Create Public Chat
-        </Text>
+    <Modal
+      isVisible={isModalVisible}
+      onBackdropPress={toggleModal}
+      backdropOpacity={0.9}
+      style={styles.modalOverlay}
+    >
+      <View style={styles.modalWrapper}>
+        <Text style={styles.modalTitle}>Create Public Chat</Text>
         <TextInput
           placeholder="Chat Name"
           value={chatName}
           onChangeText={setChatName}
-          className="border border-zoltek p-2 mb-4 text-bialas rounded"
-          placeholderTextColor="#F5F5F5"
+          style={styles.modalInput}
+          placeholderTextColor="#888"
         />
-        <FlatList
-          data={filteredFriends}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <View className="flex-row items-center mb-2">
-              <Checkbox
-                value={selectedFriends.includes(item)}
-                onValueChange={() => handleFriendSelection(item)}
-              />
-              <Text className="ml-2 text-bialas">{item}</Text>
-            </View>
-          )}
-          ListEmptyComponent={
-            <Text className="text-bialas">No friends available</Text>
-          }
-        />
-        <View className="flex-row justify-between mt-4">
+        <View style={styles.modalListContainer}>
+          <FlatList
+            data={filteredFriends}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <View style={styles.checkboxContainer}>
+                <Checkbox
+                  value={selectedFriends.includes(item)}
+                  onValueChange={() => handleFriendSelection(item)}
+                  style={styles.checkbox}
+                />
+                <Text style={styles.modalItemText}>{item}</Text>
+              </View>
+            )}
+            ListEmptyComponent={
+              <Text style={styles.emptyListText}>No friends available</Text>
+            }
+          />
+        </View>
+        <View style={styles.modalButtons}>
           <TouchableOpacity
             onPress={handleCreateChat}
-            className="flex-1 mr-2 bg-zoltek p-3 rounded-lg items-center"
+            style={styles.modalButtonPrimary}
+            disabled={!chatName.trim() || selectedFriends.length === 0}
           >
-            <Text className="text-wegielek">Create</Text>
+            <Text style={styles.modalButtonText}>Create</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={toggleModal}
-            className="flex-1 ml-2 bg-zoltek p-3 rounded-lg items-center"
+            style={styles.modalButtonSecondary}
           >
-            <Text className="text-wegielek">Cancel</Text>
+            <Text style={styles.modalButtonTextSecondary}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -180,31 +188,33 @@ const MessagesPage: React.FC = () => {
   )
 
   return (
-    <View className="bg-wegielek h-full p-5">
-      <View className="pb-4">
-        <TouchableOpacity
-          onPress={toggleModal}
-          className="bg-zoltek p-2 w-2/3 rounded-lg items-center self-center"
-        >
-          <Text className="text-wegielek text-lg font-bold">
-            Create Public Chat
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.chatListContainer}>
+      <TouchableOpacity onPress={toggleModal} style={styles.createChatButton}>
+        <Text style={styles.createChatText}>Create Public Chat</Text>
+      </TouchableOpacity>
+
+      {/* Modal remains the same */}
       {renderCreateChatModal()}
+
       <FlatList
         data={chatsData?.content}
         keyExtractor={(item) => item._id}
         renderItem={renderChat}
         ListEmptyComponent={
-          <Text className="text-bialas">No chats available</Text>
+          <Text style={styles.emptyListText}>No chats available</Text>
         }
       />
-      <View className="flex-row justify-between items-center mt-2 absolute bottom-0 left-0 right-0 bg-wegielek">
+
+      {/* Pagination container */}
+      <View style={styles.paginationContainer}>
         <TouchableOpacity onPress={handlePreviousPage} disabled={page === 0}>
-          <Ionicons name="arrow-back" size={30} color="#F5B800" />
+          <Ionicons
+            name="arrow-back"
+            size={30}
+            color={page === 0 ? '#888' : '#F5B800'}
+          />
         </TouchableOpacity>
-        <Text className="text-bialas">{page + 1}</Text>
+        <Text style={styles.pageNumber}>{page + 1}</Text>
         <TouchableOpacity onPress={handleNextPage}>
           <Ionicons name="arrow-forward" size={30} color="#F5B800" />
         </TouchableOpacity>

@@ -31,7 +31,7 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined)
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { userData } = useContext(UserContext) as UserContextType
-  const username = userData?.username || 'defaultUser'
+  const username = userData?.username || userData?._id
   const {
     receivedMessage,
     connectionStatus,
@@ -46,8 +46,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (
-      receivedMessage.includes('friendRequest') ||
-      memberAction.includes('friendRequest')
+      (receivedMessage.includes('/friendRequest/to') ||
+        receivedMessage.includes('/friendRequest/from')) &&
+      !receivedMessage.includes('delete')
     ) {
       setNotificationCount((prev) => prev + 1)
     }

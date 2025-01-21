@@ -11,6 +11,7 @@ import { getCourses } from '../api/course/getCourses'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { useQuery } from '@tanstack/react-query'
+import styles from '../styles/BrowserStyles'
 
 type CoursesBrowserProps = NativeStackScreenProps<
   RootStackParamList,
@@ -56,16 +57,21 @@ const CoursesBrowserPage = ({ navigation, route }: CoursesBrowserProps) => {
       onPress={() =>
         navigation.navigate('CourseDetails', { courseId: item._id })
       }
+      style={styles.courseCard}
     >
-      <View className="p-4 border-b border-gray-300">
-        {item.picture && (
-          <Image source={{ uri: item.picture }} className="w-full h-40 mb-2" />
-        )}
-        <Text className="text-bialas font-chewy">{item.title}</Text>
-        <Text className="text-bialas font-chewy">{item.description}</Text>
-        <Text className="text-bialas font-chewy">Price: {item.price}</Text>
-        <Text className="text-bialas font-chewy">By: {item.username}</Text>
-      </View>
+      {item.picture && (
+        <Image
+          source={{ uri: item.picture }}
+          style={styles.courseThumbnail}
+          resizeMode="cover"
+        />
+      )}
+      <Text style={styles.courseTitle}>{item.title}</Text>
+      <Text style={styles.courseDescription} numberOfLines={2}>
+        {item.description}
+      </Text>
+      <Text style={styles.courseAuthor}>By: {item.username}</Text>
+      <Text style={styles.coursePrice}>{item.price} EUR</Text>
     </TouchableOpacity>
   )
 
@@ -75,6 +81,7 @@ const CoursesBrowserPage = ({ navigation, route }: CoursesBrowserProps) => {
         data={courses}
         keyExtractor={(item) => item._id}
         renderItem={renderCourse}
+        contentContainerStyle={{ paddingVertical: 10 }}
       />
     </View>
   )

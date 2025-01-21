@@ -235,7 +235,30 @@ const UserProfile = () => {
           <Text style={styles.customButton2Text}>Update Bio</Text>
         </TouchableOpacity>
       </View>
-
+      <View style={styles.buttonGroup}>
+        <TouchableOpacity
+          style={styles.customButton2}
+          onPress={() => navigation.navigate('Settings')}
+        >
+          <Text style={styles.customButton2Text}>Settings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.customButton2}
+          onPress={() => navigation.navigate('FriendList')}
+        >
+          <Text style={styles.customButton2Text}>Friends List</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.customButton,
+            { backgroundColor: 'red' },
+            { borderColor: 'black' },
+          ]}
+          onPress={handleLogout}
+        >
+          <Text style={styles.customButton2Text}>Logout</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.accountListContainer}>
         <Text style={styles.accountListHeader}>Watchlist:</Text>
         <FlatList
@@ -323,31 +346,6 @@ const UserProfile = () => {
             </View>
           )}
         />
-      </View>
-
-      <View style={styles.buttonGroup}>
-        <TouchableOpacity
-          style={styles.customButton2}
-          onPress={() => navigation.navigate('FriendList')}
-        >
-          <Text style={styles.customButton2Text}>Friends List</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.customButton2}
-          onPress={() => navigation.navigate('Settings')}
-        >
-          <Text style={styles.customButton2Text}>Settings</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.customButton,
-            { backgroundColor: 'red' },
-            { borderColor: 'black' },
-          ]}
-          onPress={handleLogout}
-        >
-          <Text style={styles.customButton2Text}>Logout</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   )

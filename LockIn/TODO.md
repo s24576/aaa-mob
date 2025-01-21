@@ -1,12 +1,6 @@
 # TODO List
 
-Pageable
-
-- ograniczyc ilosc page do tylu ile ich serio jest
-
 Account Seach:
-
-- styl na guzik przeniesienie do riotu
 
 Build Browser
 
@@ -23,13 +17,7 @@ Build Details
 
 Course Browser
 
-- kolor czcionek
-
-* układ / css
-
 Course Details
-
-- czcionki
 
 Duo Browser
 
@@ -37,27 +25,13 @@ Duo Answer
 
 Friend List
 
-- czcionka
-- ikonki mniejsze
-
-* układ jak na x/ss
-
 Friend Requests
-
-- czcionki
-
-* układ jak na x/ss
 
 Home
 
 Lockin Profile
 
-- css / stylowanie jak na ss
-- poprawic placeholder
-
-* ew. wyswietlanie wiecej rzeczy np. potwierdzone konto i lista znaj
-
-- ERROR, websocket daje +1 do notifs on any msg a nie on notification (resolved?)
+- css
 
 Login
 
@@ -74,17 +48,10 @@ Match Details
 
 Messages + Msg Room
 
-- tlumaczenia
-- czcionki
-
-* poprawa wygl odpowiadania
-* gest na odpowiedzi
+- poprawa wygl odpowiadania
+- gest na odpowiedzi
 
 Notifications
-
-- czcionka
-
-* stylowanie jak ss
 
 Riot Profile
 
@@ -94,14 +61,14 @@ Riot Profile
 
 Settings
 
-- padding top
-
 User Profile
-
-- css
-- Zastapic iron unrankedem (DONE)
-- Unloaded player na niezcachowane konta
 
 ## Bugs
 
 (NOBRIDGE) WARN i18next: init: i18next is already initialized. You should call init just once!
+
+ERROR, websocket daje +1 do notifs on any msg a nie on notification (resolved?)
+
+notif ikonka zwieksza o 1 na dowolnej wiadomosci websocketa
+
+Pageable - ograniczyc ilosc page do tylu ile ich serio jest

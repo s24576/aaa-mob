@@ -11,6 +11,7 @@ import { useSocket } from '../context/SocketProvider'
 import { getNotifications } from '../api/profile/getNotifications'
 import { useNavigation } from '@react-navigation/native'
 import { ProfileScreenProps } from '../App'
+import styles from '../styles/BrowserStyles'
 
 const NotificationComponent: React.FC = () => {
   const { receivedMessage } = useSocket()
@@ -43,30 +44,40 @@ const NotificationComponent: React.FC = () => {
 
   if (isLoading) {
     return (
-      <View className="bg-wegielek">
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#F5B800" />
       </View>
     )
   }
 
   if (error) {
-    return <Text>Error: {error.message}</Text>
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error: {error.message}</Text>
+      </View>
+    )
   }
 
+  const EmptyNotifications = () => (
+    <Text style={styles.emptyListText}>No notifications to display</Text>
+  )
+
   return (
-    <View className="p-5">
-      <Text className="text-lg text-zoltek mb-3">Notifications:</Text>
+    <View style={styles.notificationsContainer}>
+      <Text style={styles.notificationsHeader}>Notifications</Text>
       <FlatList
         data={notifications?.content}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            className="border border-zoltek p-3 mb-2 rounded"
+            style={styles.notificationItem}
             onPress={() => handleNotificationClick(item.value)}
           >
-            <Text className="text-bialas">{item.value}</Text>
+            <Text style={styles.notificationText}>{item.value}</Text>
           </TouchableOpacity>
         )}
+        ListEmptyComponent={EmptyNotifications}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   )
