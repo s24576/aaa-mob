@@ -1,5 +1,12 @@
 import React from 'react'
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Participant } from '../types/riot/matchClass'
 import { useQuery } from '@tanstack/react-query'
@@ -48,7 +55,6 @@ const MatchDetailsPage: React.FC = () => {
           style={{ width: 50, height: 50 }}
         />
         <Text className="text-bialas flex-1 text-left">
-          {' '}
           {item.riotIdGameName}
         </Text>
         <Text className="text-bialas flex-1 text-left">
@@ -118,30 +124,73 @@ const MatchDetailsPage: React.FC = () => {
     <FlatList
       ListHeaderComponent={
         <View className="p-4">
-          <Text className="text-bialas text-2xl font-bold mb-4">
-            Match Details
-          </Text>
+          <View style={styles.header}>
+            <Text className="text-bialas text-2xl font-bold mb-4">
+              {new Date(
+                Number(matchInfo.info.gameCreation)
+              ).toLocaleDateString()}
+            </Text>
+            <Text className="text-bialas text-lg mb-4">
+              {matchInfo.info.queueType}
+            </Text>
+          </View>
+
           <Text className="text-bialas text-xl font-semibold mb-2">Team 1</Text>
+          <View className="mb-4 flex-row">
+            <Text className="text-bialas mx-2">
+              Baron: {matchInfo.info.teams[0].objectives.baron.kills}
+            </Text>
+            <Text className="text-bialas mx-2">
+              Dragons: {matchInfo.info.teams[0].objectives.dragon.kills}
+            </Text>
+            <Text className="text-bialas mx-2">
+              Horde: {matchInfo.info.teams[0].objectives.horde.kills}
+            </Text>
+            <Text className="text-bialas mx-2">
+              Herald: {matchInfo.info.teams[0].objectives.riftHerald.kills}
+            </Text>
+            <Text className="text-bialas mx-2">
+              Towers: {matchInfo.info.teams[0].objectives.tower.kills}
+            </Text>
+          </View>
+
+          <Text className="text-bialas text-xl font-semibold mb-2">Team 2</Text>
+          <View className="mb-4 flex-row">
+            <Text className="text-bialas mx-2">
+              Baron: {matchInfo.info.teams[1].objectives.baron.kills}
+            </Text>
+            <Text className="text-bialas mx-2">
+              Dragons: {matchInfo.info.teams[1].objectives.dragon.kills}
+            </Text>
+            <Text className="text-bialas mx-2">
+              Horde: {matchInfo.info.teams[1].objectives.horde.kills}
+            </Text>
+            <Text className="text-bialas mx-2">
+              Herald: {matchInfo.info.teams[1].objectives.riftHerald.kills}
+            </Text>
+            <Text className="text-bialas mx-2">
+              Towers: {matchInfo.info.teams[1].objectives.tower.kills}
+            </Text>
+          </View>
         </View>
       }
-      data={[...team1, { header: 'Team 2' }, ...team2]}
+      data={[...team1, ...team2]}
       keyExtractor={(item, index) =>
         item.participantId ? item.participantId.toString() : `header-${index}`
       }
-      renderItem={({ item }) => {
-        if (item.header) {
-          return (
-            <View className="p-4">
-              <Text className="text-bialas text-xl font-semibold mt-4 mb-2">
-                {item.header}
-              </Text>
-            </View>
-          )
-        }
-        return renderParticipant({ item })
-      }}
+      renderItem={renderParticipant}
     />
   )
 }
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: 'Chewy-Regular',
+    color: '#F5B800',
+  },
+})
 
 export default MatchDetailsPage

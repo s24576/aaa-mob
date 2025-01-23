@@ -36,7 +36,7 @@ import CourseDetails from './screens/CourseDetails'
 import { useFonts } from 'expo-font'
 import Settings from './screens/Settings'
 import DuoAnswers from './screens/DuoAnswer'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+// import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 initI18n()
 
@@ -83,15 +83,15 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <UserContextProvider>
-        <SocketProvider>
-          <PaperProvider>
-            <Layout />
-          </PaperProvider>
-        </SocketProvider>
-      </UserContextProvider>
-    </GestureHandlerRootView>
+    // <GestureHandlerRootView style={{ flex: 1 }}>
+    <UserContextProvider>
+      <SocketProvider>
+        <PaperProvider>
+          <Layout />
+        </PaperProvider>
+      </SocketProvider>
+    </UserContextProvider>
+    // </GestureHandlerRootView>
   )
 }
 

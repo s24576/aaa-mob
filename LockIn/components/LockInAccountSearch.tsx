@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { View, TextInput, Button } from 'react-native'
+import { View, TextInput, Button, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { ProfileScreenProps } from '../App'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+// import { TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles/BrowserStyles'
 

@@ -174,7 +174,6 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
         <View style={styles.rankedContainer}>
           <Text style={styles.text}>SOLO Q</Text>
           <View style={styles.rankContainer}>
-            {' '}
             <Image
               source={
                 rankImages[
