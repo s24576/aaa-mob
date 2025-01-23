@@ -239,34 +239,32 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
                 // className="mb-4"
               />
               <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-                {mastery.championPoints}
+                {mastery.championLevel}
               </Text>
             </View>
           </View>
         ))}
       </View>
+      <View className="flex-row justify-evenly"></View>
       {profile.matches.map((match) => (
-        <View key={match.matchId} className="flex-row justify-between py-2">
+        <TouchableOpacity
+          key={match.matchId}
+          style={styles.matchContainer}
+          onPress={() => handleMatchPress(match.matchId)}
+        >
           <Text style={match.win ? styles.winText : styles.loseText}>
             {match.win ? 'WIN' : 'LOSE'}
           </Text>
-          <View style={styles.championContainer}>
-            <Image
-              source={{
-                uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${match.championName}.png`,
-              }}
-              style={styles.championIcon}
-            />
-          </View>
-          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+          <Image
+            source={{
+              uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${match.championName}.png`,
+            }}
+            style={styles.championIcon}
+          />
+          <Text style={styles.kdaText}>
             {match.kills}/{match.deaths}/{match.assists}
           </Text>
-          <TouchableOpacity onPress={() => handleMatchPress(match.matchId)}>
-            <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-              {match.matchId}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   )
@@ -293,7 +291,6 @@ const ProfilePage: React.FC = () => {
       {error && (
         <View>
           <Text>Error fetching profile: {error.message}</Text>
-          <Button title="Go Back" onPress={() => navigation.goBack()} />
         </View>
       )}
       {profile && <ProfileTable profile={profile} />}
@@ -528,7 +525,7 @@ const styles = StyleSheet.create({
   masteriesContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     marginBottom: 16,
   },
   singleMastery: {
@@ -575,6 +572,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   loseText: {
+    color: '#F5F5F5',
+    fontFamily: 'Chewy-Regular',
+    fontSize: 16,
+  },
+  matchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F5B800',
+  },
+  kdaText: {
     color: '#F5F5F5',
     fontFamily: 'Chewy-Regular',
     fontSize: 16,
