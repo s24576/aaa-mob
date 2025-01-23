@@ -14,9 +14,9 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles/BrowserStyles'
 
 const RiotSearchPage: React.FC = () => {
-  const [server, setServer] = useState('EUW1')
-  const [tag, setTag] = useState('ECPU')
-  const [name, setName] = useState('Oriol')
+  const [server, setServer] = useState('eun1')
+  const [tag, setTag] = useState('BBB')
+  const [name, setName] = useState('BlingBlingBoi')
   const [modalVisible, setModalVisible] = useState(false)
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
 

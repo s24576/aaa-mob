@@ -18,6 +18,7 @@ import { getWatchlistRiotProfiles } from '../api/riot/getWatchlistRiotProfiles'
 import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
 import { manageWatchlist } from '../api/profile/manageWatchlist'
 import { manageMyAccount } from '../api/profile/manageMyAccount'
+import servers from '../assets/servers.json'
 
 type RiotProfileRouteProp = RouteProp<
   {
@@ -31,7 +32,39 @@ type RiotProfileRouteProp = RouteProp<
   'RiotProfile'
 >
 
+const getServerName = (code: string) => {
+  const serverObj = servers.find((s) => s.code === code)
+  return serverObj ? serverObj.name : code
+}
+
 const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
+  const rankImages: { [key: string]: any } = {
+    IRON: require('../assets/ranks/IRON.png'),
+    BRONZE: require('../assets/ranks/BRONZE.png'),
+    SILVER: require('../assets/ranks/SILVER.png'),
+    GOLD: require('../assets/ranks/GOLD.png'),
+    PLATINUM: require('../assets/ranks/PLATINUM.png'),
+    EMERALD: require('../assets/ranks/EMERALD.png'),
+    DIAMOND: require('../assets/ranks/DIAMOND.png'),
+    MASTER: require('../assets/ranks/MASTER.png'),
+    GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
+    CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
+    UNRANKED: require('../assets/ranks/UNRANKED.png'),
+  }
+
+  const masteryEmblems: { [key: string]: any } = {
+    1: require('../assets/masteryEmblems/1.png'),
+    2: require('../assets/masteryEmblems/2.png'),
+    3: require('../assets/masteryEmblems/3.png'),
+    4: require('../assets/masteryEmblems/4.png'),
+    5: require('../assets/masteryEmblems/5.png'),
+    6: require('../assets/masteryEmblems/6.png'),
+    7: require('../assets/masteryEmblems/7.png'),
+    8: require('../assets/masteryEmblems/8.png'),
+    9: require('../assets/masteryEmblems/9.png'),
+    10: require('../assets/masteryEmblems/10.png'),
+  }
+
   const [isWatching, setIsWatching] = useState(false)
   const [isClaimed, setIsClaimed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -97,10 +130,15 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.text} className="text-zoltek font-Chewy-Regular">
-          {profile.server}
+        <Text
+          style={styles.textHeader}
+          className="text-zoltek font-Chewy-Regular"
+        >
+          {getServerName(profile.server)}
         </Text>
-        <Text style={styles.text}>{profile.summonerLevel}</Text>
+        <Text style={styles.textHeader}>
+          Summoner level: {profile.summonerLevel}
+        </Text>
       </View>
       <View style={styles.subheader}>
         <Image
@@ -113,110 +151,105 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
           {profile.gameName} #{profile.tagLine}
         </Text>
       </View>
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          Server
-        </Text>
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          {profile.server}
-        </Text>
+      <View style={styles.ranksRow}>
+        <View style={styles.rankedContainer}>
+          <Text style={styles.text}>FLEX</Text>
+          <View style={styles.rankContainer}>
+            <Image
+              source={
+                rankImages[
+                  profile.ranks.find((r) => r.queueType === 'RANKED_FLEX_SR')
+                    ?.tier || 'UNRANKED'
+                ]
+              }
+              style={styles.rankImage}
+              className="mr-2"
+            />
+            <Text style={styles.text}>
+              {profile.ranks.find((r) => r.queueType === 'RANKED_FLEX_SR')
+                ?.rank || ''}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.rankedContainer}>
+          <Text style={styles.text}>SOLO Q</Text>
+          <View style={styles.rankContainer}>
+            {' '}
+            <Image
+              source={
+                rankImages[
+                  profile.ranks.find((r) => r.queueType === 'RANKED_SOLO_5x5')
+                    ?.tier || 'UNRANKED'
+                ]
+              }
+              style={styles.rankImage}
+              className="mr-2"
+            />
+            <Text style={styles.text}>
+              {profile.ranks.find((r) => r.queueType === 'RANKED_SOLO_5x5')
+                ?.rank || ''}
+            </Text>
+          </View>
+        </View>
       </View>
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          Summoner Level
-        </Text>
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          {profile.summonerLevel}
-        </Text>
-      </View>
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          Ranked Tier
-        </Text>
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          {profile.rankedTier}
-        </Text>
-      </View>
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          Ranked Rank
-        </Text>
-        <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-          {profile.rankedRank}
-        </Text>
-      </View>
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Button
-          title={
-            isLoading
+      <View className="flex-row justify-between py-2">
+        <TouchableOpacity
+          style={styles.customButton2}
+          onPress={handleClaimAccount}
+          disabled={isLoading}
+        >
+          <Text style={styles.customButton2Text}>
+            {isLoading
               ? 'Loading...'
               : isClaimed
                 ? 'Porzuć konto'
-                : 'Przypisz konto'
-          }
-          onPress={handleClaimAccount}
+                : 'Przypisz konto'}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.customButton2}
+          onPress={handleAddToWatchList}
           disabled={isLoading}
-        />
-        <Button
-          title={
-            isLoading
+        >
+          <Text style={styles.customButton2Text}>
+            {isLoading
               ? 'Loading...'
               : isWatching
                 ? 'Przestań obserwować'
-                : 'Obserwuj konto'
-          }
-          onPress={handleAddToWatchList}
-          disabled={isLoading}
-        />
+                : 'Obserwuj konto'}
+          </Text>
+        </TouchableOpacity>
       </View>
-      <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-        Ranks
-      </Text>
-      {profile.ranks.map((rank, index) => (
-        <View
-          key={index}
-          className="flex-row justify-between py-2 border-b border-gray-300"
-        >
-          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-            {rank.queueType}
-          </Text>
-          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-            {rank.tier} {rank.rank}
-          </Text>
-        </View>
-      ))}
-      <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-        Mastery
-      </Text>
-      {profile.mastery.map((mastery, index) => (
-        <View
-          key={index}
-          className="flex-row justify-between py-2 border-b border-gray-300"
-        >
-          <View style={styles.championContainer}>
-            <Image
-              source={{
-                uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${mastery.championName}.png`,
-              }}
-              style={styles.championIcon}
-            />
-            <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-              {mastery.championName}
-            </Text>
+      <View style={styles.masteriesContainer}>
+        {profile.mastery.map((mastery, index) => (
+          <View key={index} className="flex-row justify-between py-2">
+            <View style={styles.singleMastery}>
+              <View style={styles.championContainer}>
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${mastery.championName}.png`,
+                  }}
+                  style={styles.championIcon}
+                  // className="mb-18 ml-8"
+                />
+              </View>
+              <Image
+                source={masteryEmblems[Math.min(mastery.championLevel, 10)]}
+                style={styles.masteryEmblem}
+                // className="mb-4"
+              />
+              <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+                {mastery.championPoints}
+              </Text>
+            </View>
           </View>
-          <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-            {mastery.championPoints}
-          </Text>
-        </View>
-      ))}
-      <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
-        Matches
-      </Text>
+        ))}
+      </View>
       {profile.matches.map((match) => (
-        <View
-          key={match.matchId}
-          className="flex-row justify-between py-2 border-b border-gray-300"
-        >
+        <View key={match.matchId} className="flex-row justify-between py-2">
+          <Text style={match.win ? styles.winText : styles.loseText}>
+            {match.win ? 'WIN' : 'LOSE'}
+          </Text>
           <View style={styles.championContainer}>
             <Image
               source={{
@@ -323,6 +356,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 16,
   },
+  ranksRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginBottom: 16,
+  },
+  rankedContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  rankContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   gameName: {
     fontSize: 24,
     fontFamily: 'Chewy-Regular',
@@ -332,6 +381,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Chewy-Regular',
     color: '#F5F5F5',
+  },
+  textHeader: {
+    fontSize: 18,
+    fontFamily: 'Chewy-Regular',
+    color: '#F5F5F5',
+    maxWidth: '45%',
   },
   container: {
     borderBottomColor: '#F5B800',
@@ -449,9 +504,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     alignItems: 'center',
-    minWidth: '94%',
-    maxWidth: '94%',
-    paddingHorizontal: 20,
+    minWidth: '40%',
+    maxWidth: '40%',
+    // paddingHorizontal: 20,
   },
   customButton2Text: {
     color: '#131313',
@@ -469,6 +524,17 @@ const styles = StyleSheet.create({
   selectedChampionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  masteriesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  singleMastery: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   selectedChampionText: {
     color: '#F5F5F5',
@@ -490,7 +556,28 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    marginRight: 8,
+  },
+  rankImage: {
+    width: 50,
+    height: 50,
+    marginVertical: 8,
+  },
+  masteryEmblem: {
+    width: 24,
+    height: 24,
+    // position: 'absolute',
+    // flex: 1,
+    // justifyContent: 'center',
+  },
+  winText: {
+    color: '#F5B800',
+    fontFamily: 'Chewy-Regular',
+    fontSize: 16,
+  },
+  loseText: {
+    color: '#F5F5F5',
+    fontFamily: 'Chewy-Regular',
+    fontSize: 16,
   },
 })
 
