@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useContext } from 'react'
 import {
   View,
   Text,
@@ -180,6 +179,7 @@ const BuildDetailsPage: React.FC = () => {
   })
 
   const handleLike = () => {
+
     mutation.mutate({ objectId: buildId, value: true })
   }
 
