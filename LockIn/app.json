@@ -4,30 +4,28 @@
     "slug": "LockIn",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/lock.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/lock.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F5F5F5"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/lock.png",
+        "backgroundColor": "#F5F5F5"
       },
       "newArchEnabled": true,
       "package": "com.boguss8.LockIn"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/lock.png"
     },
-    "plugins": [
-      "expo-localization"
-    ],
+    "plugins": ["expo-localization"],
     "extra": {
       "eas": {
         "projectId": "0c5e76ad-8ab9-4d90-babf-fa9dd9aa2756"
