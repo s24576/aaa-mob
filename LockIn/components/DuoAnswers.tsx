@@ -161,7 +161,7 @@ const DuoAnswerPage = () => {
                         source={{
                           uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${answer.profile.profileIconId}.png`,
                         }}
-                        style={styles.profileImage}
+                        style={styles.profileIcon}
                       />
                       <Text style={styles.profileText}>
                         {answer.profile.gameName}#{answer.profile.tagLine}

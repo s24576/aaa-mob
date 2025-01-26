@@ -41,6 +41,7 @@ const useWebSocket = (username: string): UseWebSocketResult => {
           `/user/${username}/messenger/message`,
           `/user/${username}/member/event`,
           `/user/${username}/messenger/members`,
+          `/user/${username}/notification`,
         ]
         console.log('STOMP Debug: Subscribing to', subscriptions)
         subscriptions.forEach((sub) => {
