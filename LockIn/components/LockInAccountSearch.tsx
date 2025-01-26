@@ -5,8 +5,10 @@ import { ProfileScreenProps } from '../App'
 // import { TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const LockInAccountSearch: React.FC = () => {
+  const { t } = useTranslation()
   const [username, setUsername] = useState('inzynierka')
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const handleSearch = () => {
@@ -18,7 +20,7 @@ const LockInAccountSearch: React.FC = () => {
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TextInput
           style={[styles.searchInput, { flex: 1 }]}
-          placeholder="Username"
+          placeholder={t('username')}
           placeholderTextColor="#787878"
           value={username}
           onChangeText={setUsername}

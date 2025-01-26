@@ -304,8 +304,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   positionImageLarge: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
   },
   championImageLarge: {
     width: 30,

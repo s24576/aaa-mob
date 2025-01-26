@@ -20,8 +20,10 @@ import { useSocket } from '../context/SocketProvider'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const FriendRequestsPage: React.FC = () => {
+  const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState('')
   const queryClient = useQueryClient()
   const { receivedMessage, memberAction } = useSocket()
@@ -67,11 +69,11 @@ const FriendRequestsPage: React.FC = () => {
     if (!searchQuery.trim()) return
     try {
       await sendFriendRequest(searchQuery)
-      Alert.alert('Success', 'Friend request sent!', [{ text: 'OK' }])
+      Alert.alert(t('success'), t('friendRequestSent'), [{ text: t('ok') }])
       refetchOutgoingRequests()
     } catch (error) {
       console.error(error)
-      Alert.alert('Error', 'Failed to send friend request.', [{ text: 'OK' }])
+      Alert.alert(t('error'), t('failedToSendRequest'), [{ text: t('ok') }])
     }
   }
 
@@ -79,17 +81,17 @@ const FriendRequestsPage: React.FC = () => {
     try {
       await respondFriendRequest({ requestId: id, response })
       Alert.alert(
-        'Success',
-        `Friend request ${response ? 'accepted' : 'declined'}!`,
-        [{ text: 'OK', style: 'cancel' }]
+        t('success'),
+        response ? t('friendRequestAccepted') : t('friendRequestDeclined'),
+        [{ text: t('ok'), style: 'cancel' }]
       )
       refetchIncomingRequests()
     } catch (error) {
       console.error(error)
       Alert.alert(
-        'Error',
-        `Failed to ${response ? 'accept' : 'decline'} friend request.`,
-        [{ text: 'OK' }]
+        t('error'),
+        response ? t('failedToAcceptRequest') : t('failedToDeclineRequest'),
+        [{ text: t('ok') }]
       )
     }
   }
@@ -97,11 +99,11 @@ const FriendRequestsPage: React.FC = () => {
   const handleCancelRequest = async (id: string) => {
     try {
       await cancelFriendRequest(id)
-      Alert.alert('Success', 'Friend request canceled!', [{ text: 'OK' }])
+      Alert.alert(t('success'), t('friendRequestCanceled'), [{ text: t('ok') }])
       refetchOutgoingRequests()
     } catch (error) {
       console.error(error)
-      Alert.alert('Error', 'Failed to cancel friend request.', [{ text: 'OK' }])
+      Alert.alert(t('error'), t('failedToCancelRequest'), [{ text: t('ok') }])
     }
   }
 
@@ -120,7 +122,9 @@ const FriendRequestsPage: React.FC = () => {
   if (incomingError || outgoingError) {
     return (
       <View className=" justify-center items-center bg-czarnuch">
-        <Text>Error: {(incomingError || outgoingError)?.message}</Text>
+        <Text>
+          {t('error')}: {(incomingError || outgoingError)?.message}
+        </Text>
       </View>
     )
   }
@@ -136,7 +140,7 @@ const FriendRequestsPage: React.FC = () => {
         </TouchableOpacity>
         <TextInput
           style={styles.searchInputFR}
-          placeholder="Search username..."
+          placeholder={t('searchUsername')}
           placeholderTextColor="#808080"
           value={searchQuery}
           onChangeText={handleSearchChange}
@@ -159,9 +163,11 @@ const FriendRequestsPage: React.FC = () => {
 
       <ScrollView className="mb-20">
         <View style={styles.requestsSection}>
-          <Text style={styles.requestsSectionTitle}>Incoming Requests</Text>
+          <Text style={styles.requestsSectionTitle}>
+            {t('incomingRequests')}
+          </Text>
           {incomingRequestsData?.content?.length === 0 ? (
-            <Text style={styles.emptyListText}>No incoming requests</Text>
+            <Text style={styles.emptyListText}>{t('noIncomingRequests')}</Text>
           ) : (
             <FlatList
               scrollEnabled={false}
@@ -196,9 +202,11 @@ const FriendRequestsPage: React.FC = () => {
         </View>
 
         <View style={styles.requestsSection}>
-          <Text style={styles.requestsSectionTitle}>Outgoing Requests</Text>
+          <Text style={styles.requestsSectionTitle}>
+            {t('outgoingRequests')}
+          </Text>
           {outgoingRequestsData?.content?.length === 0 ? (
-            <Text style={styles.emptyListText}>No outgoing requests</Text>
+            <Text style={styles.emptyListText}>{t('noOutgoingRequests')}</Text>
           ) : (
             <FlatList
               scrollEnabled={false}

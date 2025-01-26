@@ -66,7 +66,13 @@ const LoginForm = () => {
         justifyContent: 'center',
       }}
     >
-      <EvilIcons name="lock" size={240} color="#F5B800" />
+      <View
+        style={{
+          paddingBottom: 10,
+        }}
+      >
+        <EvilIcons name="lock" size={240} color="#F5B800" />
+      </View>
 
       <TextInput
         placeholder={t('usernameInput')}

@@ -24,8 +24,10 @@ import { addComment, addReply } from '../api/comments/addComment'
 import { deleteComment } from '../api/comments/deleteComment'
 import { getResponses } from '../api/comments/getResponses'
 import { getUserData } from '../api/user/getUserData'
+import { useTranslation } from 'react-i18next'
 
 const CourseDetailsPage = () => {
+  const { t } = useTranslation()
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
   const route = useRoute()
   const { courseId } = route.params as { courseId: string }
@@ -257,7 +259,7 @@ const CourseDetailsPage = () => {
     return (
       <View className="flex-grow justify-center items-center bg-[#131313]">
         <Text className="text-lg text-white text-center">
-          Error fetching course details: {courseError.message}
+          {t('errorFetchingCourse')}: {courseError.message}
         </Text>
       </View>
     )
@@ -282,7 +284,9 @@ const CourseDetailsPage = () => {
         )}
         <View style={styles.courseDetailTitleContainer}>
           <Text style={styles.courseDetailTitle}>{course.title}</Text>
-          <Text style={styles.courseDetailAuthor}>By: {course.username}</Text>
+          <Text style={styles.courseDetailAuthor}>
+            {t('author')}: {course.username}
+          </Text>
           <Text style={styles.courseDetailDescription}>
             {course.description}
           </Text>
@@ -339,19 +343,21 @@ const CourseDetailsPage = () => {
             <Text style={styles.purchaseButtonText}>{course.price} EUR</Text>
           </TouchableOpacity>
           <Text style={styles.purchaseMessage}>
-            To pay for this course please visit our website.
+            {t('visitWebsiteToPurchase')}
           </Text>
         </View>
       )}
 
       <View className="mt-4 mb-6 px-4">
-        <Text className="text-xl text-bialas font-chewy mb-4">Comments</Text>
+        <Text className="text-xl text-bialas font-chewy mb-4">
+          {t('comments')}
+        </Text>
 
         <View className="bg-wegielek border border-zoltek rounded-lg mb-4 p-3">
           <TextInput
             value={newComment}
             onChangeText={setNewComment}
-            placeholder={replyingTo ? 'Add a reply' : 'Add a comment'}
+            placeholder={replyingTo ? t('addReply') : t('addComment')}
             placeholderTextColor="#A9A9A9"
             className="text-bialas font-chewy mb-3"
           />
@@ -365,7 +371,7 @@ const CourseDetailsPage = () => {
             disabled={!newComment.trim()}
           >
             <Text className="text-wegielek font-chewy">
-              {replyingTo ? 'Submit Reply' : 'Submit Comment'}
+              {replyingTo ? t('submitReply') : t('submitComment')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -420,7 +426,9 @@ const CourseDetailsPage = () => {
                     onPress={() => handleDeleteComment(comment._id)}
                     className="bg-red-500 py-2 px-4 rounded-lg"
                   >
-                    <Text className="text-wegielek font-chewy">Delete</Text>
+                    <Text className="text-wegielek font-chewy">
+                      {t('delete')}
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -431,7 +439,7 @@ const CourseDetailsPage = () => {
                   onChangeText={(text) =>
                     handleReplyTextChange(comment._id, text)
                   }
-                  placeholder="Add a reply"
+                  placeholder={t('addReply')}
                   placeholderTextColor="#A9A9A9"
                   className="text-bialas font-chewy mb-3"
                 />
@@ -444,14 +452,16 @@ const CourseDetailsPage = () => {
                   }`}
                   disabled={!replyTexts[comment._id]?.trim()}
                 >
-                  <Text className="text-wegielek font-chewy">Submit Reply</Text>
+                  <Text className="text-wegielek font-chewy">
+                    {t('submitReply')}
+                  </Text>
                 </TouchableOpacity>
               </View>
 
               {responses[comment._id]?.length > 0 && (
                 <View className="mt-3 pl-4 border-l-2 border-zoltek">
                   <Text className="text-zoltek font-chewy text-lg mb-2">
-                    Responses:
+                    {t('responses')}:
                   </Text>
                   {responses[comment._id].map((response: any) => (
                     <View
@@ -503,7 +513,7 @@ const CourseDetailsPage = () => {
                             className="bg-red-500 py-2 px-4 rounded-lg"
                           >
                             <Text className="text-wegielek font-chewy">
-                              Delete
+                              {t('delete')}
                             </Text>
                           </TouchableOpacity>
                         )}
@@ -516,7 +526,7 @@ const CourseDetailsPage = () => {
           ))
         ) : (
           <Text className="text-bialas font-chewy text-center">
-            No comments yet
+            {t('noCommentsYet')}
           </Text>
         )}
       </View>
