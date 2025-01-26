@@ -563,7 +563,7 @@ const BuildDetailsPage: React.FC = () => {
               {responses[comment._id]?.length > 0 && (
                 <View className="mt-3 pl-4 border-l-2 border-zoltek">
                   <Text className="text-zoltek font-chewy text-lg mb-2">
-                    {t('comments')}:
+                    {t('responses')}:
                   </Text>
                   {responses[comment._id].map((response: any) => (
                     <View

@@ -387,7 +387,7 @@ const BuildsBrowserPage: React.FC = () => {
                   textStyle={styles.customButtonText}
                 />
                 <TextInput
-                  placeholder={t('authorNames')}
+                  placeholder={t('author')}
                   placeholderTextColor="#F5F5F5"
                   value={authorName}
                   onChangeText={setAuthorName}
