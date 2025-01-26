@@ -1019,7 +1019,7 @@ const DuosPage = () => {
                         ) : pickerModal.type === 'Languages' ? (
                           <Image
                             source={languageFlags[option]}
-                            style={{ width: 30, height: 20, marginRight: 10 }}
+                            style={{ width: 30, height: 30, marginRight: 10 }}
                           />
                         ) : pickerModal.type === 'Positions' ? (
                           <Image

@@ -141,9 +141,13 @@ const RegisterForm = () => {
           paddingLeft: 10,
         }}
       />
-
       <View
-        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 10,
+          flexWrap: 'wrap',
+        }}
       >
         <TouchableOpacity
           onPress={() => setIsChecked(!isChecked)}

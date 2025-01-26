@@ -49,7 +49,7 @@ const HomePage = () => {
             }}
             style={styles.backgroundImage}
           >
-            <Text style={styles.tileButtonText}>Go to Builds Browser</Text>
+            <Text style={styles.tileButtonText}>Builds Browser</Text>
           </ImageBackground>
         </TouchableOpacity>
         <TouchableOpacity
@@ -62,7 +62,7 @@ const HomePage = () => {
             }}
             style={styles.backgroundImage}
           >
-            <Text style={styles.tileButtonText}>Go to Duos</Text>
+            <Text style={styles.tileButtonText}>Duos</Text>
           </ImageBackground>
         </TouchableOpacity>
         <TouchableOpacity
@@ -75,7 +75,7 @@ const HomePage = () => {
             }}
             style={styles.backgroundImage}
           >
-            <Text style={styles.tileButtonText}>Go to Courses</Text>
+            <Text style={styles.tileButtonText}>Courses</Text>
           </ImageBackground>
         </TouchableOpacity>
         <Text style={styles.welcomeText}>We are glad to have you here!</Text>
