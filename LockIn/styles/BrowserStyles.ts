@@ -325,6 +325,13 @@ const styles = StyleSheet.create({
     height: 30,
     marginRight: 5,
   },
+  profileIcon: {
+    width: 50,
+    height: 50,
+    marginRight: 5,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
   positionsText: {
     marginTop: 5,
     marginBottom: 15,
