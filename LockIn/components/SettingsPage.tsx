@@ -51,7 +51,7 @@ const SettingsPage = () => {
           style={{
             color: '#131313',
             fontSize: 16,
-            fontFamily: 'Chewy-Regular',
+            fontFamily: 'PoetsenOne-Regular',
           }}
         >
           {t('changePassword')}
@@ -101,7 +101,7 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
-                fontFamily: 'Chewy-Regular',
+                fontFamily: 'PoetsenOne-Regular',
               }}
             />
             <TextInput
@@ -118,7 +118,7 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
-                fontFamily: 'Chewy-Regular',
+                fontFamily: 'PoetsenOne-Regular',
               }}
             />
             <TextInput
@@ -135,7 +135,7 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
-                fontFamily: 'Chewy-Regular',
+                fontFamily: 'PoetsenOne-Regular',
               }}
             />
             <TouchableOpacity
@@ -155,7 +155,7 @@ const SettingsPage = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
-                  fontFamily: 'Chewy-Regular',
+                  fontFamily: 'PoetsenOne-Regular',
                 }}
               >
                 {t('change')}
@@ -180,7 +180,7 @@ const SettingsPage = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
-                  fontFamily: 'Chewy-Regular',
+                  fontFamily: 'PoetsenOne-Regular',
                 }}
               >
                 {t('close')}
@@ -204,7 +204,7 @@ const SettingsPage = () => {
           style={{
             color: '#131313',
             fontSize: 16,
-            fontFamily: 'Chewy-Regular',
+            fontFamily: 'PoetsenOne-Regular',
           }}
         >
           {t('changeEmail')}
@@ -252,7 +252,7 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
-                fontFamily: 'Chewy-Regular',
+                fontFamily: 'PoetsenOne-Regular',
               }}
             />
             <TextInput
@@ -269,7 +269,7 @@ const SettingsPage = () => {
                 borderRadius: 12,
                 marginBottom: 10,
                 paddingLeft: 10,
-                fontFamily: 'Chewy-Regular',
+                fontFamily: 'PoetsenOne-Regular',
               }}
             />
             <TouchableOpacity
@@ -288,7 +288,7 @@ const SettingsPage = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
-                  fontFamily: 'Chewy-Regular',
+                  fontFamily: 'PoetsenOne-Regular',
                 }}
               >
                 {t('change')}
@@ -312,7 +312,7 @@ const SettingsPage = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
-                  fontFamily: 'Chewy-Regular',
+                  fontFamily: 'PoetsenOne-Regular',
                 }}
               >
                 {t('close')}

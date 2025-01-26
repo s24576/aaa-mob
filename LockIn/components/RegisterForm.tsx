@@ -87,7 +87,7 @@ const RegisterForm = () => {
           width: '90%',
           borderRadius: 12,
           marginBottom: 10,
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
           paddingLeft: 10,
         }}
       />
@@ -103,7 +103,7 @@ const RegisterForm = () => {
           width: '90%',
           borderRadius: 12,
           marginBottom: 10,
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
           paddingLeft: 10,
         }}
       />
@@ -120,7 +120,7 @@ const RegisterForm = () => {
           width: '90%',
           borderRadius: 12,
           marginBottom: 10,
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
           paddingLeft: 10,
         }}
       />
@@ -137,7 +137,7 @@ const RegisterForm = () => {
           width: '90%',
           borderRadius: 12,
           marginBottom: 10,
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
           paddingLeft: 10,
         }}
       />
@@ -166,7 +166,7 @@ const RegisterForm = () => {
           style={{
             color: '#F5F5F5',
             fontSize: 16,
-            fontFamily: 'Chewy-Regular',
+            fontFamily: 'PoetsenOne-Regular',
             marginLeft: 10,
           }}
         >
@@ -177,7 +177,7 @@ const RegisterForm = () => {
             color: '#F5B800',
             fontSize: 16,
             textDecorationLine: 'underline',
-            fontFamily: 'Chewy-Regular',
+            fontFamily: 'PoetsenOne-Regular',
             marginLeft: 5,
           }}
           onPress={() => setModalVisible(true)}
@@ -202,14 +202,18 @@ const RegisterForm = () => {
           style={{
             color: isDisabled ? '#A9A9A9' : '#131313',
             fontSize: 16,
-            fontFamily: 'Chewy-Regular',
+            fontFamily: 'PoetsenOne-Regular',
           }}
         >
           {t('registerButton')}
         </Text>
       </TouchableOpacity>
       <Text
-        style={{ color: '#F5F5F5', fontSize: 16, fontFamily: 'Chewy-Regular' }}
+        style={{
+          color: '#F5F5F5',
+          fontSize: 16,
+          fontFamily: 'PoetsenOne-Regular',
+        }}
       >
         {t('alreadyHaveAccount')}
       </Text>
@@ -218,7 +222,7 @@ const RegisterForm = () => {
           color: '#F5B800',
           fontSize: 16,
           textDecorationLine: 'underline',
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
         }}
         onPress={() => navigation.navigate('Login')}
       >
@@ -227,7 +231,11 @@ const RegisterForm = () => {
 
       {error ? (
         <Text
-          style={{ color: 'red', marginTop: 15, fontFamily: 'Chewy-Regular' }}
+          style={{
+            color: 'red',
+            marginTop: 15,
+            fontFamily: 'PoetsenOne-Regular',
+          }}
         >
           {error}
         </Text>
@@ -257,7 +265,7 @@ const RegisterForm = () => {
           >
             <Text
               style={{
-                fontFamily: 'Chewy-Regular',
+                fontFamily: 'PoetsenOne-Regular',
                 marginBottom: 20,
                 color: '#F5F5F5',
               }}
@@ -285,7 +293,7 @@ const RegisterForm = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
-                  fontFamily: 'Chewy-Regular',
+                  fontFamily: 'PoetsenOne-Regular',
                 }}
               >
                 {t('close')}

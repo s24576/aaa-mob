@@ -75,7 +75,8 @@ const queryClient = new QueryClient()
 export default function App() {
   const [fontsLoaded] = useFonts({
     'Bangers-Regular': require('./assets/fonts/Bangers-Regular.ttf'),
-    'Chewy-Regular': require('./assets/fonts/Chewy-Regular.ttf'),
+    'PoetsenOne-Regular': require('./assets/fonts/PoetsenOne-Regular.ttf'),
+    'PoetsenOne-Regular': require('./assets/fonts/PoetsenOne-Regular.ttf'),
   })
 
   if (!fontsLoaded) {

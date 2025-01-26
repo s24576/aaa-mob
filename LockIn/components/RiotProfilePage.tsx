@@ -132,7 +132,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
       <View style={styles.header}>
         <Text
           style={styles.textHeader}
-          className="text-zoltek font-Chewy-Regular"
+          className="text-zoltek font-PoetsenOne-Regular"
         >
           {getServerName(profile.server)}
         </Text>
@@ -237,7 +237,9 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
                 style={styles.masteryEmblem}
                 // className="mb-4"
               />
-              <Text style={{ color: '#F5F5F5', fontFamily: 'Chewy-Regular' }}>
+              <Text
+                style={{ color: '#F5F5F5', fontFamily: 'PoetsenOne-Regular' }}
+              >
                 {mastery.championLevel}
               </Text>
             </View>
@@ -300,7 +302,7 @@ const ProfilePage: React.FC = () => {
 const styles = StyleSheet.create({
   description: {
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5F5F5',
   },
   sixthRow: {
@@ -370,17 +372,17 @@ const styles = StyleSheet.create({
   },
   gameName: {
     fontSize: 24,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5B800',
   },
   text: {
     fontSize: 18,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5F5F5',
   },
   textHeader: {
     fontSize: 18,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5F5F5',
     maxWidth: '45%',
   },
@@ -419,7 +421,7 @@ const styles = StyleSheet.create({
   },
   applyFiltersButton: {
     backgroundColor: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
@@ -433,13 +435,13 @@ const styles = StyleSheet.create({
   applyFiltersButtonText: {
     color: '#131313',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
   filtersButton: {
     backgroundColor: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
@@ -453,13 +455,13 @@ const styles = StyleSheet.create({
   filtersButtonText: {
     color: '#131313',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
   customButton: {
     backgroundColor: '#13131313',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
@@ -471,7 +473,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   textInput: {
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     backgroundColor: '#1E1E1E',
     color: '#F5F5F5',
     paddingVertical: 10,
@@ -487,13 +489,13 @@ const styles = StyleSheet.create({
   customButtonText: {
     color: '#F5F5F5',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
   customButton2: {
     backgroundColor: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
@@ -507,7 +509,7 @@ const styles = StyleSheet.create({
   customButton2Text: {
     color: '#131313',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
@@ -535,7 +537,7 @@ const styles = StyleSheet.create({
   selectedChampionText: {
     color: '#F5F5F5',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     marginLeft: 10,
   },
   profileIcon: {
@@ -567,12 +569,12 @@ const styles = StyleSheet.create({
   },
   winText: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   loseText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   matchContainer: {
@@ -585,7 +587,7 @@ const styles = StyleSheet.create({
   },
   kdaText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
 })

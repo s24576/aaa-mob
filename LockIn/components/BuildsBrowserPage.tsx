@@ -212,7 +212,10 @@ const BuildsBrowserPage: React.FC = () => {
       {/* BUILD */}
       <View className="p-4 border-b border-[#F5B800]">
         <View style={styles.header}>
-          <Text style={styles.text} className="text-zoltek font-Chewy-Regular">
+          <Text
+            style={styles.text}
+            className="text-zoltek font-PoetsenOne-Regular"
+          >
             {item.username}
           </Text>
           <Text style={styles.text}>
@@ -526,12 +529,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5B800',
   },
   text: {
     fontSize: 18,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5F5F5',
   },
   container: {
@@ -569,7 +572,7 @@ const styles = StyleSheet.create({
   },
   applyFiltersButton: {
     backgroundColor: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
@@ -583,13 +586,13 @@ const styles = StyleSheet.create({
   applyFiltersButtonText: {
     color: '#131313',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
   filtersButton: {
     backgroundColor: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
@@ -603,13 +606,13 @@ const styles = StyleSheet.create({
   filtersButtonText: {
     color: '#131313',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
   customButton: {
     backgroundColor: '#13131313',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
@@ -621,7 +624,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   textInput: {
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     backgroundColor: '#1E1E1E',
     color: '#F5F5F5',
     paddingVertical: 10,
@@ -637,13 +640,13 @@ const styles = StyleSheet.create({
   customButtonText: {
     color: '#F5F5F5',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
   customButton2: {
     backgroundColor: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     borderRadius: 10,
     borderColor: '#F5B800',
@@ -657,7 +660,7 @@ const styles = StyleSheet.create({
   customButton2Text: {
     color: '#131313',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
@@ -673,7 +676,7 @@ const styles = StyleSheet.create({
   selectedChampionText: {
     color: '#F5F5F5',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     marginLeft: 10,
   },
 })

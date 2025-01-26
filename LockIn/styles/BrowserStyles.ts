@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: '#FF4444',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     fontSize: 16,
   },
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 24,
   },
   scrollViewContainer: {
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   answerTitle: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 20,
     marginBottom: 10,
   },
@@ -68,12 +68,12 @@ const styles = StyleSheet.create({
   },
   profileText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     marginLeft: 10,
   },
   answerText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     marginBottom: 5,
   },
   rankImage: {
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   acceptButtonText: {
     color: '#131313',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   rejectButton: {
@@ -112,12 +112,12 @@ const styles = StyleSheet.create({
   },
   rejectButtonText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   noAnswersText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
   },
   paginationContainer: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   pageNumber: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
   },
   serverName: {
@@ -148,13 +148,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   customButton2Text: {
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#131313',
     fontSize: 16,
   },
   welcomeText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
     textAlign: 'center',
     marginTop: 20,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   },
   customButton: {
     backgroundColor: '#13131313',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -206,17 +206,17 @@ const styles = StyleSheet.create({
   customButtonText: {
     color: '#F5F5F5',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },
   buttonContainerDuo: {
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     marginTop: 10,
     marginBottom: 0,
   },
   applyButton: {
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     backgroundColor: '#F5B800',
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -228,10 +228,10 @@ const styles = StyleSheet.create({
   applyButtonText: {
     color: '#131313',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
   },
   textInput: {
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     backgroundColor: '#1E1E1E',
     color: '#F5F5F5',
     padding: 10,
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   },
   duoText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     marginBottom: 5,
   },
   championContainer: {
@@ -276,12 +276,12 @@ const styles = StyleSheet.create({
   },
   authorText: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
   },
   dateText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
   },
   positionContainer: {
     flexDirection: 'row',
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 10,
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   },
   modalOptionText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   tileButton: {
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   },
   tileButtonText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 24,
     textAlign: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
   },
   welcomeHeader: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 28,
     marginVertical: 20,
     textAlign: 'center',
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
     color: '#F5F5F5',
     borderRadius: 12,
     padding: 12,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     backgroundColor: '#1E1E1E',
   },
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
     color: '#F5F5F5',
     borderRadius: 12,
     padding: 12,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     backgroundColor: '#1E1E1E',
     marginBottom: 10,
@@ -442,13 +442,13 @@ const styles = StyleSheet.create({
   },
   username: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 28,
     marginBottom: 10,
   },
   bioText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     marginBottom: 15,
     textAlign: 'center',
@@ -462,11 +462,11 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 10,
     backgroundColor: '#1E1E1E',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
   },
   sectionTitle: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 22,
     marginVertical: 15,
   },
@@ -486,12 +486,12 @@ const styles = StyleSheet.create({
   },
   accountName: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   serverText: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 14,
   },
   actionButton: {
@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     color: '#131313',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   accountListContainer: {
@@ -513,7 +513,7 @@ const styles = StyleSheet.create({
   },
   accountListHeader: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 20,
     marginBottom: 10,
     marginTop: 20,
@@ -547,7 +547,7 @@ const styles = StyleSheet.create({
   },
   removeButtonText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
   },
   profileImageContainer: {
     marginTop: 20,
@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
   },
   friendListHeader: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 24,
     marginBottom: 15,
     textAlign: 'center',
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
   friendName: {
     flex: 1,
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
   },
   friendRequestsContainer: {
@@ -605,7 +605,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#131313',
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     padding: 10,
     borderRadius: 8,
     marginRight: 10,
@@ -618,7 +618,7 @@ const styles = StyleSheet.create({
   },
   requestsSectionTitle: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 20,
     marginBottom: 15,
     textAlign: 'center',
@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
   requestName: {
     flex: 1,
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   requestActions: {
@@ -659,7 +659,7 @@ const styles = StyleSheet.create({
   },
   emptyListText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
@@ -677,12 +677,12 @@ const styles = StyleSheet.create({
   },
   chatTitle: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 24,
   },
   chatMembers: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 14,
   },
   messagesList: {
@@ -707,14 +707,14 @@ const styles = StyleSheet.create({
   },
   messageText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   messageTime: {
     color: '#888',
     fontSize: 12,
     marginTop: 5,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -730,7 +730,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     marginRight: 10,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     borderColor: '#F5B800',
     borderWidth: 1,
   },
@@ -754,7 +754,7 @@ const styles = StyleSheet.create({
   },
   replyText: {
     color: '#888',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 14,
   },
   chatListContainer: {
@@ -777,7 +777,7 @@ const styles = StyleSheet.create({
   },
   lastMessage: {
     color: '#888',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 14,
   },
   createChatButton: {
@@ -789,12 +789,12 @@ const styles = StyleSheet.create({
   },
   createChatText: {
     color: '#131313',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
   },
   modalHeader: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 20,
     marginBottom: 15,
     textAlign: 'center',
@@ -817,7 +817,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     marginBottom: 15,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   modalListContainer: {
@@ -836,7 +836,7 @@ const styles = StyleSheet.create({
   },
   modalItemText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   modalButtons: {
@@ -861,19 +861,19 @@ const styles = StyleSheet.create({
   },
   modalButtonText: {
     color: '#131313',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     textAlign: 'center',
   },
   modalButtonTextSecondary: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     textAlign: 'center',
   },
   modalConfirmText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
     textAlign: 'center',
     marginBottom: 20,
@@ -894,7 +894,7 @@ const styles = StyleSheet.create({
   },
   notificationsHeader: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 24,
     marginBottom: 15,
     paddingHorizontal: 10,
@@ -909,7 +909,7 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   errorContainer: {
@@ -942,24 +942,24 @@ const styles = StyleSheet.create({
   },
   courseTitle: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 22,
     marginBottom: 5,
   },
   courseDescription: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     marginBottom: 10,
   },
   courseAuthor: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   coursePrice: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
     marginTop: 5,
   },
@@ -976,7 +976,7 @@ const styles = StyleSheet.create({
   },
   videoButtonText: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
   },
   courseDetailsContainer: {
@@ -991,7 +991,7 @@ const styles = StyleSheet.create({
   },
   courseDetailTitle: {
     color: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 26,
     textAlign: 'center',
     marginVertical: 15,
@@ -1024,14 +1024,14 @@ const styles = StyleSheet.create({
   },
   courseDetailAuthor: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
     textAlign: 'center',
     marginBottom: 15,
   },
   courseDetailDescription: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     lineHeight: 24,
     textAlign: 'center',
@@ -1061,7 +1061,7 @@ const styles = StyleSheet.create({
   },
   courseVideoTitle: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
     flex: 1,
     marginRight: 10,
@@ -1089,13 +1089,13 @@ const styles = StyleSheet.create({
   },
   purchaseButtonText: {
     color: '#131313',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 18,
     marginLeft: 10,
   },
   purchaseMessage: {
     color: '#F5F5F5',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     fontSize: 16,
     textAlign: 'center',
   },

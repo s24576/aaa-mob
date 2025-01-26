@@ -55,7 +55,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   customButton: {
     backgroundColor: '#F5B800',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   customButtonText: {
     color: '#131313',
     fontSize: 16,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     textAlign: 'center',
     alignItems: 'center',
   },

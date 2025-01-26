@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Participant } from '../types/riot/matchClass'
@@ -13,7 +14,6 @@ import { useQuery } from '@tanstack/react-query'
 import { getMatchInfo } from '../api/riot/getMatchInfo'
 import { getVersion } from '../api/ddragon/version'
 import { ProfileScreenProps } from '../App'
-import { ActivityIndicator } from 'react-native'
 
 const MatchDetailsPage: React.FC = () => {
   const route = useRoute()
@@ -134,17 +134,16 @@ const MatchDetailsPage: React.FC = () => {
               {matchInfo.info.queueType}
             </Text>
           </View>
-
-          <Text className="text-bialas text-xl font-semibold mb-2">Team 1</Text>
-          <View className="mb-4 flex-row">
+          {/* Informacje drużynowe */}
+          <Text className="text-bialas text-xl font-semibold mb-2 text-center">
+            Team 1
+          </Text>
+          <View className="mb-4 flex-row justify-center">
             <Text className="text-bialas mx-2">
               Baron: {matchInfo.info.teams[0].objectives.baron.kills}
             </Text>
             <Text className="text-bialas mx-2">
               Dragons: {matchInfo.info.teams[0].objectives.dragon.kills}
-            </Text>
-            <Text className="text-bialas mx-2">
-              Horde: {matchInfo.info.teams[0].objectives.horde.kills}
             </Text>
             <Text className="text-bialas mx-2">
               Herald: {matchInfo.info.teams[0].objectives.riftHerald.kills}
@@ -153,17 +152,22 @@ const MatchDetailsPage: React.FC = () => {
               Towers: {matchInfo.info.teams[0].objectives.tower.kills}
             </Text>
           </View>
-
-          <Text className="text-bialas text-xl font-semibold mb-2">Team 2</Text>
-          <View className="mb-4 flex-row">
+        </View>
+      }
+      data={team1}
+      keyExtractor={(item) => item.participantId.toString()}
+      renderItem={renderParticipant}
+      ListFooterComponent={
+        <>
+          <Text className="text-bialas text-xl font-semibold mb-2 text-center">
+            Team 2
+          </Text>
+          <View className="mb-4 flex-row justify-center">
             <Text className="text-bialas mx-2">
               Baron: {matchInfo.info.teams[1].objectives.baron.kills}
             </Text>
             <Text className="text-bialas mx-2">
               Dragons: {matchInfo.info.teams[1].objectives.dragon.kills}
-            </Text>
-            <Text className="text-bialas mx-2">
-              Horde: {matchInfo.info.teams[1].objectives.horde.kills}
             </Text>
             <Text className="text-bialas mx-2">
               Herald: {matchInfo.info.teams[1].objectives.riftHerald.kills}
@@ -172,13 +176,13 @@ const MatchDetailsPage: React.FC = () => {
               Towers: {matchInfo.info.teams[1].objectives.tower.kills}
             </Text>
           </View>
-        </View>
+          <FlatList
+            data={team2}
+            keyExtractor={(item) => item.participantId.toString()}
+            renderItem={renderParticipant}
+          />
+        </>
       }
-      data={[...team1, ...team2]}
-      keyExtractor={(item, index) =>
-        item.participantId ? item.participantId.toString() : `header-${index}`
-      }
-      renderItem={renderParticipant}
     />
   )
 }
@@ -188,7 +192,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5B800',
   },
 })

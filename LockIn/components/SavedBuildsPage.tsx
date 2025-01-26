@@ -137,7 +137,10 @@ const BuildsBrowserPage: React.FC = () => {
       {/* BUILD */}
       <View className="p-4 border-b border-[#F5B800]">
         <View style={styles.header}>
-          <Text style={styles.text} className="text-zoltek font-Chewy-Regular">
+          <Text
+            style={styles.text}
+            className="text-zoltek font-PoetsenOne-Regular"
+          >
             {item.username}
           </Text>
           <Text style={styles.text}>
@@ -273,12 +276,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5B800',
   },
   text: {
     fontSize: 18,
-    fontFamily: 'Chewy-Regular',
+    fontFamily: 'PoetsenOne-Regular',
     color: '#F5F5F5',
   },
   container: {

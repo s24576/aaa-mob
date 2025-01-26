@@ -85,7 +85,7 @@ const LoginForm = () => {
           width: '90%',
           borderRadius: 12,
           marginBottom: 10,
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
           paddingLeft: 10,
         }}
       />
@@ -102,7 +102,7 @@ const LoginForm = () => {
           width: '90%',
           borderRadius: 12,
           marginBottom: 30,
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
           paddingLeft: 10,
         }}
       />
@@ -111,7 +111,7 @@ const LoginForm = () => {
         style={{
           color: '#F5F5F5',
           fontSize: 16,
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
           textDecorationLine: 'underline',
           marginBottom: 15,
         }}
@@ -138,7 +138,7 @@ const LoginForm = () => {
           style={{
             color: isDisabled ? '#A9A9A9' : '#131313',
             fontSize: 16,
-            fontFamily: 'Chewy-Regular',
+            fontFamily: 'PoetsenOne-Regular',
           }}
         >
           {t('loginButton')}
@@ -146,7 +146,11 @@ const LoginForm = () => {
       </TouchableOpacity>
 
       <Text
-        style={{ color: '#F5F5F5', fontSize: 16, fontFamily: 'Chewy-Regular' }}
+        style={{
+          color: '#F5F5F5',
+          fontSize: 16,
+          fontFamily: 'PoetsenOne-Regular',
+        }}
       >
         {t('noAccount')}
       </Text>
@@ -155,7 +159,7 @@ const LoginForm = () => {
           color: '#F5B800',
           fontSize: 16,
           textDecorationLine: 'underline',
-          fontFamily: 'Chewy-Regular',
+          fontFamily: 'PoetsenOne-Regular',
         }}
         onPress={() => navigation.navigate('Register')}
       >
@@ -164,7 +168,11 @@ const LoginForm = () => {
 
       {error ? (
         <Text
-          style={{ color: 'red', marginTop: 15, fontFamily: 'Chewy-Regular' }}
+          style={{
+            color: 'red',
+            marginTop: 15,
+            fontFamily: 'PoetsenOne-Regular',
+          }}
         >
           {error}
         </Text>
@@ -225,7 +233,7 @@ const LoginForm = () => {
                 width: '100%',
                 borderRadius: 12,
                 marginBottom: 10,
-                fontFamily: 'Chewy-Regular',
+                fontFamily: 'PoetsenOne-Regular',
                 paddingLeft: 10,
               }}
             />
@@ -234,7 +242,7 @@ const LoginForm = () => {
                 style={{
                   color: 'red',
                   marginBottom: 10,
-                  fontFamily: 'Chewy-Regular',
+                  fontFamily: 'PoetsenOne-Regular',
                 }}
               >
                 {resetError}
@@ -255,7 +263,7 @@ const LoginForm = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
-                  fontFamily: 'Chewy-Regular',
+                  fontFamily: 'PoetsenOne-Regular',
                 }}
               >
                 {t('resetPassword')}
@@ -275,7 +283,7 @@ const LoginForm = () => {
                 style={{
                   color: '#131313',
                   fontSize: 16,
-                  fontFamily: 'Chewy-Regular',
+                  fontFamily: 'PoetsenOne-Regular',
                 }}
               >
                 {t('close')}
