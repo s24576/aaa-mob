@@ -26,5 +26,11 @@
   "change": "Change",
   "changeEmail": "Change email",
   "newEmail": "New Email",
-  "password": "Password"
+  "password": "Password",
+  "barons": "Barons",
+  "dragons": "Dragons",
+  "heralds": "Heralds",
+  "towers": "Towers",
+  "winner": "Winner",
+  "loser": "Loser"
 }

@@ -76,7 +76,6 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     'Bangers-Regular': require('./assets/fonts/Bangers-Regular.ttf'),
     'PoetsenOne-Regular': require('./assets/fonts/PoetsenOne-Regular.ttf'),
-    'PoetsenOne-Regular': require('./assets/fonts/PoetsenOne-Regular.ttf'),
   })
 
   if (!fontsLoaded) {

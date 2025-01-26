@@ -14,11 +14,28 @@ import { useQuery } from '@tanstack/react-query'
 import { getMatchInfo } from '../api/riot/getMatchInfo'
 import { getVersion } from '../api/ddragon/version'
 import { ProfileScreenProps } from '../App'
+import runesIcon from '../assets/runesIcon.json'
+import { useTranslation } from 'react-i18next'
 
 const MatchDetailsPage: React.FC = () => {
   const route = useRoute()
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const { matchId } = route.params as { matchId: string }
+  const { t } = useTranslation()
+
+  const rankImages: { [key: string]: any } = {
+    IRON: require('../assets/ranks/IRON.png'),
+    BRONZE: require('../assets/ranks/BRONZE.png'),
+    SILVER: require('../assets/ranks/SILVER.png'),
+    GOLD: require('../assets/ranks/GOLD.png'),
+    PLATINUM: require('../assets/ranks/PLATINUM.png'),
+    EMERALD: require('../assets/ranks/EMERALD.png'),
+    DIAMOND: require('../assets/ranks/DIAMOND.png'),
+    MASTER: require('../assets/ranks/MASTER.png'),
+    GRANDMASTER: require('../assets/ranks/GRANDMASTER.png'),
+    CHALLENGER: require('../assets/ranks/CHALLENGER.png'),
+    UNRANKED: require('../assets/ranks/UNRANKED.png'),
+  }
 
   const {
     data: matchInfo,
@@ -43,39 +60,114 @@ const MatchDetailsPage: React.FC = () => {
     navigation.navigate('RiotProfile', { server, puuid })
   }
 
+  const getRuneIcon = (runeId: number): string => {
+    return runesIcon[runeId as keyof typeof runesIcon] || runesIcon.default
+  }
+
   const renderParticipant = ({ item }: { item: Participant }) => (
     <TouchableOpacity
-      onPress={() => handleParticipantPress('EUW1', item.puuid)}
+      onPress={() =>
+        handleParticipantPress(matchInfo.info.platformId, item.puuid)
+      }
     >
-      <View className="flex-row justify-between py-2 border-b border-gray-300">
-        <Image
-          source={{
-            uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championName}.png`,
-          }}
-          style={{ width: 50, height: 50 }}
-        />
-        <Text className="text-bialas flex-1 text-left">
-          {item.riotIdGameName}
-        </Text>
-        <Text className="text-bialas flex-1 text-left">
-          {item.kills}/{item.deaths}/{item.assists}
-        </Text>
-        <Text className="text-bialas flex-1 text-left">
-          Rank: {item.tier} {item.rank}
-        </Text>
-        <View className="flex-1 flex-row items-center">
-          <Image
-            source={{
-              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${item.summoner1Name}.png`,
-            }}
-            style={{ width: 24, height: 24, marginRight: 4 }}
-          />
-          <Image
-            source={{
-              uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${item.summoner2Name}.png`,
-            }}
-            style={{ width: 24, height: 24 }}
-          />
+      <View className="flex-row items-center justify-between py-2 border-b border-gray-300">
+        <View className="flex-column w-full">
+          <View className="flex-row items-center justify-around">
+            <View className="flex-row items-center justify-center mb-4">
+              {/* Ikona championa */}
+              <Image
+                source={{
+                  uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${item.championName}.png`,
+                }}
+                style={{ width: 48, height: 48 }}
+              />
+              {/* Summonerki */}
+              <View className="flex-column items-center">
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${item.summoner1Name}.png`,
+                  }}
+                  style={{ width: 20, height: 20, marginBottom: 4 }}
+                />
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${item.summoner2Name}.png`,
+                  }}
+                  style={{ width: 20, height: 20 }}
+                />
+              </View>
+              {/* Runy */}
+              <View className="flex-column items-center">
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${getRuneIcon(
+                      item.perks.styles[0].selections[0].perk
+                    )}`,
+                  }}
+                  style={{ width: 20, height: 20, marginBottom: 4 }}
+                />
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/img/${getRuneIcon(
+                      item.perks.styles[1].style
+                    )}`,
+                  }}
+                  style={{ width: 20, height: 20 }}
+                />
+              </View>
+            </View>
+
+            <View className="flex-column items-center justify-center">
+              {/* Nazwa gracza */}
+              <Text
+                style={styles.baseText}
+                className="text-bialas text-left"
+                // style={{ flex: 1 }}
+              >
+                {item.riotIdGameName}
+              </Text>
+
+              {/* Statystyki */}
+              <Text
+                style={styles.baseText}
+                className="text-bialas text-left"
+                // style={{ flex: 1 }}
+              >
+                {item.kills}/{item.deaths}/{item.assists}
+              </Text>
+            </View>
+            <View className="flex-column items-center justify-center m-0 p-0">
+              {/* Rank */}
+              <Image
+                source={rankImages[item.tier] || rankImages['UNRANKED']}
+                style={{ width: 30, height: 30 }}
+              />
+            </View>
+          </View>
+          <View className="flex-row items-center justify-center w-full">
+            {/* Items */}
+            <View className="flex-row items-center mx-2">
+              {[
+                item.item0,
+                item.item1,
+                item.item2,
+                item.item3,
+                item.item4,
+                item.item5,
+                item.item6,
+              ].map((itemId, index) =>
+                itemId > 0 ? (
+                  <Image
+                    key={index}
+                    source={{
+                      uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/item/${itemId}.png`,
+                    }}
+                    style={{ width: 36, height: 36, marginRight: 6 }}
+                  />
+                ) : null
+              )}
+            </View>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -92,7 +184,7 @@ const MatchDetailsPage: React.FC = () => {
   if (error || versionError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-bialas text-lg">
+        <Text style={styles.baseText} className="text-bialas text-lg">
           Error fetching match info: {(error || versionError)?.message}
         </Text>
       </View>
@@ -102,7 +194,9 @@ const MatchDetailsPage: React.FC = () => {
   if (!matchInfo) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-bialas text-lg">No match information found.</Text>
+        <Text style={styles.baseText} className="text-bialas text-lg">
+          No match information found.
+        </Text>
       </View>
     )
   }
@@ -110,7 +204,7 @@ const MatchDetailsPage: React.FC = () => {
   if (!Array.isArray(matchInfo.info.participants)) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-bialas text-lg">
+        <Text style={styles.baseText} className="text-bialas text-lg">
           Invalid match information format.
         </Text>
       </View>
@@ -123,33 +217,58 @@ const MatchDetailsPage: React.FC = () => {
   return (
     <FlatList
       ListHeaderComponent={
-        <View className="p-4">
+        <View>
           <View style={styles.header}>
-            <Text className="text-bialas text-2xl font-bold mb-4">
+            <Text
+              style={styles.baseText}
+              className="text-bialas text-2xl font-bold mb-4"
+            >
               {new Date(
                 Number(matchInfo.info.gameCreation)
               ).toLocaleDateString()}
             </Text>
-            <Text className="text-bialas text-lg mb-4">
+            <Text style={styles.baseText} className="text-bialas text-lg mb-12">
               {matchInfo.info.queueType}
             </Text>
           </View>
           {/* Informacje drużynowe */}
-          <Text className="text-bialas text-xl font-semibold mb-2 text-center">
+          <Text
+            style={styles.baseText}
+            className={`text-xl font-semibold mb-2 text-center ${matchInfo.info.teams[0].win ? 'text-zoltek' : 'text-bialas'}`}
+          >
             Team 1
           </Text>
+          <Text
+            style={styles.baseText}
+            className={`text-lg mb-2 text-center ${matchInfo.info.teams[0].win ? 'text-zoltek' : 'text-bialas'}`}
+          >
+            {matchInfo.info.teams[0].win ? t('winner') : t('loser')}
+          </Text>
           <View className="mb-4 flex-row justify-center">
-            <Text className="text-bialas mx-2">
-              Baron: {matchInfo.info.teams[0].objectives.baron.kills}
+            <Text
+              style={styles.baseText}
+              className={`mx-2 ${matchInfo.info.teams[0].win ? 'text-zoltek' : 'text-bialas'}`}
+            >
+              {t('barons')}: {matchInfo.info.teams[0].objectives.baron.kills}
             </Text>
-            <Text className="text-bialas mx-2">
-              Dragons: {matchInfo.info.teams[0].objectives.dragon.kills}
+            <Text
+              style={styles.baseText}
+              className={`mx-2 ${matchInfo.info.teams[0].win ? 'text-zoltek' : 'text-bialas'}`}
+            >
+              {t('dragons')}: {matchInfo.info.teams[0].objectives.dragon.kills}
             </Text>
-            <Text className="text-bialas mx-2">
-              Herald: {matchInfo.info.teams[0].objectives.riftHerald.kills}
+            <Text
+              style={styles.baseText}
+              className={`mx-2 ${matchInfo.info.teams[0].win ? 'text-zoltek' : 'text-bialas'}`}
+            >
+              {t('heralds')}:{' '}
+              {matchInfo.info.teams[0].objectives.riftHerald.kills}
             </Text>
-            <Text className="text-bialas mx-2">
-              Towers: {matchInfo.info.teams[0].objectives.tower.kills}
+            <Text
+              style={styles.baseText}
+              className={`mx-2 ${matchInfo.info.teams[0].win ? 'text-zoltek' : 'text-bialas'}`}
+            >
+              {t('towers')}: {matchInfo.info.teams[0].objectives.tower.kills}
             </Text>
           </View>
         </View>
@@ -158,22 +277,44 @@ const MatchDetailsPage: React.FC = () => {
       keyExtractor={(item) => item.participantId.toString()}
       renderItem={renderParticipant}
       ListFooterComponent={
-        <>
-          <Text className="text-bialas text-xl font-semibold mb-2 text-center">
+        <View style={styles.header}>
+          <Text
+            style={styles.baseText}
+            className={`text-xl font-semibold mb-2 text-center ${matchInfo.info.teams[1].win ? 'text-zoltek' : 'text-bialas'} mt-8`}
+          >
             Team 2
           </Text>
+          <Text
+            style={styles.baseText}
+            className={`text-lg mb-2 text-center ${matchInfo.info.teams[1].win ? 'text-zoltek' : 'text-bialas'}`}
+          >
+            {matchInfo.info.teams[1].win ? t('winner') : t('loser')}
+          </Text>
           <View className="mb-4 flex-row justify-center">
-            <Text className="text-bialas mx-2">
-              Baron: {matchInfo.info.teams[1].objectives.baron.kills}
+            <Text
+              style={styles.baseText}
+              className={`mx-2 ${matchInfo.info.teams[1].win ? 'text-zoltek' : 'text-bialas'}`}
+            >
+              {t('barons')}: {matchInfo.info.teams[1].objectives.baron.kills}
             </Text>
-            <Text className="text-bialas mx-2">
-              Dragons: {matchInfo.info.teams[1].objectives.dragon.kills}
+            <Text
+              style={styles.baseText}
+              className={`mx-2 ${matchInfo.info.teams[1].win ? 'text-zoltek' : 'text-bialas'}`}
+            >
+              {t('dragons')}: {matchInfo.info.teams[1].objectives.dragon.kills}
             </Text>
-            <Text className="text-bialas mx-2">
-              Herald: {matchInfo.info.teams[1].objectives.riftHerald.kills}
+            <Text
+              style={styles.baseText}
+              className={`mx-2 ${matchInfo.info.teams[1].win ? 'text-zoltek' : 'text-bialas'}`}
+            >
+              {t('heralds')}:{' '}
+              {matchInfo.info.teams[1].objectives.riftHerald.kills}
             </Text>
-            <Text className="text-bialas mx-2">
-              Towers: {matchInfo.info.teams[1].objectives.tower.kills}
+            <Text
+              style={styles.baseText}
+              className={`mx-2 ${matchInfo.info.teams[1].win ? 'text-zoltek' : 'text-bialas'}`}
+            >
+              {t('towers')}: {matchInfo.info.teams[1].objectives.tower.kills}
             </Text>
           </View>
           <FlatList
@@ -181,7 +322,7 @@ const MatchDetailsPage: React.FC = () => {
             keyExtractor={(item) => item.participantId.toString()}
             renderItem={renderParticipant}
           />
-        </>
+        </View>
       }
     />
   )
@@ -192,8 +333,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    fontFamily: 'PoetsenOne-Regular',
     color: '#F5B800',
+  },
+  baseText: {
+    fontFamily: 'PoetsenOne-Regular',
+    flex: 1,
   },
 })
 

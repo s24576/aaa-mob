@@ -26,5 +26,11 @@
   "change": "Zmień",
   "changeEmail": "Zmień email",
   "newEmail": "Nowy email",
-  "password": "Hasło"
+  "password": "Hasło",
+  "barons": "Barony",
+  "dragons": "Smoki",
+  "heralds": "Heraldy",
+  "towers": "Wieże",
+  "winner": "Wygrani",
+  "loser": "Przegrani"
 }
