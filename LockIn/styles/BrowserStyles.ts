@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
   },
   languageFlag: {
     width: 30,
-    height: 20,
+    height: 30,
     marginRight: 5,
   },
   positionsText: {

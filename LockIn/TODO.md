@@ -1,4 +1,15 @@
+# Lista tłumaczeń
+
+
+
 # TODO List
+
+- do usuniecia na prod:
+logout home page
+testy na logowaniu
+z home page wyjebac "Go to "
+
+
 
 Account Seach:
 

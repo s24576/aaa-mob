@@ -66,12 +66,7 @@ const LoginForm = () => {
         justifyContent: 'center',
       }}
     >
-      <EvilIcons
-        name="lock"
-        size={240}
-        color="#F5B800"
-        style={{ marginBottom: 30 }}
-      />
+      <EvilIcons name="lock" size={240} color="#F5B800" />
 
       <TextInput
         placeholder={t('usernameInput')}
@@ -81,11 +76,13 @@ const LoginForm = () => {
         style={{
           borderWidth: 1,
           borderColor: '#F5B800',
+          fontSize: 20,
           color: '#F5F5F5',
           width: '90%',
           borderRadius: 12,
           marginBottom: 10,
           fontFamily: 'Chewy-Regular',
+          padding: 5,
           paddingLeft: 10,
         }}
       />
@@ -97,6 +94,7 @@ const LoginForm = () => {
         secureTextEntry
         style={{
           borderWidth: 1,
+          fontSize: 20,
           borderColor: '#F5B800',
           color: '#F5F5F5',
           width: '90%',
