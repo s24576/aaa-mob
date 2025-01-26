@@ -19,6 +19,7 @@ import { getMyRiotProfiles } from '../api/riot/getMyRiotProfiles'
 import { manageWatchlist } from '../api/profile/manageWatchlist'
 import { manageMyAccount } from '../api/profile/manageMyAccount'
 import servers from '../assets/servers.json'
+import { useTranslation } from 'react-i18next'
 
 type RiotProfileRouteProp = RouteProp<
   {
@@ -69,6 +70,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
   const [isClaimed, setIsClaimed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const navigation = useNavigation<MatchDetailsScreenProps['navigation']>()
+  const { t } = useTranslation()
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -137,7 +139,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
           {getServerName(profile.server)}
         </Text>
         <Text style={styles.textHeader}>
-          Summoner level: {profile.summonerLevel}
+          {t('summonerLevel')}: {profile.summonerLevel}
         </Text>
       </View>
       <View style={styles.subheader}>
@@ -201,8 +203,8 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
             {isLoading
               ? 'Loading...'
               : isClaimed
-                ? 'Porzuć konto'
-                : 'Przypisz konto'}
+                ? t('unclaimAccount')
+                : t('claimAccount')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -214,8 +216,8 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
             {isLoading
               ? 'Loading...'
               : isWatching
-                ? 'Przestań obserwować'
-                : 'Obserwuj konto'}
+                ? t('unfollowAccount')
+                : t('followAccount')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -254,7 +256,7 @@ const ProfileTable: React.FC<{ profile: Profile }> = ({ profile }) => {
           onPress={() => handleMatchPress(match.matchId)}
         >
           <Text style={match.win ? styles.winText : styles.loseText}>
-            {match.win ? 'WIN' : 'LOSE'}
+            {match.win ? t('win') : t('lose')}
           </Text>
           <Image
             source={{

@@ -430,7 +430,7 @@ const DuosPage = () => {
         keyExtractor={(item) => item._id}
         renderItem={renderDuo}
         ListEmptyComponent={
-          <Text style={styles.customButtonText}>No posts found.</Text>
+          <Text style={styles.customButtonText}>{t('noPosts')}</Text>
         }
         ListHeaderComponent={
           <View className="p-5">
@@ -465,12 +465,12 @@ const DuosPage = () => {
                               style={styles.rankImageDuo}
                             />
                           ) : (
-                            'Min Rank'
+                            t('minRank')
                           )
                         }
                         onPress={() =>
                           openPickerModal(
-                            'Min rank',
+                            t('minRank'),
                             Object.keys(rankImages),
                             (values) =>
                               setFilters({
@@ -494,12 +494,12 @@ const DuosPage = () => {
                               style={styles.rankImageDuo}
                             />
                           ) : (
-                            'Max Rank'
+                            t('maxRank')
                           )
                         }
                         onPress={() =>
                           openPickerModal(
-                            'Max rank',
+                            t('maxRank'),
                             Object.keys(rankImages),
                             (values) =>
                               setFilters({
@@ -529,12 +529,12 @@ const DuosPage = () => {
                           ))}
                         </View>
                       ) : (
-                        'Select Positions'
+                        t('selectPositions')
                       )
                     }
                     onPress={() =>
                       openPickerModal(
-                        'Positions',
+                        t('positions'),
                         Object.keys(positionImages),
                         (values) =>
                           setFilters({ ...filters, positions: values }),
@@ -560,12 +560,12 @@ const DuosPage = () => {
                           ))}
                         </View>
                       ) : (
-                        'Select Languages'
+                        t('selectLanguages')
                       )
                     }
                     onPress={() =>
                       openPickerModal(
-                        'Languages',
+                        t('languages'),
                         Object.keys(languageFlags),
                         (values) =>
                           setFilters({ ...filters, languages: values }),
@@ -593,12 +593,12 @@ const DuosPage = () => {
                           ))}
                         </View>
                       ) : (
-                        'Select Champions'
+                        t('selectChampions')
                       )
                     }
                     onPress={() =>
                       openPickerModal(
-                        'Select Champions',
+                        t('selectChampions'),
                         Object.keys(champions)
                           .map((key) => champions[key])
                           .sort(),
@@ -624,7 +624,7 @@ const DuosPage = () => {
                 </View>
                 <View>
                   <CustomButton
-                    title="Reset Filters"
+                    title={t('clearFilters')}
                     onPress={resetFilters}
                     style={styles.customButton2}
                     textStyle={styles.customButton2Text}
@@ -668,36 +668,36 @@ const DuosPage = () => {
               <View style={styles.modalContent}>
                 <FlatList
                   data={[
-                    { key: 'Select Riot Account' },
-                    { key: 'Your position' },
-                    { key: 'Searched position' },
-                    { key: 'Min rank' },
-                    { key: 'Max rank' },
-                    { key: 'Languages' },
-                    { key: 'Select Champions' },
-                    { key: 'Create Duo' },
-                    { key: 'Cancel' },
+                    { key: t('selectRiotAccount') },
+                    { key: t('yourPosition') },
+                    { key: t('searchedPosition') },
+                    { key: t('minRank') },
+                    { key: t('maxRank') },
+                    { key: t('languages') },
+                    { key: t('selectChampions') },
+                    { key: t('createDuoPost') },
+                    { key: t('cancel') },
                   ]}
                   renderItem={({ item }) => {
                     switch (item.key) {
-                      case 'Select Riot Account':
+                      case t('selectRiotAccount'):
                         return (
                           <View>
                             <Text
                               className="text-center"
                               style={styles.customButtonText}
                             >
-                              Create a Duo Post
+                              {t('createDuoPost')}
                             </Text>
                             <CustomButton
                               title={
                                 selectedProfile
                                   ? selectedProfile.gameName
-                                  : 'Select Account'
+                                  : t('selectRiotAccount')
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Select Riot Account',
+                                  t('selectRiotAccount'),
                                   riotProfiles.map(
                                     (profile) => profile.gameName
                                   ),
@@ -721,7 +721,7 @@ const DuosPage = () => {
                             />
                           </View>
                         )
-                      case 'Your position':
+                      case t('yourPosition'):
                         return (
                           <View>
                             <CustomButton
@@ -737,12 +737,12 @@ const DuosPage = () => {
                                     ))}
                                   </View>
                                 ) : (
-                                  'Your position'
+                                  t('yourPosition')
                                 )
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Positions',
+                                  t('positions'),
                                   Object.keys(positionImages),
                                   (values) =>
                                     setNewDuo({
@@ -758,7 +758,7 @@ const DuosPage = () => {
                             />
                           </View>
                         )
-                      case 'Searched position':
+                      case t('searchedPosition'):
                         return (
                           <View>
                             <CustomButton
@@ -774,12 +774,12 @@ const DuosPage = () => {
                                     ))}
                                   </View>
                                 ) : (
-                                  'Searched position'
+                                  t('searchedPosition')
                                 )
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Positions',
+                                  t('positions'),
                                   Object.keys(positionImages),
                                   (values) =>
                                     setNewDuo({
@@ -795,7 +795,7 @@ const DuosPage = () => {
                             />
                           </View>
                         )
-                      case 'Min rank':
+                      case t('minRank'):
                         return (
                           <View>
                             <CustomButton
@@ -806,12 +806,12 @@ const DuosPage = () => {
                                     style={styles.rankImageDuo}
                                   />
                                 ) : (
-                                  'Min Rank'
+                                  t('minRank')
                                 )
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Min rank',
+                                  t('minRank'),
                                   Object.keys(rankImages),
                                   (values) =>
                                     setNewDuo({ ...newDuo, minRank: values[0] })
@@ -822,7 +822,7 @@ const DuosPage = () => {
                             />
                           </View>
                         )
-                      case 'Max rank':
+                      case t('maxRank'):
                         return (
                           <View>
                             <CustomButton
@@ -833,12 +833,12 @@ const DuosPage = () => {
                                     style={styles.rankImageDuo}
                                   />
                                 ) : (
-                                  'Max Rank'
+                                  t('maxRank')
                                 )
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Max rank',
+                                  t('maxRank'),
                                   Object.keys(rankImages),
                                   (values) =>
                                     setNewDuo({ ...newDuo, maxRank: values[0] })
@@ -849,7 +849,7 @@ const DuosPage = () => {
                             />
                           </View>
                         )
-                      case 'Languages':
+                      case t('languages'):
                         return (
                           <View>
                             <CustomButton
@@ -865,12 +865,12 @@ const DuosPage = () => {
                                     ))}
                                   </View>
                                 ) : (
-                                  'Languages'
+                                  t('languages')
                                 )
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Languages',
+                                  t('languages'),
                                   Object.keys(languageFlags),
                                   (values) =>
                                     setNewDuo({ ...newDuo, languages: values }),
@@ -883,7 +883,7 @@ const DuosPage = () => {
                             />
                           </View>
                         )
-                      case 'Select Champions':
+                      case t('selectChampions'):
                         return (
                           <View>
                             <CustomButton
@@ -901,12 +901,12 @@ const DuosPage = () => {
                                     ))}
                                   </View>
                                 ) : (
-                                  'Select Champions'
+                                  t('selectChampions')
                                 )
                               }
                               onPress={() =>
                                 openPickerModal(
-                                  'Select Champions',
+                                  t('selectChampions'),
                                   Object.keys(champions)
                                     .sort()
                                     .map((key) => champions[key]),
@@ -939,7 +939,7 @@ const DuosPage = () => {
                 />
                 <View>
                   <CustomButton
-                    title="Create Duo"
+                    title={t('createDuoPost')}
                     onPress={handleCreateDuo}
                     style={styles.customButton2}
                     textStyle={styles.customButton2Text}
@@ -947,7 +947,7 @@ const DuosPage = () => {
                 </View>
                 <View>
                   <CustomButton
-                    title="Cancel"
+                    title={t('cancel')}
                     onPress={() => {
                       setModalVisible(false)
                       setNewDuo({
@@ -1008,7 +1008,7 @@ const DuosPage = () => {
                       }}
                     >
                       <View style={styles.modalOptionContainer}>
-                        {pickerModal.type === 'Select Champions' ? (
+                        {pickerModal.type === t('selectChampions') ? (
                           <Image
                             source={{
                               uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${Object.keys(
@@ -1017,18 +1017,18 @@ const DuosPage = () => {
                             }}
                             style={{ width: 20, height: 20, marginRight: 10 }}
                           />
-                        ) : pickerModal.type === 'Languages' ? (
+                        ) : pickerModal.type === t('languages') ? (
                           <Image
                             source={languageFlags[option]}
                             style={{ width: 30, height: 30, marginRight: 10 }}
                           />
-                        ) : pickerModal.type === 'Positions' ? (
+                        ) : pickerModal.type === t('positions') ? (
                           <Image
                             source={positionImages[option]}
                             style={{ width: 20, height: 20, marginRight: 10 }}
                           />
-                        ) : pickerModal.type === 'Min rank' ||
-                          pickerModal.type === 'Max rank' ? (
+                        ) : pickerModal.type === t('minRank') ||
+                          pickerModal.type === t('maxRank') ? (
                           <Image
                             source={rankImages[option]}
                             style={{ width: 30, height: 30, marginRight: 10 }}
@@ -1050,7 +1050,7 @@ const DuosPage = () => {
                 <View style={styles.buttonContainerDuo}>
                   {pickerModal.multiSelect && (
                     <CustomButton
-                      title="Done"
+                      title={t('done')}
                       onPress={() => {
                         pickerModal.onSelect(pickerModal.selectedValues)
                         setPickerModal({ ...pickerModal, visible: false })
@@ -1060,7 +1060,7 @@ const DuosPage = () => {
                     />
                   )}
                   <CustomButton
-                    title="Back"
+                    title={t('back')}
                     onPress={() =>
                       setPickerModal({ ...pickerModal, visible: false })
                     }
@@ -1088,17 +1088,17 @@ const DuosPage = () => {
             <TouchableWithoutFeedback>
               <View style={styles.modalContent}>
                 <Text className="text-center" style={styles.customButtonText}>
-                  Apply for Duo
+                  {t('applyForDuo')}
                 </Text>
                 <CustomButton
                   title={
                     selectedProfile
                       ? selectedProfile.gameName
-                      : 'Select Account'
+                      : t('selectRiotAccount')
                   }
                   onPress={() =>
                     openPickerModal(
-                      'Select Riot Account',
+                      t('selectRiotAccount'),
                       riotProfiles.map((profile) => profile.gameName),
                       (values) => {
                         const profile = riotProfiles.find(
@@ -1115,7 +1115,7 @@ const DuosPage = () => {
                 />
                 <View>
                   <CustomButton
-                    title="Apply"
+                    title={t('applyForDuo')}
                     onPress={handleApplyForDuo}
                     style={styles.customButton2}
                     textStyle={styles.customButton2Text}
@@ -1123,7 +1123,7 @@ const DuosPage = () => {
                 </View>
                 <View>
                   <CustomButton
-                    title="Cancel"
+                    title={t('cancel')}
                     onPress={() => {
                       setApplyModalVisible(false)
                       setApplyMessage('')

@@ -110,7 +110,7 @@ const BuildsBrowserPage: React.FC = () => {
   if (isLoading || isVersionLoading || isRunesLoading || isFetching) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-bialas font-chewy">Loading...</Text>
+        <Text className="text-bialas font-PoetsenOne-Regular">Loading...</Text>
       </View>
     )
   }
@@ -118,7 +118,7 @@ const BuildsBrowserPage: React.FC = () => {
   if (error || versionError || runesError) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-bialas font-chewy">
+        <Text className="text-bialas font-PoetsenOne-Regular">
           Error: {(error || versionError || runesError)?.message}
         </Text>
       </View>
@@ -306,12 +306,14 @@ const styles = StyleSheet.create({
   option: {
     padding: 10,
     fontSize: 16,
+    fontFamily: 'PoetsenOne-Regular',
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     color: '#F5F5F5',
   },
   selectedOption: {
     color: '#F5B800',
+    fontFamily: 'PoetsenOne-Regular',
   },
   buttonContainer: {
     marginTop: 10,

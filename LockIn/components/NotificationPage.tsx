@@ -12,6 +12,7 @@ import { getNotifications } from '../api/profile/getNotifications'
 import { useNavigation } from '@react-navigation/native'
 import { ProfileScreenProps } from '../App'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const NotificationComponent: React.FC = () => {
   const { receivedMessage } = useSocket()
@@ -20,6 +21,7 @@ const NotificationComponent: React.FC = () => {
     string | null
   >(null)
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
+  const { t } = useTranslation()
 
   const {
     data: notifications,
@@ -59,12 +61,12 @@ const NotificationComponent: React.FC = () => {
   }
 
   const EmptyNotifications = () => (
-    <Text style={styles.emptyListText}>No notifications to display</Text>
+    <Text style={styles.emptyListText}>{t('noNotifications')}</Text>
   )
 
   return (
     <View style={styles.notificationsContainer}>
-      <Text style={styles.notificationsHeader}>Notifications</Text>
+      <Text style={styles.notificationsHeader}>{t('notifications')}</Text>
       <FlatList
         data={notifications?.content}
         keyExtractor={(item) => item._id}

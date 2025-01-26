@@ -113,5 +113,18 @@
   "heralds": "Heraldy",
   "towers": "Wieże",
   "winner": "Wygrani",
-  "loser": "Przegrani"
+  "loser": "Przegrani",
+  "selectPositions": "Wybierz pozycje",
+  "selectRiotAccount": "Wybierz konto Riot",
+  "yourPosition": "Twoja pozycja",
+  "searchedPosition": "Szukana pozycja",
+  "noPosts": "Nie znaleziono postów",
+  "typeAMessage": "Wpisz wiadomość",
+  "chatMembers": "Uczestnicy czatu",
+  "claimAccount": "Przypisz konto",
+  "followAccount": "Obserwuj konto",
+  "unfollowAccount": "Przestań obserwować konto",
+  "unclaimAccount": "Porzuć konto",
+  "win": "WYGRANA",
+  "lose": "PRZEGRANA"
 }

@@ -21,6 +21,7 @@ import Checkbox from 'expo-checkbox'
 import { Chat } from '../types/messenger'
 import { Ionicons } from '@expo/vector-icons'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const MessagesPage: React.FC = () => {
   const navigation = useNavigation<ChatPageScreenProps['navigation']>()
@@ -31,6 +32,7 @@ const MessagesPage: React.FC = () => {
   const [chatName, setChatName] = useState('')
   const [page, setPage] = useState(0)
   const size = 4
+  const { t } = useTranslation()
 
   const {
     data: chatsData,
@@ -123,11 +125,12 @@ const MessagesPage: React.FC = () => {
         <Text style={styles.chatTitle}>{item.name}</Text>
       </View>
       <Text style={styles.chatMembers}>
-        Members: {item.members.map((member) => member.username).join(', ')}
+        {t('members')}:{' '}
+        {item.members.map((member) => member.username).join(', ')}
       </Text>
       {item.lastMessage && (
         <Text style={styles.lastMessage}>
-          Last message: {item.lastMessage.message}
+          {t('lastMessage')}: {item.lastMessage.message}
         </Text>
       )}
     </TouchableOpacity>
@@ -141,9 +144,9 @@ const MessagesPage: React.FC = () => {
       style={styles.modalOverlay}
     >
       <View style={styles.modalWrapper}>
-        <Text style={styles.modalTitle}>Create Public Chat</Text>
+        <Text style={styles.modalTitle}>{t('createPublicChat')}</Text>
         <TextInput
-          placeholder="Chat Name"
+          placeholder={t('chatName')}
           value={chatName}
           onChangeText={setChatName}
           style={styles.modalInput}
@@ -174,13 +177,13 @@ const MessagesPage: React.FC = () => {
             style={styles.modalButtonPrimary}
             disabled={!chatName.trim() || selectedFriends.length === 0}
           >
-            <Text style={styles.modalButtonText}>Create</Text>
+            <Text style={styles.modalButtonText}>{t('create')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={toggleModal}
             style={styles.modalButtonSecondary}
           >
-            <Text style={styles.modalButtonTextSecondary}>Cancel</Text>
+            <Text style={styles.modalButtonTextSecondary}>{t('cancel')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -190,7 +193,7 @@ const MessagesPage: React.FC = () => {
   return (
     <View style={styles.chatListContainer}>
       <TouchableOpacity onPress={toggleModal} style={styles.createChatButton}>
-        <Text style={styles.createChatText}>Create Public Chat</Text>
+        <Text style={styles.createChatText}>{t('createPublicChat')}</Text>
       </TouchableOpacity>
 
       {/* Modal remains the same */}

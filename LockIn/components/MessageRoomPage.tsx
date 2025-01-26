@@ -25,6 +25,7 @@ import { leaveChat } from '../api/messenger/leaveChat'
 import { useSocket } from '../context/SocketProvider'
 import styles from '../styles/BrowserStyles'
 import Icon from 'react-native-vector-icons/Ionicons'
+import { useTranslation } from 'react-i18next'
 
 const ChatPage: React.FC = () => {
   const route = useRoute()
@@ -44,6 +45,7 @@ const ChatPage: React.FC = () => {
   const [selectedFriends, setSelectedFriends] = useState<string[]>([])
   const { memberAction, refreshMessages, setRefreshMessages } = useSocket()
   const [isMembersModalVisible, setMembersModalVisible] = useState(false)
+  const { t } = useTranslation()
 
   const toggleMembersModal = () => {
     setMembersModalVisible(!isMembersModalVisible)
@@ -60,7 +62,7 @@ const ChatPage: React.FC = () => {
       backdropOpacity={0.9}
     >
       <View style={styles.modalWrapper}>
-        <Text style={styles.modalTitle}>Chat Members</Text>
+        <Text style={styles.modalTitle}>{t('chatMembers')}</Text>
         <View style={styles.modalListContainer}>
           <FlatList
             data={chatData?.members}
@@ -87,13 +89,15 @@ const ChatPage: React.FC = () => {
             onPress={toggleAddFriendModal}
             style={styles.modalButtonPrimary}
           >
-            <Text style={styles.modalButtonText}>Add Friend</Text>
+            <Text style={styles.modalButtonText}>{t('addFriend')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={toggleLeaveChatModal}
             style={styles.modalButtonSecondary}
           >
-            <Text style={styles.modalButtonTextSecondary}>Leave Chat</Text>
+            <Text style={styles.modalButtonTextSecondary}>
+              {t('leaveChat')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -203,7 +207,7 @@ const ChatPage: React.FC = () => {
       {item.respondingTo && (
         <View style={styles.replyContainer}>
           <Text style={styles.replyText}>
-            Replying to:{' '}
+            {t('replyingTo')}:{' '}
             {
               allMessages.find((msg: Message) => msg._id === item.respondingTo)
                 ?.message
@@ -352,7 +356,7 @@ const ChatPage: React.FC = () => {
         {chatData && (
           <TouchableOpacity onPress={toggleMembersModal}>
             <Text style={styles.chatMembers}>
-              Members:{' '}
+              {t('members')}:{' '}
               {chatData.members
                 .map((member: any) => member.username)
                 .join(', ')}
@@ -383,7 +387,7 @@ const ChatPage: React.FC = () => {
         {replyingTo && (
           <View style={styles.replyContainer}>
             <Text style={styles.replyText}>
-              Replying to: {replyingTo.message}
+              {t('replyingTo')}: {replyingTo.message}
             </Text>
             <TouchableOpacity onPress={() => setReplyingTo(null)}>
               <Ionicons name="close" size={20} color="#888" />
@@ -395,7 +399,7 @@ const ChatPage: React.FC = () => {
         <TextInput
           value={newMessage}
           onChangeText={setNewMessage}
-          placeholder="Type a message"
+          placeholder={t('typeAMessage')}
           placeholderTextColor="#888"
           style={styles.messageInput}
         />

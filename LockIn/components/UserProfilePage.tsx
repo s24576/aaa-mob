@@ -46,6 +46,7 @@ const UserProfile = () => {
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string>('')
   const [reload, setReload] = useState(false)
+  const { t } = useTranslation()
 
   const rankImages: { [key: string]: any } = {
     IRON: require('../assets/ranks/IRON.png'),
@@ -224,7 +225,7 @@ const UserProfile = () => {
         <TextInput
           value={newBio}
           onChangeText={setNewBio}
-          placeholder="Enter new bio"
+          placeholder={t('enterNewBio')}
           placeholderTextColor="#F5F5F5"
           style={styles.bioInput}
         />
@@ -232,7 +233,7 @@ const UserProfile = () => {
           style={styles.customButton2}
           onPress={handleBioChange}
         >
-          <Text style={styles.customButton2Text}>Update Bio</Text>
+          <Text style={styles.customButton2Text}>{t('updateBio')}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.buttonGroup}>
@@ -240,13 +241,13 @@ const UserProfile = () => {
           style={styles.customButton2}
           onPress={() => navigation.navigate('Settings')}
         >
-          <Text style={styles.customButton2Text}>Settings</Text>
+          <Text style={styles.customButton2Text}>{t('settings')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.customButton2}
           onPress={() => navigation.navigate('FriendList')}
         >
-          <Text style={styles.customButton2Text}>Friends List</Text>
+          <Text style={styles.customButton2Text}>{t('friendsList')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -256,57 +257,14 @@ const UserProfile = () => {
           ]}
           onPress={handleLogout}
         >
-          <Text style={styles.customButton2Text}>Logout</Text>
+          <Text style={styles.customButton2Text}>{t('logout')}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.accountListContainer}>
-        <Text style={styles.accountListHeader}>Watchlist:</Text>
+        <Text style={styles.accountListHeader}>{t('watchlist')}:</Text>
         <FlatList
           data={watchList}
           keyExtractor={(item, index) => `watchlist-${item.id}-${index}`}
-          renderItem={({ item }) => (
-            <View style={styles.listItemContainer}>
-              {item.name && item.name.trim() && (
-                <Image
-                  source={{
-                    uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
-                  }}
-                  style={styles.rankImage}
-                />
-              )}
-              <View style={styles.accountInfo}>
-                <Text
-                  style={styles.accountName}
-                  onPress={() => handleProfilePress(item.server, item.id)}
-                >
-                  {item.name && item.name.trim()
-                    ? `${item.name} ${item.tag}`
-                    : 'Unloaded User'}
-                </Text>
-                <Text style={styles.serverText}>{item.server}</Text>
-              </View>
-              {item.name && item.name.trim() && (
-                <Image
-                  source={rankImages[item.tier] || rankImages['UNRANKED']}
-                  style={styles.rankImage}
-                />
-              )}
-              <TouchableOpacity
-                style={styles.removeButton}
-                onPress={() => handleRemoveFromWatchlist(item.server, item.id)}
-              >
-                <Text style={styles.removeButtonText}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
-      </View>
-
-      <View style={styles.accountListContainer}>
-        <Text style={styles.accountListHeader}>My Accounts:</Text>
-        <FlatList
-          data={myAccounts}
-          keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
           renderItem={({ item }) => (
             <View style={styles.listItemContainer}>
               {item.name && item.name.trim() && (
@@ -330,6 +288,49 @@ const UserProfile = () => {
               </View>
               {item.name && item.name.trim() && (
                 <Image
+                  source={rankImages[item.tier] || rankImages['UNRANKED']}
+                  style={styles.rankImage}
+                />
+              )}
+              <TouchableOpacity
+                style={styles.removeButton}
+                onPress={() => handleRemoveFromWatchlist(item.server, item.id)}
+              >
+                <Text style={styles.removeButtonText}>{t('remove')}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      </View>
+
+      <View style={styles.accountListContainer}>
+        <Text style={styles.accountListHeader}>{t('myAccounts')}:</Text>
+        <FlatList
+          data={myAccounts}
+          keyExtractor={(item, index) => `myaccount-${item.id}-${index}`}
+          renderItem={({ item }) => (
+            <View style={styles.listItemContainer}>
+              {item.name && item.name.trim() && (
+                <Image
+                  source={{
+                    uri: `https://ddragon.leagueoflegends.com/cdn/14.24.1/img/profileicon/${item.icon}.png`,
+                  }}
+                  style={styles.rankImage}
+                />
+              )}
+              <View style={styles.accountInfo}>
+                <Text
+                  style={styles.accountName}
+                  onPress={() => handleProfilePress(item.server, item.id)}
+                >
+                  {item.name && item.name.trim()
+                    ? `${item.name} #${item.tag}`
+                    : t('unloadedUser')}
+                </Text>
+                <Text style={styles.serverText}>{item.server}</Text>
+              </View>
+              {item.name && item.name.trim() && (
+                <Image
                   source={
                     rankImages[item.tier.toUpperCase()] ||
                     rankImages['UNRANKED']
@@ -341,7 +342,7 @@ const UserProfile = () => {
                 style={styles.removeButton}
                 onPress={() => handleRemoveMyAccount(item.server, item.id)}
               >
-                <Text style={styles.removeButtonText}>Remove</Text>
+                <Text style={styles.removeButtonText}>{t('remove')}</Text>
               </TouchableOpacity>
             </View>
           )}

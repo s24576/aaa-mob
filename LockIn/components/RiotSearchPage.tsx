@@ -12,6 +12,7 @@ import { ProfileScreenProps } from '../App'
 import servers from '../assets/servers.json'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const RiotSearchPage: React.FC = () => {
   const [server, setServer] = useState('eun1')
@@ -19,6 +20,7 @@ const RiotSearchPage: React.FC = () => {
   const [name, setName] = useState('BlingBlingBoi')
   const [modalVisible, setModalVisible] = useState(false)
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
+  const { t } = useTranslation()
 
   const getServerName = (code: string) => {
     const serverObj = servers.find((s) => s.code === code)
@@ -48,7 +50,7 @@ const RiotSearchPage: React.FC = () => {
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TextInput
           style={[styles.searchInput, { flex: 3, marginRight: 10 }]}
-          placeholder="Name"
+          placeholder={t('name')}
           placeholderTextColor="#787878"
           value={name}
           onChangeText={setName}

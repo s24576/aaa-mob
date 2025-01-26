@@ -114,5 +114,18 @@
   "heralds": "Heralds",
   "towers": "Towers",
   "winner": "Winner",
-  "loser": "Loser"
+  "loser": "Loser",
+  "selectPositions": "Select Positions",
+  "selectRiotAccount": "Select Riot Account",
+  "yourPosition": "Your Position",
+  "searchedPosition": "Searched Position",
+  "noPosts": "No posts found",
+  "typeAMessage": "Type a message",
+  "chatMembers": "Chat Members",
+  "claimAccount": "Claim Account",
+  "followAccount": "Follow Account",
+  "unfollowAccount": "Unfollow Account",
+  "unclaimAccount": "Unclaim Account",
+  "win": "WIN",
+  "lose": "LOSE"
 }
