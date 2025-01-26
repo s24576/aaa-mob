@@ -66,7 +66,13 @@ const LoginForm = () => {
         justifyContent: 'center',
       }}
     >
-      <EvilIcons name="lock" size={240} color="#F5B800" />
+      <View
+        style={{
+          paddingBottom: 10,
+        }}
+      >
+        <EvilIcons name="lock" size={240} color="#F5B800" />
+      </View>
 
       <TextInput
         placeholder={t('usernameInput')}
@@ -101,6 +107,7 @@ const LoginForm = () => {
           borderRadius: 12,
           marginBottom: 30,
           fontFamily: 'PoetsenOne-Regular',
+          padding: 5,
           paddingLeft: 10,
         }}
       />
@@ -176,7 +183,7 @@ const LoginForm = () => {
         </Text>
       ) : null}
 
-      <Button
+      {/* <Button
         title="Test1234"
         onPress={() => handleAutoComplete('Test1234', 'Test1234')}
       />
@@ -195,7 +202,7 @@ const LoginForm = () => {
       <Button
         title="test3000"
         onPress={() => handleAutoComplete('test3000', 'test3000')}
-      />
+      /> */}
 
       <Modal
         visible={modalVisible}

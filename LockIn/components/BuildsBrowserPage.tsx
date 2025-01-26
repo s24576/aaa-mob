@@ -19,6 +19,7 @@ import { BuildDetailsScreenProps } from '../App'
 import { Button } from 'react-native-paper'
 import { getRunes } from '../api/ddragon/getRunes'
 import { FontAwesome } from '@expo/vector-icons'
+import { useTranslation } from 'react-i18next'
 
 interface Build {
   _id: string
@@ -64,6 +65,7 @@ const CustomButton = ({
 )
 
 const BuildsBrowserPage: React.FC = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<BuildDetailsScreenProps['navigation']>()
   const [selectedChampion, setSelectedChampion] = useState<string | undefined>(
     undefined
@@ -345,7 +347,7 @@ const BuildsBrowserPage: React.FC = () => {
         ListHeaderComponent={
           <View className="p-5">
             <CustomButton
-              title={filtersVisible ? 'Hide Filters' : 'Show Filters'}
+              title={filtersVisible ? t('hideFilters') : t('filters')}
               onPress={() => setFiltersVisible(!filtersVisible)}
               style={styles.filtersButton}
               textStyle={styles.filtersButtonText}
@@ -367,12 +369,12 @@ const BuildsBrowserPage: React.FC = () => {
                         </Text>
                       </View>
                     ) : (
-                      'Select Champions'
+                      t('selectChampions')
                     )
                   }
                   onPress={() =>
                     openPickerModal(
-                      'Select Champions',
+                      t('selectChampions'),
                       Object.keys(champions)
                         .sort()
                         .map((key) => champions[key]),
@@ -385,20 +387,20 @@ const BuildsBrowserPage: React.FC = () => {
                   textStyle={styles.customButtonText}
                 />
                 <TextInput
-                  placeholder="Author Name"
+                  placeholder={t('author')}
                   placeholderTextColor="#F5F5F5"
                   value={authorName}
                   onChangeText={setAuthorName}
                   style={styles.textInput}
                 />
                 <CustomButton
-                  title="Filter Builds"
+                  title={t('filterBuilds')}
                   onPress={handleFilterPress}
                   style={styles.applyFiltersButton}
                   textStyle={styles.applyFiltersButtonText}
                 />
                 <CustomButton
-                  title="Clear Filters"
+                  title={t('clearFilters')}
                   onPress={handleClearFilters}
                   style={styles.customButton2}
                   textStyle={styles.customButton2Text}
@@ -466,7 +468,7 @@ const BuildsBrowserPage: React.FC = () => {
                 />
                 <View style={styles.buttonContainer}>
                   <CustomButton
-                    title="Back"
+                    title={t('back')}
                     onPress={() =>
                       setPickerModal({ ...pickerModal, visible: false })
                     }

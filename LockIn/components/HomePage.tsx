@@ -12,23 +12,27 @@ import { MatchDetailsScreenProps } from '../App'
 import { UserContextType } from '../types/local/userContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const HomePage = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const navigation = useNavigation<MatchDetailsScreenProps['navigation']>()
-  const handleLogout = async () => {
-    //remove in production
-    await AsyncStorage.removeItem('token')
-    setUserData(null)
-  }
+  const { t } = useTranslation()
+  // const handleLogout = async () => {
+  //   //remove in production
+  //   await AsyncStorage.removeItem('token')
+  //   setUserData(null)
+  // }
 
   return (
     <ScrollView>
       <View style={styles.homeContainer}>
         {userData && (
-          <Text style={styles.welcomeHeader}>Welcome, {userData._id}!</Text>
+          <Text style={styles.welcomeHeader}>
+            {t('welcome')} {userData._id}!
+          </Text>
         )}
-        <TouchableOpacity onPress={handleLogout} style={styles.tileButton}>
+        {/* <TouchableOpacity onPress={handleLogout} style={styles.tileButton}>
           <ImageBackground
             source={{
               uri: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_9.jpg',
@@ -38,7 +42,7 @@ const HomePage = () => {
           >
             <Text style={styles.tileButtonText}>Logout</Text>
           </ImageBackground>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => navigation.navigate('BuildsBrowser')}
           style={styles.tileButton}
@@ -49,7 +53,7 @@ const HomePage = () => {
             }}
             style={styles.backgroundImage}
           >
-            <Text style={styles.tileButtonText}>Builds Browser</Text>
+            <Text style={styles.tileButtonText}>{t('buildsBrowser')}</Text>
           </ImageBackground>
         </TouchableOpacity>
         <TouchableOpacity
@@ -62,7 +66,7 @@ const HomePage = () => {
             }}
             style={styles.backgroundImage}
           >
-            <Text style={styles.tileButtonText}>Duos</Text>
+            <Text style={styles.tileButtonText}>{t('duos')}</Text>
           </ImageBackground>
         </TouchableOpacity>
         <TouchableOpacity
@@ -75,10 +79,10 @@ const HomePage = () => {
             }}
             style={styles.backgroundImage}
           >
-            <Text style={styles.tileButtonText}>Courses</Text>
+            <Text style={styles.tileButtonText}>{t('courses')}</Text>
           </ImageBackground>
         </TouchableOpacity>
-        <Text style={styles.welcomeText}>We are glad to have you here!</Text>
+        <Text style={styles.welcomeText}>{t('welcomeMessage')}</Text>
         <View style={styles.bottomSpacing} />
       </View>
     </ScrollView>

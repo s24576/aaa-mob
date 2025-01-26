@@ -16,8 +16,10 @@ import { useNavigation } from '@react-navigation/native'
 import { DuoScreenProps } from '../App'
 import servers from '../assets/servers.json'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const DuoAnswerPage = () => {
+  const { t } = useTranslation()
   const { duoAnswer, duoNotification } = useSocket()
   const navigation = useNavigation<DuoScreenProps['navigation']>()
   const [page, setPage] = useState(0)
@@ -103,7 +105,11 @@ const DuoAnswerPage = () => {
   }
 
   if (errorAnswers) {
-    return <Text style={styles.errorText}>Error: {errorAnswers.message}</Text>
+    return (
+      <Text style={styles.errorText}>
+        {t('error')}: {errorAnswers.message}
+      </Text>
+    )
   }
 
   const answers = answersData?.content || []
@@ -117,7 +123,7 @@ const DuoAnswerPage = () => {
         >
           <Ionicons name="arrow-back" size={30} color="#F5B800" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Duo Requests:</Text>
+        <Text style={styles.headerText}>{t('duoRequests')}:</Text>
       </View>
       <View style={styles.scrollViewContainer}>
         <ScrollView>
@@ -186,20 +192,20 @@ const DuoAnswerPage = () => {
                       onPress={() => handleRespondAnswer(answer._id, true)}
                       style={styles.acceptButton}
                     >
-                      <Text style={styles.acceptButtonText}>Accept</Text>
+                      <Text style={styles.acceptButtonText}>{t('accept')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => handleRespondAnswer(answer._id, false)}
                       style={styles.rejectButton}
                     >
-                      <Text style={styles.rejectButtonText}>Reject</Text>
+                      <Text style={styles.rejectButtonText}>{t('reject')}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
               )
             })
           ) : (
-            <Text style={styles.noAnswersText}>No answers found.</Text>
+            <Text style={styles.noAnswersText}>{t('noAnswers')}</Text>
           )}
         </ScrollView>
       </View>

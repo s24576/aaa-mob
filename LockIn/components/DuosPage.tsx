@@ -23,6 +23,7 @@ import { answerDuo } from '../api/duo/answerDuo'
 import servers from '../assets/servers.json'
 import { Ionicons } from '@expo/vector-icons'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 interface Duo {
   _id: string
@@ -57,6 +58,7 @@ const CustomButton = ({
 )
 
 const DuosPage = () => {
+  const { t } = useTranslation()
   const [modalVisible, setModalVisible] = useState(false)
   const [filtersVisible, setFiltersVisible] = useState(false)
   const [applyModalVisible, setApplyModalVisible] = useState(false)
@@ -331,14 +333,14 @@ const DuosPage = () => {
               )
             }
           >
-            <Text style={styles.authorText}>Go to Riot Profile</Text>
+            <Text style={styles.authorText}>{t('goToRiotProfile')}</Text>
           </TouchableOpacity>
           <View className="flex-row items-center justify-space-between">
             <View className="flex-1 items-start">
               <Text style={[styles.duoText, styles.positionsText]}>
-                Looked Positions:
+                {t('lookedPositions')}:
               </Text>
-              <Text style={styles.duoText}>Played Positions:</Text>
+              <Text style={styles.duoText}>{t('playedPositions')}:</Text>
             </View>
             <View className="flex-1 items-center justify-center">
               <View style={styles.positionContainer}>
@@ -374,14 +376,13 @@ const DuosPage = () => {
           </View>
           <View style={styles.championContainer}>
             {item.championIds.map((championId) => (
-              <View key={championId} style={styles.championItem}>
+              <View key={championId}>
                 <Image
                   source={{
                     uri: `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${championId}.png`,
                   }}
                   style={styles.championImageLarge}
                 />
-                <Text style={styles.duoText}>{champions[championId]}</Text>
               </View>
             ))}
           </View>
@@ -393,7 +394,7 @@ const DuosPage = () => {
           }}
           style={styles.applyButton}
         >
-          <Text style={styles.applyButtonText}>Apply for Duo</Text>
+          <Text style={styles.applyButtonText}>{t('applyForDuo')}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -422,7 +423,7 @@ const DuosPage = () => {
         >
           <Ionicons name="arrow-back" size={30} color="#F5B800" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Duo Browser:</Text>
+        <Text style={styles.headerText}>{t('duoBrowser')}:</Text>
       </View>
       <FlatList
         data={duosQueries.data?.content}
@@ -434,19 +435,19 @@ const DuosPage = () => {
         ListHeaderComponent={
           <View className="p-5">
             <CustomButton
-              title="Create a Duo Post"
+              title={t('createDuoPost')}
               onPress={() => setModalVisible(true)}
               style={styles.customButton}
               textStyle={styles.customButtonText}
             />
             <CustomButton
-              title="Check for Duo Answers"
+              title={t('checkDuoAnswers')}
               onPress={() => handleDuoAnwserPress()}
               style={styles.customButton}
               textStyle={styles.customButtonText}
             />
             <CustomButton
-              title={filtersVisible ? 'Hide Filters' : 'Filters'}
+              title={filtersVisible ? t('hideFilters') : t('filters')}
               onPress={() => setFiltersVisible(!filtersVisible)}
               style={styles.customButton2}
               textStyle={styles.customButton2Text}

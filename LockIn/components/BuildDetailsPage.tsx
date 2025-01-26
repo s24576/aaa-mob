@@ -24,8 +24,10 @@ import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
 import { getRunes } from '../api/ddragon/getRunes'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { useTranslation } from 'react-i18next'
 
 const BuildDetailsPage: React.FC = () => {
+  const { t } = useTranslation()
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const route = useRoute()
   const { buildId } = route.params as { buildId: string }
@@ -444,18 +446,20 @@ const BuildDetailsPage: React.FC = () => {
         >
           <FontAwesome name="bookmark" size={24} color="#131313" />
           <Text className="text-wegielek font-chewy text-lg ml-2">
-            {isSaved ? 'Saved' : 'Save'}
+            {isSaved ? t('save') : t('save')}
           </Text>
         </TouchableOpacity>
       </View>
       <View className="mt-4 mb-6">
-        <Text className="text-xl text-bialas font-chewy mb-4">Comments</Text>
+        <Text className="text-xl text-bialas font-chewy mb-4">
+          {t('comments')}
+        </Text>
 
         <View className="bg-wegielek border border-zoltek rounded-lg mb-4 p-3">
           <TextInput
             value={newComment}
             onChangeText={setNewComment}
-            placeholder={replyingTo ? 'Add a reply' : 'Add a comment'}
+            placeholder={replyingTo ? t('addReply') : t('addComment')}
             placeholderTextColor="#A9A9A9"
             className="text-bialas font-chewy mb-3"
           />
@@ -469,7 +473,7 @@ const BuildDetailsPage: React.FC = () => {
             disabled={!newComment.trim()}
           >
             <Text className="text-wegielek font-chewy">
-              {replyingTo ? 'Submit Reply' : 'Submit Comment'}
+              {replyingTo ? t('submitReply') : t('submitComment')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -524,7 +528,9 @@ const BuildDetailsPage: React.FC = () => {
                     onPress={() => handleDeleteComment(comment._id)}
                     className="bg-red-500 py-2 px-4 rounded-lg"
                   >
-                    <Text className="text-wegielek font-chewy">Delete</Text>
+                    <Text className="text-wegielek font-chewy">
+                      {t('delete')}
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -535,7 +541,7 @@ const BuildDetailsPage: React.FC = () => {
                   onChangeText={(text) =>
                     handleReplyTextChange(comment._id, text)
                   }
-                  placeholder="Add a reply"
+                  placeholder={t('addReply')}
                   placeholderTextColor="#A9A9A9"
                   className="text-bialas font-chewy mb-3"
                 />
@@ -548,14 +554,16 @@ const BuildDetailsPage: React.FC = () => {
                   }`}
                   disabled={!replyTexts[comment._id]?.trim()}
                 >
-                  <Text className="text-wegielek font-chewy">Submit Reply</Text>
+                  <Text className="text-wegielek font-chewy">
+                    {t('submitReply')}
+                  </Text>
                 </TouchableOpacity>
               </View>
 
               {responses[comment._id]?.length > 0 && (
                 <View className="mt-3 pl-4 border-l-2 border-zoltek">
                   <Text className="text-zoltek font-chewy text-lg mb-2">
-                    Responses:
+                    {t('responses')}:
                   </Text>
                   {responses[comment._id].map((response: any) => (
                     <View
@@ -607,7 +615,7 @@ const BuildDetailsPage: React.FC = () => {
                             className="bg-red-500 py-2 px-4 rounded-lg"
                           >
                             <Text className="text-wegielek font-chewy">
-                              Delete
+                              {t('delete')}
                             </Text>
                           </TouchableOpacity>
                         )}

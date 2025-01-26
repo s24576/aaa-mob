@@ -18,12 +18,14 @@ import { ProfileScreenProps } from '../App'
 import { useSocket } from '../context/SocketProvider'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const FriendListPage = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const { receivedMessage, memberAction } = useSocket()
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
 
   const {
     data: userDataQuery,
@@ -79,11 +81,11 @@ const FriendListPage = () => {
           style={styles.friendRequestsButton}
           onPress={() => navigation.navigate('FriendRequests')}
         >
-          <Text style={styles.customButton2Text}>Friend Requests</Text>
+          <Text style={styles.customButton2Text}>{t('friendRequests')}</Text>
         </TouchableOpacity>
 
-        <Text style={styles.friendListHeader}>Friends List</Text>
-        
+        <Text style={styles.friendListHeader}>{t('friendsList')}</Text>
+
         {userDataQuery?.friends?.length === 0 ? (
           <Text style={styles.emptyListText}>No friends added yet</Text>
         ) : (

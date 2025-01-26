@@ -16,6 +16,7 @@ import { EvilIcons } from '@expo/vector-icons'
 import { FontAwesome } from '@expo/vector-icons'
 import { UserContext } from '../context/UserContext'
 import { UserContextType } from '../types/local/userContext'
+import { useTranslation } from 'react-i18next'
 
 type LockInProfileRouteProp = RouteProp<
   {
@@ -27,6 +28,7 @@ type LockInProfileRouteProp = RouteProp<
 >
 
 const LockInProfilePage: React.FC = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation()
   const route = useRoute<LockInProfileRouteProp>()
   const { username } = route.params
@@ -54,10 +56,10 @@ const LockInProfilePage: React.FC = () => {
         return
       }
       await sendFriendRequest(targetUsername)
-      alert('Friend request sent!')
+      alert(t('friendRequestSent'))
     } catch (error) {
       console.error(error)
-      alert('Failed to send friend request.')
+      alert(t('failedToSendRequest'))
     }
   }
 
@@ -100,7 +102,7 @@ const LockInProfilePage: React.FC = () => {
         <Text style={styles.username}>{profile.username || profile._id}</Text>
         <View style={styles.bioContainer}>
           <Text style={styles.bioText}>
-            {profile.bio || 'No bio available'}
+            {profile.bio || t('noBioAvailable')}
           </Text>
         </View>
       </View>
@@ -112,13 +114,13 @@ const LockInProfilePage: React.FC = () => {
             onPress={handleSendFriendRequest}
           >
             <FontAwesome name="user-plus" size={20} color="#131313" />
-            <Text style={styles.customButton2Text}> Add Friend</Text>
+            <Text style={styles.customButton2Text}> {t('addFriend')}</Text>
           </TouchableOpacity>
         )}
       </View>
 
       <View style={styles.accountListContainer}>
-        <Text style={styles.accountListHeader}>Friends:</Text>
+        <Text style={styles.accountListHeader}>{t('friendsList')}:</Text>
         {profile.friends && profile.friends.length > 0 ? (
           profile.friends.map((friend) => (
             <TouchableOpacity

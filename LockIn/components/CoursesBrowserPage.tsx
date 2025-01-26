@@ -12,6 +12,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { useQuery } from '@tanstack/react-query'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 type CoursesBrowserProps = NativeStackScreenProps<
   RootStackParamList,
@@ -27,6 +28,7 @@ type CourseItem = {
 }
 
 const CoursesBrowserPage = ({ navigation, route }: CoursesBrowserProps) => {
+  const { t } = useTranslation()
   const { data, isLoading, error } = useQuery({
     queryKey: ['courses'],
     queryFn: getCourses,
@@ -44,7 +46,7 @@ const CoursesBrowserPage = ({ navigation, route }: CoursesBrowserProps) => {
     return (
       <View className="justify-center items-center">
         <Text className="text-bialas font-chewy">
-          Error fetching courses: {error.message}
+          {t('errorFetchingCourses')}: {error.message}
         </Text>
       </View>
     )
@@ -70,7 +72,9 @@ const CoursesBrowserPage = ({ navigation, route }: CoursesBrowserProps) => {
       <Text style={styles.courseDescription} numberOfLines={2}>
         {item.description}
       </Text>
-      <Text style={styles.courseAuthor}>By: {item.username}</Text>
+      <Text style={styles.courseAuthor}>
+        {t('author')}: {item.username}
+      </Text>
       <Text style={styles.coursePrice}>{item.price} EUR</Text>
     </TouchableOpacity>
   )
