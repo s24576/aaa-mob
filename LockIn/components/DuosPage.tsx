@@ -281,17 +281,16 @@ const DuosPage = () => {
     Support: require('../assets/positions/Support.png'),
     Fill: require('../assets/positions/Fill.png'),
   }
-
   const languageFlags: { [key: string]: any } = {
-    English: require('../assets/flags/GB.png'),
-    German: require('../assets/flags/DE.png'),
-    French: require('../assets/flags/FR.png'),
-    Spanish: require('../assets/flags/ES.png'),
-    Polish: require('../assets/flags/PL.png'),
-    Chinese: require('../assets/flags/CN.png'),
-    Japanese: require('../assets/flags/JP.png'),
-    Korean: require('../assets/flags/KR.png'),
-    Other: require('../assets/flags/OTHER.png'),
+    English: require('../assets/flags/united-kingdom.png'),
+    German: require('../assets/flags/germany.png'),
+    French: require('../assets/flags/france.png'),
+    Spanish: require('../assets/flags/spain.png'),
+    Polish: require('../assets/flags/poland.png'),
+    Chinese: require('../assets/flags/china.png'),
+    Japanese: require('../assets/flags/japan.png'),
+    Korean: require('../assets/flags/south-korea.png'),
+    Other: require('../assets/flags/united-nations.png'),
   }
 
   const handleProfilePress = (server: string, puuid: string) => {
