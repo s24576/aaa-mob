@@ -127,5 +127,7 @@
   "unfollowAccount": "Unfollow Account",
   "unclaimAccount": "Unclaim Account",
   "win": "WIN",
-  "lose": "LOSE"
+  "lose": "LOSE",
+  "searchRiotAccount": "Search Riot Account",
+  "searchLockinAccount": "Search LockIn Account"
 }

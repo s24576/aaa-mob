@@ -4,9 +4,11 @@ import HomePage from '../components/HomePage'
 import LockInAccountSearch from '../components/LockInAccountSearch'
 import RiotSearchPage from '../components/RiotSearchPage'
 import styles from '../styles/BrowserStyles'
+import { useTranslation } from 'react-i18next'
 
 const Home = () => {
   const [showLockInSearch, setShowLockInSearch] = useState(true)
+  const { t } = useTranslation()
 
   return (
     <View className="p-5">
@@ -15,7 +17,7 @@ const Home = () => {
         style={[styles.customButton2, { marginHorizontal: 60 }]}
       >
         <Text style={styles.customButton2Text}>
-          {showLockInSearch ? 'Szukaj konta Riot' : 'Szukaj konta LockIn'}
+          {showLockInSearch ? t('searchRiotAccount') : t('searchLockinAccount')}
         </Text>
       </TouchableOpacity>
       {showLockInSearch ? <LockInAccountSearch /> : <RiotSearchPage />}

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import BuildsBrowserPage from '../components/BuildsBrowserPage'
 import MyBuildsPage from '../components/MyBuildsPage'
 import SavedBuildsPage from '../components/SavedBuildsPage'
+import { useTranslation } from 'react-i18next'
 
 const CustomButton = ({
   title,
@@ -22,24 +23,25 @@ const CustomButton = ({
 
 const Home = () => {
   const [currentPage, setCurrentPage] = useState('all')
+  const { t } = useTranslation()
 
   return (
     <View style={styles.buttonContainer}>
       <View>
         <CustomButton
-          title="SHOW ALL BUILDS"
+          title={t('showAllBuilds')}
           onPress={() => setCurrentPage('all')}
           style={styles.customButton}
           textStyle={styles.customButtonText}
         />
         <CustomButton
-          title="SHOW MY BUILDS"
+          title={t('showMyBuilds')}
           onPress={() => setCurrentPage('my')}
           style={styles.customButton}
           textStyle={styles.customButtonText}
         />
         <CustomButton
-          title="SHOW SAVED BUILDS"
+          title={t('showSavedBuilds')}
           onPress={() => setCurrentPage('saved')}
           style={styles.customButton}
           textStyle={styles.customButtonText}

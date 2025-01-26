@@ -126,5 +126,7 @@
   "unfollowAccount": "Przestań obserwować konto",
   "unclaimAccount": "Porzuć konto",
   "win": "WYGRANA",
-  "lose": "PRZEGRANA"
+  "lose": "PRZEGRANA",
+  "searchRiotAccount": "Szukaj konta Riot",
+  "searchLockinAccount": "Szukaj konta LockIn"
 }
