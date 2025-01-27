@@ -39,3 +39,54 @@ The Lock.in mobile app is part of a larger ecosystem that includes web and deskt
 ## Getting Started
 
 1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start using Expo Go:
+```bash
+npx expo start
+```
+
+## Project Structure
+
+- `/screens` - Main application screens and views
+- `/components` - Reusable React Native components
+- `/api` - API integration and services
+- `/context` - React Context providers
+- `/types` - TypeScript type definitions
+- `/translations` - i18n translation files
+- `/styles` - Shared styles
+- `/assets` - Images, fonts, and other static assets
+
+## Development
+
+This project follows a hybrid development methodology combining waterfall and agile approaches. The documentation was developed using a waterfall model, while implementation followed a more flexible approach.
+
+### Environment Setup
+
+Create a `.env` file in the root directory with the following variables:
+```
+BACKEND_ADDRESS=your_backend_url
+```
+
+## Backend Integration
+
+The application connects to a Java Spring backend service. Key integration points include:
+- REST API endpoints for data operations
+- WebSocket connections for real-time features
+- MongoDB database for data persistence
+
+## Project Status
+
+This project was developed as part of an engineering thesis at Polish-Japanese Academy of Information Technology. It demonstrates the implementation of a complex social platform for gamers using modern web technologies.
+
+## License
+
+This project is proprietary software owned by the Polish-Japanese Academy of Information Technology (PJATK). Unauthorized use, reproduction, or distribution is prohibited.
+
+## Related Projects
+
+- [Lock.in Web Application](https://github.com/s24576/aaa-web)
+- [Lock.in Desktop Application](https://github.com/s24576/aaa-desktop)
+- [Lock.in Backend Server](https://github.com/s24576/aaa-server)
