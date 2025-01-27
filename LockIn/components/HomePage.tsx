@@ -18,11 +18,11 @@ const HomePage = () => {
   const { userData, setUserData } = useContext(UserContext) as UserContextType
   const navigation = useNavigation<MatchDetailsScreenProps['navigation']>()
   const { t } = useTranslation()
-  // const handleLogout = async () => {
-  //   //remove in production
-  //   await AsyncStorage.removeItem('token')
-  //   setUserData(null)
-  // }
+  const handleLogout = async () => {
+    //remove in production
+    await AsyncStorage.removeItem('token')
+    setUserData(null)
+  }
 
   return (
     <ScrollView>
@@ -32,17 +32,6 @@ const HomePage = () => {
             {t('welcome')} {userData._id}!
           </Text>
         )}
-        {/* <TouchableOpacity onPress={handleLogout} style={styles.tileButton}>
-          <ImageBackground
-            source={{
-              uri: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_9.jpg',
-            }}
-            style={styles.backgroundImage}
-            imageStyle={{ resizeMode: 'cover' }}
-          >
-            <Text style={styles.tileButtonText}>Logout</Text>
-          </ImageBackground>
-        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => navigation.navigate('BuildsBrowser')}
           style={styles.tileButton}
@@ -83,6 +72,17 @@ const HomePage = () => {
           </ImageBackground>
         </TouchableOpacity>
         <Text style={styles.welcomeText}>{t('welcomeMessage')}</Text>
+        <TouchableOpacity onPress={handleLogout} style={styles.tileButton}>
+          <ImageBackground
+            source={{
+              uri: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_9.jpg',
+            }}
+            style={styles.backgroundImage}
+            imageStyle={{ resizeMode: 'cover' }}
+          >
+            <Text style={styles.tileButtonText}>Logout</Text>
+          </ImageBackground>
+        </TouchableOpacity>
         <View style={styles.bottomSpacing} />
       </View>
     </ScrollView>
