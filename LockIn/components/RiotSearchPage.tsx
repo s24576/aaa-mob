@@ -15,9 +15,9 @@ import styles from '../styles/BrowserStyles'
 import { useTranslation } from 'react-i18next'
 
 const RiotSearchPage: React.FC = () => {
-  const [server, setServer] = useState('eun1')
-  const [tag, setTag] = useState('BBB')
-  const [name, setName] = useState('BlingBlingBoi')
+  const [server, setServer] = useState('')
+  const [tag, setTag] = useState('')
+  const [name, setName] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const { t } = useTranslation()

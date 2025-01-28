@@ -71,7 +71,6 @@ const HomePage = () => {
             <Text style={styles.tileButtonText}>{t('courses')}</Text>
           </ImageBackground>
         </TouchableOpacity>
-        <Text style={styles.welcomeText}>{t('welcomeMessage')}</Text>
         <TouchableOpacity onPress={handleLogout} style={styles.tileButton}>
           <ImageBackground
             source={{
@@ -80,9 +79,10 @@ const HomePage = () => {
             style={styles.backgroundImage}
             imageStyle={{ resizeMode: 'cover' }}
           >
-            <Text style={styles.tileButtonText}>Logout</Text>
+            <Text style={styles.tileButtonText}>{t('logout')}</Text>
           </ImageBackground>
         </TouchableOpacity>
+        <Text style={styles.welcomeText}>{t('welcomeMessage')}</Text>
         <View style={styles.bottomSpacing} />
       </View>
     </ScrollView>

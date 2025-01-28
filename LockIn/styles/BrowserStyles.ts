@@ -1,6 +1,28 @@
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
+  buttonGroup3: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 10,
+    gap: 10,
+    padding: 10,
+},
+customButton3: {
+  backgroundColor: '#F5B800',
+  fontFamily: 'PoetsenOne-Regular',
+  paddingVertical: 10,
+  borderRadius: 10,
+  borderColor: '#F5B800',
+  borderWidth: 1,
+  margin: 5,
+  alignItems: 'center',
+  minWidth: 100, 
+  flexGrow: 1,
+  flexBasis: '30%',
+},
   container: {
     backgroundColor: '#131313',
     height: '100%',

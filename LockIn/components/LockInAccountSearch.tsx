@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 
 const LockInAccountSearch: React.FC = () => {
   const { t } = useTranslation()
-  const [username, setUsername] = useState('inzynierka')
+  const [username, setUsername] = useState('')
   const navigation = useNavigation<ProfileScreenProps['navigation']>()
   const handleSearch = () => {
     navigation.navigate('LockInProfile', { username })

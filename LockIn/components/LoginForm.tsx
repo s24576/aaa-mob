@@ -18,8 +18,8 @@ import { handleLogin } from '../api/user/login'
 import { handleResetPassword } from '../api/user/resetPassword'
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('Test1234')
-  const [password, setPassword] = useState('Test1234')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [resetEmail, setResetEmail] = useState('')
@@ -264,7 +264,7 @@ const LoginForm = () => {
                 marginBottom: 15,
               }}
             >
-              {/* <Text
+              <Text
                 style={{
                   color: '#131313',
                   fontSize: 16,
@@ -272,7 +272,7 @@ const LoginForm = () => {
                 }}
               >
                 {t('resetPassword')}
-              </Text> */}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setModalVisible(false)}

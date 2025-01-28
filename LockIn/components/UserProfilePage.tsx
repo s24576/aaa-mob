@@ -236,15 +236,15 @@ const UserProfile = () => {
           <Text style={styles.customButton2Text}>{t('updateBio')}</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.buttonGroup}>
+      <View style={styles.buttonGroup3}>
         <TouchableOpacity
-          style={styles.customButton2}
+          style={styles.customButton3}
           onPress={() => navigation.navigate('Settings')}
         >
           <Text style={styles.customButton2Text}>{t('settings')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.customButton2}
+          style={styles.customButton3}
           onPress={() => navigation.navigate('FriendList')}
         >
           <Text style={styles.customButton2Text}>{t('friendsList')}</Text>
